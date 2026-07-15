@@ -1,0 +1,27 @@
+# Ambiente / deps (lição D-78 SCM: dados curados e snapshots FICAM versionados)
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+
+# Regeneráveis / pesados
+*.sqlite
+*.sqlite3
+*.png
+*.bak
+*.tmp
+
+# Segredos
+.env
+*.token
+*credentials*
+
+# Obsidian (workspace volátil)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# SO
+.DS_Store
+Thumbs.db
