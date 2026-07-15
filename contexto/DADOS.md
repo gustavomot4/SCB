@@ -13,7 +13,7 @@ data: 2026-07-14
 
 | Fonte | Dado | Papel | Limite honesto |
 |---|---|---|---|
-| **football-data.co.uk — família EXTRA** (`new/BRA.csv`) | resultados Série A + odds 1X2 (abertura e fechamento), over/under, AH | **fonte primária do Brasileirão**: base do Elo, V/E/D realizado, mercado do ensemble, CLV | formato reduzido: **sem** chutes/escanteios/cartões; histórico mais curto que as ligas main [a medir na M1]; atualização semanal (lag na rodada); Pinnacle instável desde 07/2025 → bet365/média [confirmar na M1]; arquivo único multi-temporada (coluna Season) |
+| **football-data.co.uk — família EXTRA** (`new/BRA.csv`) | resultados Série A + odds 1X2 **de FECHAMENTO apenas** (PSC/MaxC/AvgC/BFEC/B365C — **medido na M1, D-13**; sem abertura, sem OU/AH) | **fonte primária do Brasileirão**: base do Elo, V/E/D realizado, **régua de mercado e CLV automáticos no backtest**; em produção pré-jogo, mercado = captura manual opcional | formato reduzido: **sem** chutes/escanteios/cartões; desde **2012** [medido]; atualização semanal (lag na rodada); Pinnacle instável desde 07/2025 → AvgC/B365C recentes [medir no run]; arquivo único multi-temporada (coluna Season = ano-calendário) |
 | **football-data.co.uk — família MAIN** (`E0.csv` por temporada) | Premier League: resultados + odds ~10 casas + chutes/escanteios/cartões/faltas, desde 1993 | **liga de validação do port** (dado rico e longo); candidatos extras (suspensão projetada) | páginas por temporada (1 CSV/ano) |
 | `notes.txt` do football-data | dicionário oficial das colunas | contrato do parser | ler na M1 e versionar no repo |
 | **Kaggle — Campeonato Brasileiro** (adaoduque) / openfootball | resultados históricos longos, sem odds | **candidato** p/ aquecer o Elo pré-odds [decidir na M1 → D-NN] | qualidade/dedup a auditar; sem odds |
@@ -23,15 +23,17 @@ data: 2026-07-14
 
 **Lacunas declaradas (não inventar):** escalações/lesões estruturadas grátis (desfalques seguem JSON manual) · xG do Brasileirão (FBref é ToS-restrito → consulta manual apenas; StatsBomb não cobre) · minuto do gol (mercados de tempo ficam fora) · cartões/escanteios do BRA (mercados ficam fora — lição D-72).
 
-## 2. Colunas esperadas do football-data (validar contra `notes.txt` na M1)
+## 2. Colunas MEDIDAS na M1 (2026-07-15; dicionário oficial: `scb_analytics/dados/notes.txt`)
 
 ```
-Country, League, Season, Date, Time, Home, Away, HG, AG, Res        # família EXTRA (BRA)
-Div, Date, HomeTeam, AwayTeam, FTHG, FTAG, FTR, HTHG, HTAG, ...     # família MAIN (E0)
-Odds: PSH/PSD/PSA (Pinnacle), B365H/D/A, MaxH/D/A, AvgH/D/A ...     # abertura
-      PSCH/PSCD/PSCA, B365CH/CD/CA, MaxCH..., AvgCH...              # fechamento (C = closing)
+BRA (extra):  Country,League,Season,Date,Time,Home,Away,HG,AG,Res,
+              PSCH/D/A, MaxCH/D/A, AvgCH/D/A, BFECH/D/A, B365CH/D/A   # SÓ fechamento (D-13)
+E0 (main):    Div,Date,Time,HomeTeam,AwayTeam,FTHG,FTAG,FTR,HT*,Referee,
+              HS,AS,HST,AST,HF,AF,HC,AC,HY,AY,HR,AR,                   # stats de jogo
+              B365/BW/BF/PS/WH/1XB/Max/Avg/BFE (H/D/A) + OU2.5 + AH    # abertura
+              B365C/PSC/MaxC/AvgC/BFEC (…) + OU-C + AH-C               # fechamento
 ```
-O parser é **um por família** (extra/main), parametrizado por liga num `leagues.json` (nome, arquivo/URL, nº de clubes, vagas G4/G6/Z4, regra de desempate, janelas da temporada).
+O parser é **um por família** (extra/main), parametrizado por liga em `scb_analytics/dados/leagues.json` (criado na M1: URL, nº de clubes, vagas, desempate [confirmar Q-03], janela da temporada).
 
 ## 3. Esquema SQLite alvo (delta sobre o schema do SCM)
 
@@ -47,6 +49,7 @@ seasons(league, season, start_date, end_date)                        -- virada d
 Restrições da stack declaradas no schema (lição SPO): SQLite sem enum → `stage`/`league` são TEXT com CHECK; datas ISO-8601 TEXT; probabilidade REAL em [0,1].
 
 ## 4. POC de dados (M1) — o que ela precisa responder
+> **Estado 2026-07-15:** perguntas 1 parcialmente medida, 4 decidida (D-14: sem Kaggle; burn-in interno 2012–13), 5 parcial (notes.txt + leagues.json versionados). 1(grades)/2/3 saem do `scripts/poc_m1.py` na máquina do Gustavo. Detalhe: [[POC-M1-dados (2026-07-15)]].
 
 1. Inventário real: temporadas cobertas, nº de jogos, colunas presentes por temporada (odds de fechamento existem desde quando?) — BRA e E0.
 2. Qualidade: duplicatas (rodar o detector ±2d), placares nulos, times renomeados entre temporadas (mapa de aliases).

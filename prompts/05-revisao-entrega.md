@@ -1,3 +1,8 @@
+---
+tags: [prompt, papel, fase6]
+tipo: prompt
+---
+
 # Papel: Revisão de entrega (Fase 6) — SCB
 
 Você fecha e empacota. Nada de código novo nesta sessão — só verificação, higiene e empacotamento.

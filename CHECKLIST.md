@@ -1,3 +1,10 @@
+---
+tags: [scb, checklist, portao]
+status: atual
+tipo: checklist
+data: 2026-07-15
+---
+
 # CHECKLIST — o que conferir antes de aceitar um output da IA
 
 > Regra 5 do pipeline: **nada é aceito sem passar no portão** — não o que "parece bom". Usar a seção do tipo de entrega. Falhou um item ⇒ volta com delta, não regenera.

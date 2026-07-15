@@ -1,0 +1,47 @@
+{
+  "_doc": "Config por liga (D-03). Campos *_confirmar sao juizos declarados pendentes de verificacao (Q-03 na M5). Colunas medidas na M1 (2026-07-15) por amostra real dos CSVs.",
+  "BRA": {
+    "name": "Campeonato Brasileiro Serie A",
+    "family": "extra",
+    "url": "https://www.football-data.co.uk/new/BRA.csv",
+    "single_file_multiseason": true,
+    "first_season_measured": 2012,
+    "season_format": "ano-calendario (coluna Season = YYYY)",
+    "date_format": "dd/mm/yyyy",
+    "time_zone_note": "coluna Time em horario UK (kickoffs 01:50 = jogo noturno no Brasil) [confirmar no ingest]",
+    "n_clubs": 20,
+    "rounds": 38,
+    "promoted_per_season": 4,
+    "columns_measured": ["Country","League","Season","Date","Time","Home","Away","HG","AG","Res","PSCH","PSCD","PSCA","MaxCH","MaxCD","MaxCA","AvgCH","AvgCD","AvgCA","BFECH","BFECD","BFECA","B365CH","B365CD","B365CA"],
+    "odds": {
+      "prematch": [],
+      "closing": ["PSC*", "MaxC*", "AvgC*", "BFEC*", "B365C*"],
+      "note": "SO FECHAMENTO (D-13). Pinnacle closing preenchido desde 2012; B365C/BFEC vazios no inicio [desde quando: poc_m1.py]. Pinnacle instavel pos-07/2025 -> preferir AvgC/B365C nas temporadas recentes [medir]."
+    },
+    "match_stats": false,
+    "slots_confirmar": { "titulo": 1, "libertadores": "G4 direto (G6 com pre-fase, varia por ano)", "rebaixamento": 4 },
+    "tiebreak_confirmar_Q03": ["vitorias", "saldo", "gols_pro", "confronto_direto", "menos_vermelhos", "menos_amarelos", "sorteio"]
+  },
+  "E0": {
+    "name": "Premier League (liga de validacao do port, D-03)",
+    "family": "main",
+    "url_pattern": "https://www.football-data.co.uk/mmz4281/{season_code}/E0.csv",
+    "season_code_example": "2425 = temporada 2024/25",
+    "single_file_multiseason": false,
+    "first_season_claimed": "1993/94 [site; confirmar no poc_m1.py]",
+    "season_format": "cruzada (ago-mai)",
+    "date_format": "dd/mm/yyyy (yy em temporadas antigas)",
+    "n_clubs": 20,
+    "rounds": 38,
+    "promoted_per_season": 3,
+    "columns_measured_2425_head": ["Div","Date","Time","HomeTeam","AwayTeam","FTHG","FTAG","FTR","HTHG","HTAG","HTR","Referee","HS","AS","HST","AST","HF","AF","HC","AC","HY","AY","HR","AR", "... odds pre (B365/BW/BF/PS/WH/1XB/Max/Avg/BFE + OU2.5 + AH) ...", "... odds closing (B365C/PSC/MaxC/AvgC/BFEC + OU-C + AH-C)"],
+    "odds": {
+      "prematch": ["B365*", "PS*", "Max*", "Avg*", "BFE*", "..."],
+      "closing": ["B365C*", "PSC*", "MaxC*", "AvgC*", "BFEC*"],
+      "note": "abertura (coletada 6a-feira/3a-feira, ver notes.txt) E fechamento [medido no header 2425]; fechamento desde quando: poc_m1.py (esperado ~2019/20)"
+    },
+    "match_stats": true,
+    "slots_confirmar": { "titulo": 1, "champions": 4, "rebaixamento": 3 },
+    "tiebreak_confirmar_Q03": ["saldo", "gols_pro", "confronto_direto"]
+  }
+}

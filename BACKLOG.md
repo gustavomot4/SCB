@@ -12,16 +12,20 @@ data: 2026-07-14
 ## ✅ Concluído
 
 - [x] **[M0] Bootstrap do kit de contexto** — CONTEXT/PLANO/DECISIONS/contexto/* criados a partir do estudo do vault SCM (2026-07-14)
+- [x] **[M0→M1] Congelar PLANO.md + contrato** — ✅ aprovado pelo Gustavo em 2026-07-15 (D-11); vault adaptado ao Obsidian (D-12)
 
-## 🔴 Bloqueado (aguardando Gustavo)
+## 🔜 Próximo (M2 — schema + ingest)
 
-- [ ] **[M0→M1] Congelar PLANO.md + contrato** — *aceite:* Gustavo aprova; ajustes viram delta no próprio doc; a partir daí mudança de rumo = D-NN
+- [ ] **[M2] Schema SQLite + ingest football-data parametrizado** — herda o parser determinístico da M1 (QA-01/02/03 como fixtures de teste) + cadeia de fallback de odds (D-16) + data com formato explícito dd/mm/yyyy — *aceite:* migration roda; contagens batem com o poc_m1_report (BRA 5.497 / E0 12.704); pytest verde (idempotência, guarda ±2d, anti-nulos, encoding/header sujo)
 
-## 🔜 Próximo (M1 — POC de dados)
+## ✅ M1 — FECHADA em 2026-07-15 (portão passou)
 
-- [ ] **[M1] Baixar e inventariar `new/BRA.csv` + `E0.csv` (últimas ~10 temporadas) + `notes.txt`** — *aceite:* responde as 5 perguntas de `contexto/DADOS.md` (temporadas, colunas, fechamento desde quando, qualidade, empate/gols por era)
-- [ ] **[M1] `leagues.json` v1** (BRA + E0: arquivo/URL, nº clubes, vagas, desempate, janela da temporada) — *aceite:* schema do config validado
-- [ ] **[M1] Decidir Q-02 (aquecimento Kaggle)** — *aceite:* D-NN com evidência
+- [x] **[M1] Run do inventário completo (Gustavo)** — BRA 2012–2026 (5.497), E0 93/94+ (12.704), 0 dup/0 alias; achado: Pinnacle 0% em 2026 → D-16 (fallback). 3 QA de parser achados e corrigidos (7/7 harness)
+
+- [x] **[M1] Inventário estrutural BRA + E0** — headers/colunas medidos de amostras reais; achado D-13 (BRA só fechamento); BRA desde 2012; `notes.txt` versionado. Ver [[POC-M1-dados (2026-07-15)]]
+- [x] **[M1] `leagues.json` v1** — BRA + E0 com campos [confirmar] explícitos (`scb_analytics/dados/leagues.json`)
+- [x] **[M1] Q-02 decidida (D-14)** — sem Kaggle; burn-in interno 2012–13
+- [x] **[M1] Script do inventário completo** — `scb_analytics/scripts/poc_m1.py` (download + grades por temporada + duplicatas ±3d + aliases + empate/gols por era)
 
 ## 📋 Fila (M2–M7, na ordem)
 

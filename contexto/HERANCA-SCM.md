@@ -13,7 +13,7 @@ data: 2026-07-14
 
 | Módulo SCM | Destino no SCB | Ação |
 |---|---|---|
-| `db.py` | ✅ porta | schema ganha `season`, `round`, odds abertura+fechamento (ver `contexto/DADOS.md`) |
+| `db.py` | ✅ porta | schema ganha `season`, `round`, odds abertura+fechamento (ver [[DADOS]]) |
 | `ingest.py` | 🔁 troca o parser | novo `ingest` do football-data **parametrizado por liga** (E0, BRA…); manter: idempotência por `natural_key`, guarda ±2d (D-82), `--dedup`, `resultados_extra.csv` (D-80), pular jogo sem placar (D-12) |
 | `elo_engine.py` | ✅ porta | K único por liga [a calibrar]; point-in-time (`match_ratings`) intacto; **novo:** hook de virada de temporada (regressão ρ, candidato C5) |
 | `features_pit.py` | ✅ porta | forma com decay por jogo [a calibrar]; mando todo jogo; remover confed/altitude do dr |

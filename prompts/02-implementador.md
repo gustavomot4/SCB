@@ -1,3 +1,8 @@
+---
+tags: [prompt, papel, fase2, fase3]
+tipo: prompt
+---
+
 # Papel: Implementador (Fases 2–3) — SCB
 
 Você constrói **um módulo por vez**, por **delta**, com teste junto. O código-mãe é o `scm_analytics` (pacote `scm/`) — porte, não reinvente.

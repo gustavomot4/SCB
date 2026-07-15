@@ -26,7 +26,7 @@ data: 2026-07-14
 - **Contrato congelado com versão** (D-01 SCM): mudar fórmula = bump de `MODEL_VERSION`; rebuild completo quando a versão muda.
 - **Baseline primeiro** (D-06 SCM): medir o motor mínimo antes de adicionar graus de liberdade.
 - **Mercados são releituras, não modelos novos** (D-21 SCM): over/under, BTTS, dupla chance, handicap etc. saem da MESMA matriz Poisson — zero graus de liberdade novos, não passam por portão.
-- **Mercado no ensemble com peso ≤ 0,20** (D-08 SCM): pode ecoar o Elo público, não é onisciente. *Questão aberta Q-01 (ver `DECISIONS.md`): com odds históricas reais, o teto pode ser revisto — mas por decisão do Gustavo, não do portão sozinho.*
+- **Mercado no ensemble com peso ≤ 0,20** (D-08 SCM): pode ecoar o Elo público, não é onisciente. *Questão aberta Q-01 (ver [[DECISIONS]]): com odds históricas reais, o teto pode ser revisto — mas por decisão do Gustavo, não do portão sozinho.*
 - **Point-in-time em tudo**: features/ratings usam só o passado do jogo; teste anti look-ahead no pytest é obrigatório.
 - **Ingest idempotente** (D-11 SCM) + **guarda anti-duplicata ±2 dias** (D-82 SCM): rodar N vezes não duplica; confronto igual com data divergente é barrado.
 - **Instrumentação power-aware** (D-76 SCM): monitor com n baixo marca `n baixo` e não alarma — não confundir ruído com deriva.

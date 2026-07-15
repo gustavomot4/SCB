@@ -1,14 +1,14 @@
 ---
-tags: [contexto, modelo, contrato, draft]
-status: rascunho (congelar na Fase 1 como contrato SCB v1.0)
+tags: [contexto, modelo, contrato, congelado]
+status: CONGELADO — contrato SCB v1.0 (aprovado em 2026-07-15, D-11)
 tipo: especificacao
-data: 2026-07-14
+data: 2026-07-15
 ---
 
-# Modelo matemático do SCB — contrato v1.0 (RASCUNHO para congelamento)
+# Modelo matemático do SCB — contrato v1.0 (CONGELADO)
 
 > Base: contrato **v5.0 do SCM** (`camada1-planejamento-v5` + apêndice de formas) e evolução validada até `baseline-v0.5.1-confed` (D-01..D-85). Este doc diz **o que fica, o que sai, o que recalibra e o que é candidato** ao portar de Copa (seleções, mata-mata) para **liga de clubes em pontos corridos**. Todo número marcado **[a calibrar]** sai do backtest, nunca de decreto; todo valor esperado sobre a liga marcado **[a medir na M1]** é confirmado na POC de dados — **não inventar**.
-> Após aprovação do Gustavo, este doc congela como **contrato SCB v1.0** e mudar fórmula = nova versão (regra D-01 herdada).
+> **CONGELADO como contrato SCB v1.0 em 2026-07-15 (D-11).** Mudar fórmula daqui em diante = nova versão (`MODEL_VERSION`) + D-NN — nunca edição silenciosa. Preencher um [a calibrar]/[a medir] com valor MEDIDO não é mudança de fórmula (registrar no [[DECISIONS]] mesmo assim).
 
 ## 0. Princípio (herdado e reafirmado)
 
@@ -78,6 +78,8 @@ O football-data traz **1X2 de abertura E fechamento** por jogo, grátis, no mesm
 - **CLV automático:** `monitor` compara modelo × linha de fechamento sem captura manual. A pergunta "há edge vs fechamento?" — que a Copa deixou morrer sem resposta — aqui **nasce respondível**.
 - **Benchmark honesto do backtest:** mercado de-vigged (de-vig proporcional herdado de `odds.py`) de abertura e fechamento entram como réguas fixas do harness, ao lado do uniforme e da taxa-base da liga.
 - Pinnacle instável no football-data desde 07/2025 → usar bet365/média das casas **[a confirmar colunas na M1]**.
+
+> **Nota M1 (2026-07-15, D-13 — correção de FATO, não de fórmula; sem bump):** o `BRA.csv` traz **só a linha de FECHAMENTO** (PSC/MaxC/AvgC/BFEC/B365C [medido]); abertura não existe na família extra. Portanto: CLV e régua de mercado do backtest seguem automáticos (até mais fortes — fechamento é o teto); a **perna de mercado do ensemble em produção pré-jogo do BRA é manual/opcional** (herda `odds_close`), e no backtest usa o fechamento rotulado como teto. Na E0 há abertura E fechamento [medido] — ela mede o gap abertura×fechamento e calibra o juízo. O ensemble em si não muda (pesos com/sem odds já previstos, §1).
 
 ### 3.6 Desfalques direcionais — transfere + melhora possível
 Mecânica intacta (tier −35/−15/−5 por setor; ataque corta λ_pró, defesa/goleiro via dr; dúvida → σ_ajuste; JSON manual). Em liga, **suspensões por cartão são previsíveis** (3 amarelos/vermelho) — mas o BRA.csv não traz cartões (formato extra) → segue entrada manual; nas ligas main (E0) há cartões por jogo, o que abre o candidato "suspensão projetada" **atrás do portão** quando chegarmos lá.
