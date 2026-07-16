@@ -8,6 +8,22 @@ tipo: log
 
 > Log datado, append-only. **Não é carregado nas sessões** (o presente mora no CONTEXT.md). Uma linha por evento relevante; detalhe fica no commit/D-NN.
 
+## 2026-07-16 (d) — M4 FECHADA (oficial, números idênticos) + M5 pronta
+- Run oficial da M4 reproduziu o sandbox dígito a dígito (47 passed; pipeline determinístico) → **`baseline-scb-v0.1` CONGELADO (D-17)**.
+- M5: `simulate_league` (MC da temporada, fixtures derivadas, real travado, desempate D-18/Q-03), `predict_match` (porta da frente = backtest, D-34), `registrar` (imutável + settle ±2d + report power-aware), runbook [[Operacao BRA 2026]]. 3 testes (50 no total).
+- E2E real BRA 2026 (rodada ~18): **Palmeiras 78,8% título · Flamengo 20,7% · Fluminense 0,4%; Chapecoense 100% Z4** — 5.000 sims em 3s, seed fixa.
+- Q-02 fechada formalmente; Q-03 → Gustavo confirma ordem CBF; monitor de drift movido p/ M6/M7 (sem registros acumulados ainda, não há o que monitorar).
+
+## 2026-07-16 (c) — M4: PORTÃO DO BASELINE PASSOU (sandbox; aguarda run oficial)
+- `scb/backtest_harness.py`: walk-forward por temporada (burn-in 2), curva de empate POR FOLD (anti-vazamento), previsões on-the-fly, 4 réguas, Brier/LogLoss/RPS/ECE/banda, bootstrap pareado B=10k seed=12345 vetorizado. +5 testes (47 no total).
+- **Resultados** ([[Backtest baseline (2026-07-16)]]): BRA n=4.736 Brier **0,6146** — bate uniforme (+0,0521), taxa-base (+0,0175) e Elo-puro (+0,0025), IC>0 em todos; E0 n=11.780 **0,5899** (+0,0767/+0,0530/+0,0052). Mercado (fechamento) à frente ~2pp nas duas — teto honesto. BRA > E0 em dificuldade, como a viabilidade previa. Banda sub-cobre extremos (padrão D-30 SCM) → M6. D-17 registrada.
+
+## 2026-07-16 (b) — M3.4 (predictor) pronto: MOTOR COMPLETO aguardando run oficial
+- `scb/predictor.py`: port fiel (piso conserva T_m D-22; propagação determinística por estratos D-30; A1; clamps; ensemble 0,56/0,44) com T_base POR LIGA (placeholder = medição M1) e leitura C1 via `draw_curve.ved_from_dr` (núcleo único D-43, ε do predictor). Fora: estilo/altitude/KO (D-06). Hooks: δ_ata (desfalques), perna AD com w_ad=0 (re-gate na liga, D-05). `MODEL_VERSION=scb-v0.1-baseline`.
+- +8 testes (D-22, simetria, A1/btts matriz≡fechado, Jensen, determinismo, hook AD inerte, pipeline por liga com P(E) BRA>E0, idempotência/incremental). Harness **42/42**.
+- E2E real: **18.200 previsões em 12,4s; soma=1 e bandas ok em 100%**; in-sample: BRA V 0,482/real 0,485 · E0 V 0,484/real 0,456 (H alto, já registrado) · over sobreprevisto +3-4pp (T_base, M6).
+- Staleness do mount atrapalhou o harness (config.py velho) — contornado com injeção canônica; lição D-16 SCM reconfirmada.
+
 ## 2026-07-16 — M3.3 (curva de empate por liga) pronta
 - `scb/draw_curve.py` (D-07): P_E(|dr|) empírica por liga do `match_ratings.dr` (PIT), bins com fusão por n≥200, interpolação linear, cap C1 e decomposição — P(V/E/D)∈[0,1] por construção; `--max-season` p/ o backtest reconstruir só com treino (anti-vazamento); freeze rastreável em `meta`.
 - 6 testes novos (recupera taxa, soma=1 em dr∈[−800,800], interpolação, corte por temporada, roundtrip, **curvas diferem por liga**). Harness **34/34**.

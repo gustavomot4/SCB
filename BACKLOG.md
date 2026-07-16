@@ -16,7 +16,8 @@ data: 2026-07-14
 
 ## 🔜 Próximo (M3 — motor, 1 módulo por vez)
 
-- [ ] **[M3.2] ▶ GUSTAVO: `python -m pytest -q` (esperado 28 passed) + `python -m scb.features_pit`** (~20–40s) — *aceite oficial* dos módulos 1+2
+- [ ] **[M3.4] ▶ GUSTAVO: `python -m pytest -q` (esperado 42 passed) + `python -m scb.predictor`** (~15-30s; esperado 18200 previsões) — fecha o MOTOR inteiro (M3)
+- [x] **[M3.4] Port `predictor`** — f/g(dr) com T_base POR LIGA (config, medido M1), piso conserva T_m (D-22), Poisson-condicional (A1), Elo-direto propagado por estratos determinísticos (D-30) com a curva DA LIGA via núcleo único (D-43), ensemble 0,56/0,44 com clamps, hooks δ_ata e perna AD (w_ad=0 até o portão — D-05), `MODEL_VERSION=scb-v0.1-baseline`; 8 testes. Harness **42/42**; **E2E real: 18.200 previsões/12,4s, 0 violações; 1ª olhada: BRA V 0,482 vs real 0,485; desvios de H/T_base visíveis e esperados (M6)**
 - [x] **[M3.1] Port `elo_engine` + `config.py`** — ✅ FECHADA (run oficial: 21 passed; tops conferidos a olho). Observação p/ M6: we_home 0,619 vs real 0,595 → H=100 alto p/ clube [medido]
 - [x] **[M3.2] Port `features_pit`** — forma com decay POR JOGO, vol_mult D-28, σ_dr RSS, incremental; sem confed/glicko/amistoso; 7 testes novos incl. **anti look-ahead** e **incremental==full**; **E2E real: 18.200 features em 20,8s, cap ±30 intacto, σ_dr 39,7–283**
 - [x] **[M3.3] Curva de empate POR LIGA (D-07)** — `scb/draw_curve.py`: bins de |dr| com fusão por n mínimo, interpolação, cap `2·min(we,1−we)−ε`, decomposição C1; **`max_season` p/ o harness reconstruir por fold (anti-vazamento)**; freeze em meta com versão. 6 testes; harness 34/34; **E2E real: BRA 0,307→0,195 e E0 0,296→0,148 por |dr|, congeladas**. *Nota:* era dentro da liga (E0 anos 90 empatadores) é papel do C3, não da curva
@@ -45,10 +46,12 @@ data: 2026-07-14
 - [ ] **[M3] Port elo_engine** (K por liga [a calibrar], PIT, hook de temporada) — *aceite:* testes PIT/zero-sum/idempotência verdes na E0
 - [ ] **[M3] Port features_pit** (forma decay por jogo, H_liga, σ_dr; sem confed/altitude) — *aceite:* anti look-ahead verde
 - [ ] **[M3] Port predictor + curva de empate DA LIGA + perna AD + ensemble** — *aceite:* soma=1, piso conserva T_m, consistência produção↔backtest; E2E na E0
-- [ ] **[M4] Harness walk-forward por temporada + 4 réguas; backtest E0 → BRA** — *aceite:* **portão do baseline** (Brier < uniforme e < taxa-base, IC não cruza zero); congela `baseline-scb-v0.1`
-- [ ] **[M5] Simulador de pontos corridos** (P título/G4/G6/Z4; desempate por liga; real trava sim) — *aceite:* invariantes nos testes; Q-03 resolvida
-- [ ] **[M5] Registrar/monitor/report adaptados + runbook da rodada** — *aceite:* rodada de teste completa (registrar → settle → report → monitor/CLV)
-- [ ] **[M5] ▶ Começar registro prospectivo do BRA 2026** (toda rodada, sem exceção — lição do SCM: 19/81 é auditoria fraca)
+- [ ] **[M4] ▶ GUSTAVO: `python -m pytest -q` (esperado 47 passed) + `python -m scb.backtest_harness`** (~30-60s) — run oficial que congela `baseline-scb-v0.1` (D-17)
+- [x] **[M4] Harness walk-forward + 4 réguas — PORTÃO PASSOU (sandbox)**: BRA 0,6146 bate uniforme +0,0521 / taxa-base +0,0175 / Elo-puro +0,0025, todos IC>0; E0 0,5899 idem (+0,0767/+0,0530/+0,0052); mercado à frente ~2pp (teto declarado); ECE 0,029/0,037; banda sub-cobre extremos (→M6). 5 testes; curva por fold anti-vazamento. Ver [[Backtest baseline (2026-07-16)]]
+- [ ] **[M5] ▶ GUSTAVO: `pytest -q` (esperado 50 passed) + `python -m scb.simulate_league --season 2026` + confirmar Q-03 no regulamento CBF** — fecha a M5
+- [ ] **[M5] ▶ OPERAÇÃO: registrar a PRÓXIMA rodada do BRA 2026** (runbook: [[Operacao BRA 2026]]) — toda rodada, sem exceção (lição 19/81 do SCM)
+- [x] **[M5] `simulate_league`** — fixtures derivadas do turno-returno, real travado, desempate parametrizado (D-18; Q-03 [confirmar]), seed fixa; invariantes testados; **E2E real BRA 2026: Palmeiras 78,8% título / Flamengo 20,7% / Chape 100% Z4, 5000 sims/3s**
+- [x] **[M5] `predict_match` (porta da frente, produção=backtest D-34) + `registrar` (imutável, settle ±2d, report power-aware)** — 3 testes; runbook escrito. *Monitor de drift (D-76) → M6/M7: precisa de registro ACUMULADO para ter n*
 - [ ] **[M6] Calibrar H/K/θ/κ/T_base + curvas por liga** — *aceite:* grid no treino, validação walk-forward, congelado por versão. *Insumos já medidos:* T_base BRA ≈ 2,40 ≠ 2,6 da Copa (M1); we_home 0,619 vs real 0,595 com H=100 → H de liga é menor (M3.1)
 - [ ] **[M6] Fila do portão C1–C6** (descanso, Dixon-Coles, drift de gols, viagem, regressão de temporada, H por clube) — *aceite:* um por vez; IC>0 + guardas + kill-switch; rejeição vira D-NN
 - [ ] **[M7] Web adaptada** (prever jogo, tabela simulada, prospectivo, monitor) + launcher — *aceite:* QA adversarial sem crítico/alto aberto

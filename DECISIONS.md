@@ -27,10 +27,14 @@ Registro curto de *por que* cada escolha. **Append-only** — decisão nova = li
 | D-15 | 2026-07-15 | **Layout do código: `scb_analytics/` na raiz do vault** (pacote `scb/`, `dados/`, `scripts/`) — snapshot e dados curados **versionados** (`notes.txt`, `leagues.json`, CSVs do football-data); `.gitignore` só barra `*.sqlite`/`*.png` | espelho do D-10/D-78 SCM (vault+código juntos; clone roda offline de primeira). `leagues.json` criado com campos [confirmar] explícitos (Q-03) |
 | D-16 | 2026-07-15 | **M1 FECHADA (portão passou)** + regra derivada: **coluna de mercado = cadeia de fallback por temporada (PSC → AvgC → B365C)** | run completo [medido]: BRA 5.497 jogos 2012–2026, empate 26,8%, gols 2,40, 0 dup/0 alias; E0 12.704 jogos 93/94+, fechamento completo desde 19/20. Única surpresa: **Pinnacle closing = 88% em 2025 e 0% em 2026** (morte do Pinnacle atinge a temporada-alvo) → sem a cadeia de fallback, a régua de mercado e o CLV de 2026 ficariam vazios. QA-01/02/03 do parser corrigidos (7/7 harness) e herdados pelo ingest da M2 como fixtures. Detalhe: [[POC-M1-dados (2026-07-15)]] |
 
+| D-17 | 2026-07-16 | **Baseline `scb-v0.1` VALIDADO pelo portão da M4** (walk-forward, curva por fold, B=10k): BRA Brier 0,6146 bate uniforme/taxa-base/Elo-puro com IC>0; E0 0,5899 idem; mercado à frente ~2pp (teto declarado) | congela o baseline (pendente run oficial); evolução só via fila do portão. Achado p/ M6: banda sub-cobre nos extremos (padrão D-30 SCM). Detalhe: [[Backtest baseline (2026-07-16)]] |
+
+| D-18 | 2026-07-16 | **Simulador de liga (M5)**: fixtures restantes DERIVADAS do turno-returno (fonte sem calendário futuro); forças ESTÁTICAS na sim (como no SCM); desempate pontos→vitórias→saldo→gols pró→sorteio, com **cartões pulados (lacuna de dado)** e **confronto direto fora da V1** (simplificação declarada) | jogos reais travados (D-83/85 SCM); seed fixa; invariantes testados (Σtítulo=1). Mudar a ordem do desempate = 1 linha no sort (Q-03) |
+
 ## Questões abertas (não são decisões ainda)
 
 | # | Questão | Dono | Quando decidir |
 |---|---|---|---|
-| Q-01 | Com série histórica de odds, o backtest pode medir o peso ótimo do mercado no ensemble. Se der > 0,20: sobe o teto? | Gustavo | após M4 (com os números na mesa) |
-| Q-02 | Aquecer o Elo do BRA com o dataset Kaggle 2003+ (sem odds)? | M1 decide com evidência de qualidade | M1 |
-| Q-03 | Regulamento CBF vigente de desempate da Série A (vitórias→saldo→…): confirmar na fonte oficial antes de codificar | implementador | M5 |
+| Q-01 | Com série histórica de odds, o backtest pode medir o peso ótimo do mercado no ensemble. Se der > 0,20: sobe o teto? | Gustavo | M6 (números na mesa: mercado 0,595/0,566 vs modelo 0,615/0,590) |
+| Q-02 | ~~Kaggle?~~ **FECHADA (D-14: não; burn-in interno)** | — | — |
+| Q-03 | Ordem de desempate CBF 2026: **confirmar no regulamento oficial** (implementada a histórica pontos→vitórias→saldo→gols pró; cartões sem dado; confronto direto fora da V1 — D-18) | **Gustavo (1 min no site da CBF)** | antes de divulgar P(título) |
