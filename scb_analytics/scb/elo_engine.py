@@ -35,7 +35,8 @@ class EloParams:
     sigma_floor: float = 40.0        # σ_R mínimo (maduro)              [a calibrar]
     sigma_provisional: float = 200.0 # σ_R de estreante (n=0)           [a calibrar]
     sigma_tau: float = 20.0          # escala de decaimento de σ_R      [a calibrar]
-    season_rho: float = config.SEASON_RHO   # candidato C5 (0.0 = OFF)
+    season_rho: Optional[float] = None   # None = POR LIGA via config (D-25); valor
+                                         # explícito força o MESMO ρ em todas (testes/gates)
 
 
 def we(dr: float) -> float:
@@ -78,11 +79,13 @@ def run(conn, params: EloParams = EloParams()) -> dict:
         h, a = r["home_team_id"], r["away_team_id"]
         rh = ratings.get(h, params.init)
         ra = ratings.get(a, params.init)
-        if params.season_rho > 0:                      # C5 (OFF por default): virada de temporada
+        rho = params.season_rho if params.season_rho is not None \
+            else config.season_rho_for(r["league"])    # D-25: POR LIGA (BRA=0,30; E0=0)
+        if rho > 0:                                    # virada de temporada (C5 adotado no BRA)
             if last_season.get(h) is not None and r["season"] > last_season[h]:
-                rh = (1 - params.season_rho) * rh + params.season_rho * params.init
+                rh = (1 - rho) * rh + rho * params.init
             if last_season.get(a) is not None and r["season"] > last_season[a]:
-                ra = (1 - params.season_rho) * ra + params.season_rho * params.init
+                ra = (1 - rho) * ra + rho * params.init
             ratings[h], ratings[a] = rh, ra            # regressão é estado, não só leitura
         nh, na = ngames.get(h, 0), ngames.get(a, 0)
 

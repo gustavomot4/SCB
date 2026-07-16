@@ -76,7 +76,7 @@ def test_idempotente_e_media_por_liga(conn):
 def test_hook_regressao_temporada_c5(conn):
     _add_match(conn, "BRA", 2024, "2024-04-20", "Flamengo RJ", "Palmeiras", 3, 0)
     _add_match(conn, "BRA", 2025, "2025-04-20", "Flamengo RJ", "Palmeiras", 0, 0)
-    elo_engine.run(conn)                                                 # rho=0 (OFF)
+    elo_engine.run(conn, EloParams(season_rho=0.0))                      # rho=0 (forçado OFF)
     off = conn.execute("SELECT home_elo_pre FROM match_ratings ORDER BY match_id").fetchall()[1][0]
     elo_engine.run(conn, EloParams(season_rho=0.5))                      # rho=0.5 (ON)
     on = conn.execute("SELECT home_elo_pre FROM match_ratings ORDER BY match_id").fetchall()[1][0]
@@ -85,3 +85,34 @@ def test_hook_regressao_temporada_c5(conn):
     # e zero-sum preservado no estado final
     cur = [r["elo"] for r in conn.execute("SELECT elo FROM ratings_current")]
     assert abs(sum(cur) - 3000.0) < 1e-9
+
+
+def test_rho_por_liga_d25(conn):
+    """D-25: default (None) aplica ρ POR LIGA — BRA=0,30 regride; E0=0 não."""
+    for lg, h, a in (("BRA", "Flamengo RJ", "Palmeiras"), ("E0", "Arsenal", "Chelsea")):
+        _add_match(conn, lg, 2024, "2024-04-20", h, a, 3, 0)
+        _add_match(conn, lg, 2025, "2025-04-20", h, a, 0, 0)
+    elo_engine.run(conn)                                                 # None -> config por liga
+    pre = {}
+    for lg in ("BRA", "E0"):
+        rows = conn.execute(
+            """SELECT mr.home_elo_pre FROM match_ratings mr JOIN matches m USING(match_id)
+               WHERE m.league=? ORDER BY m.match_id""", (lg,)).fetchall()
+        pre[lg] = [r[0] for r in rows]
+    ganho_bra_2024 = pre["BRA"][0]                                       # 1500 (estreia)
+    assert ganho_bra_2024 == 1500.0
+    # vencedor de 2024 chega em 2025 REGREDIDO no BRA...
+    elo_off = elo_engine.run(conn, EloParams(season_rho=0.0)) and None
+    rows_off = conn.execute(
+        """SELECT mr.home_elo_pre FROM match_ratings mr JOIN matches m USING(match_id)
+           WHERE m.league='BRA' ORDER BY m.match_id""").fetchall()
+    elo_engine.run(conn)                                                 # volta ao default
+    rows_on = conn.execute(
+        """SELECT mr.home_elo_pre FROM match_ratings mr JOIN matches m USING(match_id)
+           WHERE m.league='BRA' ORDER BY m.match_id""").fetchall()
+    assert rows_on[1][0] < rows_off[1][0]                                # BRA regrediu
+    # ...e na E0 o default NÃO regride (igual ao off)
+    e0_on = conn.execute(
+        """SELECT mr.home_elo_pre FROM match_ratings mr JOIN matches m USING(match_id)
+           WHERE m.league='E0' ORDER BY m.match_id""").fetchall()
+    assert abs((e0_on[1][0] - 1500.0) / (rows_off[1][0] - 1500.0) - 1.0) < 1e-9

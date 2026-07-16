@@ -39,11 +39,19 @@ Registro curto de *por que* cada escolha. **Append-only** — decisão nova = li
 
 | D-22 | 2026-07-16 | **M6.4 REJEITADA: descanso diferencial INTRA-LIGA (C1)** — `scb/descanso.py`: BRA Δ1X2 −0,00019 IC[−0,00041,+0,00003]; E0 −0,00003 IC cruza; kill-switch ok | causa visível no STEP 0: \|diff\| médio 0,76d/0,67d — rodadas são simétricas DENTRO da liga; a congestão real (Libertadores/Copa do Brasil/qua-dom) não está na fonte (lacuna declarada em [[DADOS]]). **Re-testar SÓ com calendário externo grátis** (= ângulo novo exigido pela D-05). C1 à lista-morta como-testado |
 
+| D-23 | 2026-07-16 | **M6.5 Dixon-Coles (C2): PASSA na E0 (canal do empate), rejeitado no BRA** — E0: ρ*=−0,05 (sinal clássico), empate-Poisson **+0,00039 IC[+0,00017,+0,00062]**, over/BTTS neutros; BRA: ρ* do treino veio **+0,05** e regrediu na validação (−0,00076 IC<0) — dependência de placar baixo instável entre eras | 2º termo aprovado na E0 (com o mando rolling, D-21); BRA segue baseline limpo. Adoção exige **2º gate** (re-blend do 1X2 do ensemble com a matriz DC) — Q-05. `scb/dixon_coles.py` + 3 testes |
+
+| D-24 | 2026-07-16 | **M6.6 regressão de temporada (C5): PASSA NO BRA (1º termo aprovado na liga-produto!), rejeitada na E0** — BRA: ρ*=0,30 (calib), validação Δ1X2 **+0,00216 IC[+0,00028,+0,00418]**, gols +0,00107 IC>0; E0: IC cruza (elencos estáveis — churn é fenômeno brasileiro) | `scb/season_rho.py` (gate com rebuild por candidato; hook já testado na M3.1). Caveats honestos: IC inferior perto de zero (passa formal, magnitude modesta) e ρ*=0,30 na borda da grade (checar 0,4 na adoção). **Q-06**: adoção = SEASON_RHO por liga + bump `scb-v0.2` + rebuild + re-run M4 |
+
+| D-25 | 2026-07-16 | **Q-06 EXECUTADA: regressão de temporada ADOTADA NO BRA (ρ=0,30) → `scb-v0.2-rho-bra`** — 1ª adoção do produto. ρ=0,40 checado e descartado (calib pior; valid IC cruza). Wiring POR LIGA (`config.SEASON_RHO` dict + `season_rho_for`; `EloParams.season_rho=None` → config); +1 teste (BRA regride, E0 não). **M4 re-rodado: BRA 0,6146→0,6131, ECE 0,0288→0,0224, gap p/ mercado −0,0195→−0,0180; E0 IDÊNTICA dígito a dígito** (isolamento provado). Sim 2026: Palmeiras 78,8→79,6%, Fla 20,7→19,6% (transparência antes/depois) | rebuild OBRIGATÓRIO na máquina do Gustavo; Q-04/Q-05 (E0) seguem abertas |
+
 ## Questões abertas (não são decisões ainda)
 
 | # | Questão | Dono | Quando decidir |
 |---|---|---|---|
 | Q-01 | Com série histórica de odds, o backtest pode medir o peso ótimo do mercado no ensemble. Se der > 0,20: sobe o teto? | Gustavo | M6 (números na mesa: mercado 0,595/0,566 vs modelo 0,615/0,590) |
 | Q-04 | **Adotar o mando rolling na E0?** (passou o portão, D-21). Custo: wiring por liga em predict/harness + bump v0.2 + re-run M4. Não muda o BRA (o produto) | **Gustavo** | próxima sessão de evolução |
+| Q-05 | **Adotar o Dixon-Coles na E0?** (passou no canal do empate, D-23). Exige o 2º gate: re-blend do 1X2 do ensemble com a matriz τ + guardas | **Gustavo** (rodar o 2º gate junto com a Q-04) | próxima sessão de evolução |
+| Q-06 | ~~Adotar ρ no BRA?~~ **EXECUTADA (D-25: `scb-v0.2-rho-bra`)** | — | — |
 | Q-02 | ~~Kaggle?~~ **FECHADA (D-14: não; burn-in interno)** | — | — |
 | Q-03 | ~~Desempate CBF~~ **FECHADA (2026-07-16, verificação web):** ordem oficial 2026 = vitórias→saldo→gols pró→confronto direto→menos vermelhos→menos amarelos→sorteio — bate com a implementada (D-18); confronto direto e cartões seguem simplificações declaradas | — | — |

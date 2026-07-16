@@ -8,6 +8,23 @@ tipo: log
 
 > Log datado, append-only. **Não é carregado nas sessões** (o presente mora no CONTEXT.md). Uma linha por evento relevante; detalhe fica no commit/D-NN.
 
+## 2026-07-16 (l) — M6.7 FECHADA no run oficial (números idênticos)
+- Rebuild do Gustavo: 63 passed · BRA 0,6131 (todas as réguas internas PASSAM, incl. elo_puro +0,0014 IC>0) · E0 idêntica · sim 2026 Palmeiras 79,6%. `scb-v0.2-rho-bra` é o modelo OFICIAL.
+- Observação de exibição (não-bug): clube que saiu da liga há anos (ex.: Portuguesa, 2013) não sofre as regressões anuais → rating congelado aparece alto no top-10 de `ratings_current`. Não toca previsão/sim (só joga quem está na temporada). Cosmético p/ M7 (filtrar ranking por clubes da temporada corrente).
+
+## 2026-07-16 (k) — M6.7: 1ª ADOÇÃO — `scb-v0.2-rho-bra` (D-25)
+- ρ=0,40 checado (pior na calib; IC cruza na valid) → ρ=0,30 confirmado. Wiring POR LIGA (config dict + EloParams None→config) + 1 teste novo (63).
+- **M4 v0.2: BRA 0,6146→0,6131 · ECE 0,0288→0,0224 · gap mercado −0,0195→−0,0180 · E0 idêntica dígito a dígito.** Sim 2026: Palmeiras 78,8→79,6%, Fla 20,7→19,6%.
+- Rebuild obrigatório na máquina do Gustavo. Q-04/Q-05 (adoções E0) abertas.
+
+## 2026-07-16 (j) — M6.6: regressão de temporada PASSA NO BRA (D-24) — 1º da liga-produto
+- `scb/season_rho.py` (gate com rebuild por ρ, em etapas): BRA ρ*=0,30 → validação Δ1X2 +0,00216 IC[+0,00028,+0,00418], gols +0,00107 IC>0; E0 rejeitada (elencos estáveis). Caveats: IC inferior baixo; ρ na borda da grade (checar 0,4 na adoção).
+- Q-06 aberta e RECOMENDADA como 1ª adoção (melhora o produto). Placar da fila: 6 testados — BRA 1 ✅ / E0 2 ✅ / 6 rejeições registradas.
+
+## 2026-07-16 (i) — M6.5: Dixon-Coles passa na E0, rejeitado no BRA (D-23)
+- `scb/dixon_coles.py` + 3 testes (62): τ(ρ) nas células de placar baixo, ρ na era de calibração, gate no canal de gols/empate. **E0: ρ=−0,05 (literatura), empate +0,00039 IC>0, sem regressão — 2º termo aprovado na E0.** BRA: ρ do treino (+0,05) regride na validação — instabilidade entre eras, rejeitado.
+- Q-05 aberta (adoção DC-E0 exige 2º gate: re-blend do 1X2). Placar da fila: 5 testados; E0 com 2 aprovados; BRA com baseline limpo (0 aprovados, 5 rejeições honestas).
+
 ## 2026-07-16 (h) — M6.4: C1 descanso intra-liga rejeitado (D-22)
 - `scb/descanso.py` + 3 testes (59): rest diferencial PIT com clip [2,8], β em grade. BRA e E0: IC cruza zero; kill-switch ok. Diagnóstico: rodadas simétricas INTRA-liga (\|diff\| ~0,7d) — a congestão real exige calendário externo (lacuna declarada). Placar da fila: 4 testados, 1 aprovado (mando rolling E0), 3 rejeitados com números.
 
