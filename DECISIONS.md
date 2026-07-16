@@ -35,10 +35,13 @@ Registro curto de *por que* cada escolha. **Append-only** — decisão nova = li
 
 | D-20 | 2026-07-16 | **M6.2 REJEITADA pelo portão: drift PIT do canal de gols (C3)** — `scb/drift.py` (família D-84 SCM): validação BRA over Δ−0,00010 IC[−0,00181,+0,00159] / BTTS +0,00005 IC cruza; E0 idem; kill-switch ok (corr ~0). **E0 também rejeitou a M6.1** (H*=100=atual; T_base do treino regride gols IC[−0,0058,−0,0019]) — completa a D-19 | o ganho do SCM vinha da estrutura por CLASSE (amistoso/major) que liga única não tem; a deriva recente do BRA (25-26) fica atrás da janela. C3 vai à lista-morta COM números (re-propor só com ângulo novo). Baseline v0.1 segue o melhor modelo conhecido |
 
+| D-21 | 2026-07-16 | **M6.3 mando rolling PIT (`scb/mando_rolling.py`): PASSA na E0, rejeitado no BRA** — E0 validação n=6.080: 1X2 **+0,00180 IC[+0,00059,+0,00302]**, gols +0,00066 IC>0, kill-switch −0,004, δ vigente **−36,8 Elo** (queda estrutural do mando pós-COVID); BRA: −0,00087 IC cruza (δ −12, ruidoso) | **1º termo a passar um portão no SCB.** Adoção é DECISÃO SEPARADA do Gustavo (Q-04): wiring por liga + bump `scb-v0.2-mando-e0` + re-run M4. Flag OFF até lá. Família = ângulo novo da D-19 (rolling em vez de estático) — o método funcionando |
+
 ## Questões abertas (não são decisões ainda)
 
 | # | Questão | Dono | Quando decidir |
 |---|---|---|---|
 | Q-01 | Com série histórica de odds, o backtest pode medir o peso ótimo do mercado no ensemble. Se der > 0,20: sobe o teto? | Gustavo | M6 (números na mesa: mercado 0,595/0,566 vs modelo 0,615/0,590) |
+| Q-04 | **Adotar o mando rolling na E0?** (passou o portão, D-21). Custo: wiring por liga em predict/harness + bump v0.2 + re-run M4. Não muda o BRA (o produto) | **Gustavo** | próxima sessão de evolução |
 | Q-02 | ~~Kaggle?~~ **FECHADA (D-14: não; burn-in interno)** | — | — |
 | Q-03 | ~~Desempate CBF~~ **FECHADA (2026-07-16, verificação web):** ordem oficial 2026 = vitórias→saldo→gols pró→confronto direto→menos vermelhos→menos amarelos→sorteio — bate com a implementada (D-18); confronto direto e cartões seguem simplificações declaradas | — | — |
