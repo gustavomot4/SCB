@@ -1,27 +1,27 @@
 """Parâmetros do modelo SCB — TODOS os [a calibrar] saem do backtest (M6), não de palpite.
 
-Placeholders herdados do SCM/contrato até o grid: mudar valor calibrado = registrar no
-DECISIONS; mudar FÓRMULA = bump de MODEL_VERSION (regra D-01/D-11).
+Placeholders herdados do SCM/contrato até o grid; mudar valor calibrado = D-NN;
+mudar FÓRMULA = bump de MODEL_VERSION (regra D-01/D-11).
+M6.1 (D-19): grid ESTÁTICO de H/T_base REJEITADO pelo portão nas 2 ligas
+(não-estacionariedade) — valores abaixo seguem os do baseline validado.
 """
 
-# --- Elo (contrato §1; port do scm/config) -------------------------------------
-K_LIGA = {"default": 30.0}    # [a calibrar M6] K único por liga (clube joga ~2x/semana;
-                              # o K por tipo-de-torneio era coisa de seleção — contrato §2)
-H_LIGA = {"default": 100.0}   # [a calibrar M6] mando da liga, presente em TODO jogo
-                              # (referência herdada: empírico de seleções ~110-120, D-47 SCM)
+# --- Elo (contrato §1) -----------------------------------------------------------
+K_LIGA = {"default": 30.0}    # [a calibrar] K único por liga
+H_LIGA = {"default": 100.0}   # [a calibrar] mando da liga (estático rejeitado D-19;
+                              #   candidato M6.3: mando por janela móvel PIT)
+SEASON_RHO = 0.0              # candidato C5 (0.0 = OFF até o portão)
 
-# Candidato C5 (contrato §3.4) — regressão do Elo à média na VIRADA de temporada.
-# OFF até passar o portão (0.0 = no-op). Substitui o `_revert` do SCM (rejeitado lá
-# p/ seleções; em liga a variante certa é por TEMPORADA, não por meses parado — D-05).
-SEASON_RHO = 0.0              # [candidato ao portão M6] fração puxada rumo a 1500
+# --- Gols (contrato §1) ----------------------------------------------------------
+T_BASE_LIGA = {"BRA": 2.40, "E0": 2.70, "default": 2.6}   # placeholder medido M1
 
+# --- Drift do canal de gols (M6.2 / C3, família D-84 SCM) -------------------------
+USE_MKT_DRIFT = False         # ligar SÓ se o gate (python -m scb.drift) passar E a
+                              # decisão de timing for tomada (D-NN); corrige over/BTTS
+                              # na LEITURA (predict_match); 1X2 intocado por construção
+DRIFT_W_DIAS = 3650.0
 
-# --- Gols (contrato §1: T_base/θ/κ [a calibrar M6]) ------------------------------
-# T_base por liga: placeholder = gols/jogo MEDIDO na M1 (melhor que o 2,6 da Copa);
-# o grid da M6 refina (o κ·E|dr| embutido na média é absorvido lá).
-T_BASE_LIGA = {"BRA": 2.40, "E0": 2.70, "default": 2.6}
-
-MODEL_VERSION = "scb-v0.1-baseline"   # bump SÓ com mudança de fórmula (D-01/D-11)
+MODEL_VERSION = "scb-v0.1-baseline"
 
 
 def k_for(league: str) -> float:

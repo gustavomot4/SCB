@@ -31,10 +31,14 @@ Registro curto de *por que* cada escolha. **Append-only** — decisão nova = li
 
 | D-18 | 2026-07-16 | **Simulador de liga (M5)**: fixtures restantes DERIVADAS do turno-returno (fonte sem calendário futuro); forças ESTÁTICAS na sim (como no SCM); desempate pontos→vitórias→saldo→gols pró→sorteio, com **cartões pulados (lacuna de dado)** e **confronto direto fora da V1** (simplificação declarada) | jogos reais travados (D-83/85 SCM); seed fixa; invariantes testados (Σtítulo=1). Mudar a ordem do desempate = 1 linha no sort (Q-03) |
 
+| D-19 | 2026-07-16 | **M6.1 REJEITADA pelo portão: recalibração ESTÁTICA de H/T_base** (`scb/calibrate.py`, grid 2014–19 → gate 2020–26): candidato H=120/T_base=2,20 piora gols com IC<0 (Δ−0,0065 IC[−0,0101,−0,0031]) e não melhora o 1X2 (IC cruza) | **regime inverteu entre eras** (mando BRA caiu pós-COVID; gols subiram 2,18→2,66) — mesmo padrão D-25/D-40 SCM. Caminho: **C3 janela móvel PIT** (família APROVADA no SCM, D-84) p/ gols, e variante rolling p/ mando como candidato novo. Baseline v0.1 segue como está — o gate protegeu o modelo |
+
+| D-20 | 2026-07-16 | **M6.2 REJEITADA pelo portão: drift PIT do canal de gols (C3)** — `scb/drift.py` (família D-84 SCM): validação BRA over Δ−0,00010 IC[−0,00181,+0,00159] / BTTS +0,00005 IC cruza; E0 idem; kill-switch ok (corr ~0). **E0 também rejeitou a M6.1** (H*=100=atual; T_base do treino regride gols IC[−0,0058,−0,0019]) — completa a D-19 | o ganho do SCM vinha da estrutura por CLASSE (amistoso/major) que liga única não tem; a deriva recente do BRA (25-26) fica atrás da janela. C3 vai à lista-morta COM números (re-propor só com ângulo novo). Baseline v0.1 segue o melhor modelo conhecido |
+
 ## Questões abertas (não são decisões ainda)
 
 | # | Questão | Dono | Quando decidir |
 |---|---|---|---|
 | Q-01 | Com série histórica de odds, o backtest pode medir o peso ótimo do mercado no ensemble. Se der > 0,20: sobe o teto? | Gustavo | M6 (números na mesa: mercado 0,595/0,566 vs modelo 0,615/0,590) |
 | Q-02 | ~~Kaggle?~~ **FECHADA (D-14: não; burn-in interno)** | — | — |
-| Q-03 | Ordem de desempate CBF 2026: **confirmar no regulamento oficial** (implementada a histórica pontos→vitórias→saldo→gols pró; cartões sem dado; confronto direto fora da V1 — D-18) | **Gustavo (1 min no site da CBF)** | antes de divulgar P(título) |
+| Q-03 | ~~Desempate CBF~~ **FECHADA (2026-07-16, verificação web):** ordem oficial 2026 = vitórias→saldo→gols pró→confronto direto→menos vermelhos→menos amarelos→sorteio — bate com a implementada (D-18); confronto direto e cartões seguem simplificações declaradas | — | — |

@@ -8,6 +8,17 @@ tipo: log
 
 > Log datado, append-only. **Não é carregado nas sessões** (o presente mora no CONTEXT.md). Uma linha por evento relevante; detalhe fica no commit/D-NN.
 
+## 2026-07-16 (f) — M6.2 rejeitada · Q-03 fechada · M6.1-E0 rejeitada
+- **D-20:** drift PIT do canal de gols (C3, família D-84 SCM) REJEITADO nas 2 ligas (IC cruza zero; kill-switch ok). `scb/drift.py` + `config.USE_MKT_DRIFT=False` + 3 testes (53 no total). Interpretação: o ganho do SCM vinha da estrutura por classe; liga única não tem.
+- M6.1 na E0 (run do Gustavo): também rejeitada (T_base do treino regride gols) — D-19 completa nas 2 ligas.
+- **Q-03 FECHADA por verificação web:** ordem CBF 2026 (vitórias→saldo→gols pró→confronto direto→cartões→sorteio) = a implementada; simplificações da D-18 seguem declaradas.
+- Estado honesto da evolução: 2 candidatos testados, 2 rejeitados com números — baseline v0.1 segue o melhor modelo. Fila: M6.3 (mando rolling PIT), C1/C2/C4/C5/C6, banda.
+
+## 2026-07-16 (e) — M5 FECHADA (oficial) + M6.1 rodada e REJEITADA (o portão protegeu)
+- M5 oficial: 50 passed; tabela BRA 2026 na tela do Gustavo (Palmeiras 78,8%). Operação liberada ([[Operacao BRA 2026]]).
+- M6.1 (`scb/calibrate.py`): grid estático de H_pred/T_base com era de validação separada → **REJEITADO (D-19)**: candidato do treino (H=120, T_base=2,20) piora gols na validação (IC<0). Causa: não-estacionariedade (mando ↓ pós-COVID, gols ↑ recentes) — regime inverte entre eras, calibração estática corrige ao contrário. Mesmo padrão D-25/D-40 SCM.
+- Rota da M6: C3 (janela móvel PIT de gols — família aprovada no SCM D-84) e candidato novo "mando rolling PIT". Baseline v0.1 intacto.
+
 ## 2026-07-16 (d) — M4 FECHADA (oficial, números idênticos) + M5 pronta
 - Run oficial da M4 reproduziu o sandbox dígito a dígito (47 passed; pipeline determinístico) → **`baseline-scb-v0.1` CONGELADO (D-17)**.
 - M5: `simulate_league` (MC da temporada, fixtures derivadas, real travado, desempate D-18/Q-03), `predict_match` (porta da frente = backtest, D-34), `registrar` (imutável + settle ±2d + report power-aware), runbook [[Operacao BRA 2026]]. 3 testes (50 no total).

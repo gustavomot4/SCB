@@ -52,7 +52,10 @@ data: 2026-07-14
 - [ ] **[M5] ▶ OPERAÇÃO: registrar a PRÓXIMA rodada do BRA 2026** (runbook: [[Operacao BRA 2026]]) — toda rodada, sem exceção (lição 19/81 do SCM)
 - [x] **[M5] `simulate_league`** — fixtures derivadas do turno-returno, real travado, desempate parametrizado (D-18; Q-03 [confirmar]), seed fixa; invariantes testados; **E2E real BRA 2026: Palmeiras 78,8% título / Flamengo 20,7% / Chape 100% Z4, 5000 sims/3s**
 - [x] **[M5] `predict_match` (porta da frente, produção=backtest D-34) + `registrar` (imutável, settle ±2d, report power-aware)** — 3 testes; runbook escrito. *Monitor de drift (D-76) → M6/M7: precisa de registro ACUMULADO para ter n*
-- [ ] **[M6] Calibrar H/K/θ/κ/T_base + curvas por liga** — *aceite:* grid no treino, validação walk-forward, congelado por versão. *Insumos já medidos:* T_base BRA ≈ 2,40 ≠ 2,6 da Copa (M1); we_home 0,619 vs real 0,595 com H=100 → H de liga é menor (M3.1)
+- [x] **[M6.1] Grid estático H/T_base — REJEITADO pelo portão (D-19)** — `scb/calibrate.py` (era de calibração vs era de validação): candidato piora gols IC<0; regime inverteu entre eras (mando pós-COVID ↓, gols ↑). Baseline v0.1 mantido. *Rodar E0 na máquina do Gustavo p/ completar o registro (`python -m scb.calibrate --league E0`)*
+- [x] **[M6.2] C3 drift PIT de gols — REJEITADO (D-20)** — `scb/drift.py` + 3 testes: IC cruza zero nas 2 ligas; kill-switch limpo; flag `USE_MKT_DRIFT=False` permanece. Lista-morta com números. *Q-03 fechada (ordem CBF confirmada — bate com a D-18)*
+- [ ] **[M6.3] Candidato NOVO: mando por janela móvel PIT** (o H estático morreu pela mesma não-estacionariedade; a variante rolling é o ângulo novo que a D-05 exige) — *aceite:* ΔBrier 1X2 IC>0 + guardas
+- [ ] **[M6] Fila restante: C1 descanso · C2 Dixon-Coles · C4 viagem · C5 regressão de temporada · C6 H por clube · banda/σ_dr (sub-cobre extremos, D-17)** — um por vez, cada um com portão
 - [ ] **[M6] Fila do portão C1–C6** (descanso, Dixon-Coles, drift de gols, viagem, regressão de temporada, H por clube) — *aceite:* um por vez; IC>0 + guardas + kill-switch; rejeição vira D-NN
 - [ ] **[M7] Web adaptada** (prever jogo, tabela simulada, prospectivo, monitor) + launcher — *aceite:* QA adversarial sem crítico/alto aberto
 - [ ] **[M7] Empacotamento** — *aceite:* CHECKLIST.md completo (zip sem deps/segredos, aberto e conferido)
