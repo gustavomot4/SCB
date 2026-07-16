@@ -1,0 +1,5 @@
+# teto de major (política do SCM D-43; lock exato via pip freeze quando congelar)
+numpy>=1.26,<3
+pandas>=2,<3
+requests>=2,<3
+pytest>=8,<9
