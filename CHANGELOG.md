@@ -8,6 +8,9 @@ tipo: log
 
 > Log datado, append-only. **Não é carregado nas sessões** (o presente mora no CONTEXT.md). Uma linha por evento relevante; detalhe fica no commit/D-NN.
 
+## 2026-07-16 (h) — M6.4: C1 descanso intra-liga rejeitado (D-22)
+- `scb/descanso.py` + 3 testes (59): rest diferencial PIT com clip [2,8], β em grade. BRA e E0: IC cruza zero; kill-switch ok. Diagnóstico: rodadas simétricas INTRA-liga (\|diff\| ~0,7d) — a congestão real exige calendário externo (lacuna declarada). Placar da fila: 4 testados, 1 aprovado (mando rolling E0), 3 rejeitados com números.
+
 ## 2026-07-16 (g) — M6.3: PRIMEIRO TERMO A PASSAR UM PORTÃO NO SCB (D-21)
 - `scb/mando_rolling.py` (ângulo novo da D-19): δ do mando por janela móvel PIT, inversão exata da curva Elo, cap ±60, zero parâmetro além de W. +3 testes (56).
 - **E0 PASSA:** 1X2 +0,00180 IC[+0,00059,+0,00302] (n=6.080), gols +0,00066 IC>0, kill-switch −0,004; δ vigente −36,8 Elo (mando pós-COVID). **BRA rejeitado** (IC cruza; δ −12). Q-04: adoção na E0 = decisão do Gustavo (flag OFF até lá).

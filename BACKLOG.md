@@ -55,7 +55,8 @@ data: 2026-07-14
 - [x] **[M6.1] Grid estático H/T_base — REJEITADO pelo portão (D-19)** — `scb/calibrate.py` (era de calibração vs era de validação): candidato piora gols IC<0; regime inverteu entre eras (mando pós-COVID ↓, gols ↑). Baseline v0.1 mantido. *Rodar E0 na máquina do Gustavo p/ completar o registro (`python -m scb.calibrate --league E0`)*
 - [x] **[M6.2] C3 drift PIT de gols — REJEITADO (D-20)** — `scb/drift.py` + 3 testes: IC cruza zero nas 2 ligas; kill-switch limpo; flag `USE_MKT_DRIFT=False` permanece. Lista-morta com números. *Q-03 fechada (ordem CBF confirmada — bate com a D-18)*
 - [x] **[M6.3] Mando rolling PIT — PASSA na E0 (1º ✅ da fila!), rejeitado no BRA (D-21)** — `scb/mando_rolling.py` + 3 testes (56 no total); E0: 1X2 +0,00180 IC>0, δ vigente −36,8 Elo; **Q-04 aberta: Gustavo decide a adoção (wiring + bump v0.2 + re-run M4)**
-- [ ] **[M6] Fila restante: C1 descanso · C2 Dixon-Coles · C4 viagem · C5 regressão de temporada · C6 H por clube · banda/σ_dr (sub-cobre extremos, D-17)** — um por vez, cada um com portão
+- [x] **[M6.4] C1 descanso intra-liga — REJEITADO nas 2 ligas (D-22)** — `scb/descanso.py` + 3 testes (59): rodadas simétricas dentro da liga (\|diff\| ~0,7d); re-teste só com calendário externo grátis
+- [ ] **[M6] Fila restante: C2 Dixon-Coles · C4 viagem · C5 regressão de temporada · C6 H por clube · banda/σ_dr (sub-cobre extremos, D-17) · Q-04 (adoção mando rolling E0)** — um por vez, cada um com portão
 - [ ] **[M6] Fila do portão C1–C6** (descanso, Dixon-Coles, drift de gols, viagem, regressão de temporada, H por clube) — *aceite:* um por vez; IC>0 + guardas + kill-switch; rejeição vira D-NN
 - [ ] **[M7] Web adaptada** (prever jogo, tabela simulada, prospectivo, monitor) + launcher — *aceite:* QA adversarial sem crítico/alto aberto
 - [ ] **[M7] Empacotamento** — *aceite:* CHECKLIST.md completo (zip sem deps/segredos, aberto e conferido)

@@ -37,6 +37,8 @@ Registro curto de *por que* cada escolha. **Append-only** — decisão nova = li
 
 | D-21 | 2026-07-16 | **M6.3 mando rolling PIT (`scb/mando_rolling.py`): PASSA na E0, rejeitado no BRA** — E0 validação n=6.080: 1X2 **+0,00180 IC[+0,00059,+0,00302]**, gols +0,00066 IC>0, kill-switch −0,004, δ vigente **−36,8 Elo** (queda estrutural do mando pós-COVID); BRA: −0,00087 IC cruza (δ −12, ruidoso) | **1º termo a passar um portão no SCB.** Adoção é DECISÃO SEPARADA do Gustavo (Q-04): wiring por liga + bump `scb-v0.2-mando-e0` + re-run M4. Flag OFF até lá. Família = ângulo novo da D-19 (rolling em vez de estático) — o método funcionando |
 
+| D-22 | 2026-07-16 | **M6.4 REJEITADA: descanso diferencial INTRA-LIGA (C1)** — `scb/descanso.py`: BRA Δ1X2 −0,00019 IC[−0,00041,+0,00003]; E0 −0,00003 IC cruza; kill-switch ok | causa visível no STEP 0: \|diff\| médio 0,76d/0,67d — rodadas são simétricas DENTRO da liga; a congestão real (Libertadores/Copa do Brasil/qua-dom) não está na fonte (lacuna declarada em [[DADOS]]). **Re-testar SÓ com calendário externo grátis** (= ângulo novo exigido pela D-05). C1 à lista-morta como-testado |
+
 ## Questões abertas (não são decisões ainda)
 
 | # | Questão | Dono | Quando decidir |
