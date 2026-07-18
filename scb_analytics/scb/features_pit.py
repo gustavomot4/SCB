@@ -25,7 +25,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from . import db
+from . import config, db
 from .elo_engine import EloParams, sigma_r
 from .ingest import DEFAULT_DB
 
@@ -100,6 +100,12 @@ def run(conn, params: FeatureParams = FeatureParams(),
     else:
         conn.execute("DELETE FROM match_features")
         done = set()
+    # D-26 (Q-04): mando rolling POR LIGA — δ PIT somado ao dr_adj nas ligas adotadas
+    mando_delta: dict = {}
+    for lg in [r[0] for r in conn.execute("SELECT DISTINCT league FROM matches")]:
+        if config.mando_rolling_for(lg):
+            from . import mando_rolling
+            mando_delta.update(mando_rolling.deltas_by_match(conn, lg, config.MANDO_ROLLING_W))
     rows = conn.execute(
         """SELECT m.match_id, m.date, m.home_team_id, m.away_team_id,
                   mr.dr AS dr_elo, mr.home_n_pre, mr.away_n_pre
@@ -116,7 +122,8 @@ def run(conn, params: FeatureParams = FeatureParams(),
         sr_a = sigma_r(r["away_n_pre"], elo_params) * vol_mult(da, na_f)
         sa_h = params.sigma_ajuste_c * dh
         sa_a = params.sigma_ajuste_c * da
-        dr_adj = r["dr_elo"] + fh - fa               # produção = backtest (D-34 SCM)
+        dr_adj = r["dr_elo"] + fh - fa \
+            + mando_delta.get(r["match_id"], 0.0)    # produção = backtest (D-34 SCM; D-26)
         sigma_dr = math.sqrt(sr_h ** 2 + sr_a ** 2 + sa_h ** 2 + sa_a ** 2)
         conn.execute(
             """INSERT OR REPLACE INTO match_features

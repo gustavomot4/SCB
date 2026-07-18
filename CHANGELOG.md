@@ -8,6 +8,56 @@ tipo: log
 
 > Log datado, append-only. **Não é carregado nas sessões** (o presente mora no CONTEXT.md). Uma linha por evento relevante; detalhe fica no commit/D-NN.
 
+## 2026-07-17 (e) — Evolução: proxy de xG REJEITADO (D-32) + base `match_stats` + telas
+- **Portão do proxy de xG por CHUTES NO GOL (SoT)** — `scb/sot_edge.py` (δ PIT anti-look-ahead somado ao `dr`; K/θ escolhidos na era de calibração). Gate-0 promissor (corr parcial 0,11 no saldo, além do Elo), mas o **portão completo REJEITOU** (E0 validação 2014-25, n=4560, K\*=5 θ\*=10): 1X2 Δ−0,0005 IC cruza zero; over/BTTS e ECE regridem; kill-switch corr 0,70 (ok). Eco do Dixon-Coles (D-27): sinal marginal dilui no ensemble. **2 canais testados, ambos rejeitados**: (dr) 1X2 −0,0005 IC cruza + gols/ECE regridem; (gd, δ só na margem da Poisson) 1X2 +0,0001 IC cruza + gols regride. Sinal real mas fraco/entrelaçado com o Elo (corr 0,70). **3º ângulo — SoT-TOTAL→T_m**: MELHORA os gols (over/BTTS Δ+0,0013 IC>0) + ECE, independente do Elo (corr 0,07), mas trips a guarda do 1X2 por um fio (−0,00007). Não adotado no λ compartilhado, mas é o 1º sinal ÚTIL — caminho: desacoplar (SoT-total só nas saídas de gols). Módulo OFF; `MODEL_VERSION` inalterada.
+- **Base `match_stats` (nova)** — ingest agora guarda escanteios/cartões/chutes/faltas/HT/árbitro da Premier (E0 2000-2025, 11.780 jogos); BRA sem stats (lacuna da fonte). DESCRITIVO — o modelo não lê. +5 testes. Exibida no **Prever Confronto** (perfil estatístico, médias/jogo, barras estilo Globo/Opta) via `/api/matchstats`.
+- **Telas/UX** — E0→**PRE** só no display (código interno segue `E0`); `fixtures.csv` com BRA rodada 19 + PL 2026/27 (+coluna `round`); **Tabela Simulada** projeta a temporada a partir do calendário quando ainda não começou (PRE 2026/27) + coluna **V–E–D** + clique no clube (Elo/forma/rank); tela nova **Jogos** por rodada (placar mais provável, estilo Globo). Logos: `object-fit:contain` (fim do esticamento) + Coventry/Hull nas cores curadas.
+- **Comparativo de mercado** — SCB vs Opta/538-SPI/ClubElo: SCB é grátis/local/auditável/bem-calibrado; teto ~2pp atrás do mercado (que a Opta parcialmente usa como input); maior lacuna = sem xG e sem dados de jogador.
+
+## 2026-07-17 (d) — Registro da RODADA em 1 clique (D-31)
+- Pergunta do Gustavo: "não dá pra apertar um botão e registrar a rodada?" Resposta honesta: a fonte NÃO publica calendário futuro (lacuna declarada) e scraping fura ToS/R$0. Desenho dentro das regras: **`dados/fixtures.csv` colado 1x por temporada** (a CBF publica a tabela completa) + `registrar.auto(dias=4)` — registra tudo que vence na janela, idempotente. Na web: botão **"Registrar rodada"** no Prospectivo; na CLI: `python -m scb.registrar auto` (agendável no Task Scheduler do Windows p/ automação total).
+- Bônus de robustez: **settle acha jogo ADIADO** — o par ordenado (casa,fora) é único por temporada no turno-returno, então casar o jogo mais próximo após o registro é seguro (antes: ±2d e ficava em aberto p/ sempre).
+- 2 testes novos (janela+idempotência; adiado liquida). 73 no total.
+
+## 2026-07-17 (c) — Escudos: estado final + REGISTRO PELA WEB
+- Escudos: Premier 100%; BRA = 4 automáticos (tudo que o FCLOGO/CBF tem) + **lista manual digna** p/ os 16 da temporada (`dados/escudos-pendentes.md`, slugs exatos) — 5 repositórios varridos, fontes públicas esgotadas com honestidade.
+- **Prospectivo ganhou operação pela web** (pedido do Gustavo): formulário "Registrar jogo" (liga/casa/fora/data → `/api/registrar`, imutável e idempotente — mostra o V/E/D gravado) + botão "Liquidar resultados" (`/api/settle`). O ritual da rodada agora é 100% sem terminal. Exige reiniciar o `.bat` (código novo).
+
+## 2026-07-17 (b) — QA-10: cache-busting fecha a saga dos escudos
+- Verificado contra o disco real: **a v5 baixou o BRA** (palmeiras.svg, flamengo-rj.svg via /CBF/) e a rota serve os arquivos certos p/ TODOS os testados. O que segurava era o **cache do navegador** (max-age=86400 da 1ª versão sobrevive a reiniciar a máquina — o browser nem consulta o servidor até expirar). Fix independente do navegador: **URLs com `?v=2`** nos templates (cache key nova) — F5 normal resolve.
+
+## 2026-07-17 — QA-09: escudos v5 — resolvido COM DADO (modo --investigar)
+- `--investigar` (novo) imprimiu a estrutura REAL: FCLOGO organiza por FEDERAÇÃO (Brasil = `/CBF/`, nunca "brazil" no caminho) e nomeia por extenso com sufixo de versão (`Clube-de-Regatas-do-Flamengo-v0000`). Três consertos medidos: (a) hint `/cbf/`+`br-brazil`; (b) matching por SUBCONJUNTO DE PALAVRAS (apelido ⊆ nome oficial) com desempate por similaridade; (c) **bug das chaves do ALIAS sem normalização** (Nott'm/Ipswich regrediram na v3 por isso). Sufixos v0000 e bandeiras 1200x630 filtrados. Harness com os caminhos reais: **12/12 + guarda de bandeira**.
+- Confirmado no disco via mount: 28 PNGs da E0 presentes; BRA aguardando o run da v5.
+
+## 2026-07-16 (r) — QA-08: escudos v4 (fonte BRA de verdade) + causa do "não aparece nada"
+- Run do Gustavo: hugomiura tinha SÓ 4 arquivos (fonte furada → BRA 0/38) e a web seguia genérica porque **o servidor antigo continuava no ar** (a correção QA-06 do cache é código → exige reiniciar o `.bat` + Ctrl+F5; os 28 PNGs da E0 JÁ estavam no disco).
+- **v4:** repo Leo4815162342/football-logos (3.400+ escudos SVG+PNG mundiais) em modo "auto" — cada arquivo classificado pela pasta do país (brazil→BRA, england→E0); hugomiura removido.
+
+## 2026-07-16 (q) — QA-06/QA-07: escudos v3 + cache do badge
+- **QA-06 [corrigido]:** a rota `/badge` mandava `max-age=86400` → o navegador segurava o SVG antigo por 24h e os PNGs baixados "não apareciam". Agora `no-cache` (app local) e o override aceita **.png OU .svg**.
+- **QA-07 [corrigido]:** matching v2 com cutoff frouxo criou falsos positivos (Juventude←Juventus, Mirassol←Sassuolo, Portsmouth←Bournemouth, Barnsley←Burnley…) e o repo mundial não tinha Brasil. **v3:** fonte BRA dedicada (hugomiura/escudos-times-brasil-svg, Séries A+B em SVG), **afinidade por repositório** (repo BR só alimenta BRA; europeu só E0), cutoff 0,82 e fora-do-pool só match EXATO; `--limpar` refaz do zero. Harness: 11/11 (falsos da v2 mortos; Atlético-MG→Mineiro via alias confirmado).
+
+## 2026-07-16 (p) — QA-05: baixar_escudos v2 (árvore completa, sem chute de pasta)
+- 1º run do Gustavo: v1 chutava nomes de pasta (repo tinha `logos/` na raiz e ligas dentro) → 0 escudos, aviso gracioso. **v2: API git/trees baixa a árvore INTEIRA (1 chamada/repo) e casa clube×PNG por similaridade** com mapa de apelidos (Man City→Manchester City, Bragantino→Red Bull, Atlético-MG→Mineiro…) e filtro de liga (sem vazamento cruzado). 2 fontes: luukhopman (Europa/E0, temporadas 21/22–25/26) + klunn91/team-logos (mundial, tentativa BRA). Matching 5/5 no harness. Sem match = badge SVG (fallback intacto).
+
+## 2026-07-16 (o) — Feedback do Gustavo na web: QA-04 + escudos PNG + compartilhar (D-30)
+- **QA-04 [corrigido]:** chips de probabilidade tinham glow verde-sobre-verde ilegível (achado do usuário, com print) → chips SÓLIDOS de alto contraste (≥50% = volt com texto escuro; faixas médias em roxo/cinza; Z4 vermelho sólido).
+- **D-30 — escudos PNG (projeto pessoal/estudo):** `scripts/baixar_escudos.py` — VOCÊ roda (padrão `--download`): lista repo público de logos via API do GitHub, casa nomes por similaridade com os slugs e preenche `static/logos/`; a web usa os PNGs automaticamente (override já existente); sem match = badge SVG. Uso pessoal, nunca publicar.
+- **Compartilhar/imprimir:** CSS de impressão (tema claro p/ papel/PDF, esconde navegação) + botões "Imprimir/PDF" e "Copiar resumo" (texto formatado p/ clipboard) nas telas de confronto e tabela, com cabeçalho carimbado (versão, data, "probabilidade nunca certeza").
+- Templates re-renderizados no Jinja do sandbox; teste visual = navegador do Gustavo.
+
+## 2026-07-16 (n) — M7.1: WEB estilo EA FC entregue (D-29)
+- `scb/web.py` (Flask lazy) + `scb/badges.py` + 3 templates (layout com design system dark/condensado; prever com arena VS + barras animadas + top-5 em tiles; tabela com trilho de temporada + chips coloridos por probabilidade; prospectivo com painel de auditoria) + `Abrir SCB.bat`.
+- Escudos: SVG gerado com cores REAIS por clube (~50 curados + fallback hash) + override `static/logos/<slug>.png` (uso pessoal). Sem Node (TECH_STACK); fontes CDN com fallback (offline ok).
+- 5 testes de badges/import (71); 3 telas renderizam no Jinja do sandbox; Flask ao vivo = navegador do Gustavo (precedente SCM).
+
+## 2026-07-16 (m) — Fila da E0 fechada: `scb-v0.3-mando-e0` (D-26/27/28)
+- **Q-04 executada (D-26):** mando rolling adotado na E0 (features_pit soma δ PIT no dr_adj; predict_match usa delta_today; harness lê dc_rho/config). Oficial: **E0 0,5899→0,5894 · ECE 0,0365→0,0290 · gap mercado −0,0156; BRA 0,6131 intacto.** δ embutido: E0 −41,5 Elo / BRA 0,0. Fix: default min_n congelava no def.
+- **Q-05 fechada (D-27):** DC rejeitado no 2º gate (re-blend 1X2: +0,00005 IC cruza) — ganho do empate dilui no ensemble; capacidade dc_rho testada e OFF.
+- **Banda medida (D-28):** σ×1,3 → E0 8/10 (+29% largura), BRA neutro → Q-07 (2ª propagação só-banda, M7+).
+- +3 testes (66). C4 precisa de curadoria de coordenadas (Q-08); C6 pronto-para-rodar. **M7 liberada.**
+
 ## 2026-07-16 (l) — M6.7 FECHADA no run oficial (números idênticos)
 - Rebuild do Gustavo: 63 passed · BRA 0,6131 (todas as réguas internas PASSAM, incl. elo_puro +0,0014 IC>0) · E0 idêntica · sim 2026 Palmeiras 79,6%. `scb-v0.2-rho-bra` é o modelo OFICIAL.
 - Observação de exibição (não-bug): clube que saiu da liga há anos (ex.: Portuguesa, 2013) não sofre as regressões anuais → rating congelado aparece alto no top-10 de `ratings_current`. Não toca previsão/sim (só joga quem está na temporada). Cosmético p/ M7 (filtrar ranking por clubes da temporada corrente).

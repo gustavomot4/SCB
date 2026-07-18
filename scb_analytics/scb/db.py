@@ -101,6 +101,20 @@ CREATE TABLE IF NOT EXISTS predictions (
     p_over25 REAL, p_btts REAL,
     PRIMARY KEY (match_id, versao_modelo)
 );
+-- estatísticas de jogo do football-data (só ligas 'main'/E0; BRA não traz -> sem linha).
+-- PURAMENTE DESCRITIVO: o modelo (elo/features/predictor) NÃO lê esta tabela. Coluna
+-- ausente ou temporada antiga sem stat = NULL declarado (regra: não inventar dado).
+CREATE TABLE IF NOT EXISTS match_stats (
+    match_id     INTEGER PRIMARY KEY REFERENCES matches(match_id),
+    ht_home      INTEGER, ht_away      INTEGER,   -- placar do 1º tempo (HTHG/HTAG)
+    shots_home   INTEGER, shots_away   INTEGER,   -- HS/AS
+    sot_home     INTEGER, sot_away     INTEGER,   -- HST/AST (no gol)
+    fouls_home   INTEGER, fouls_away   INTEGER,   -- HF/AF
+    corners_home INTEGER, corners_away INTEGER,   -- HC/AC
+    yellow_home  INTEGER, yellow_away  INTEGER,   -- HY/AY
+    red_home     INTEGER, red_away     INTEGER,   -- HR/AR
+    referee      TEXT
+);
 """
 
 

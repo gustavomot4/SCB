@@ -1,0 +1,195 @@
+{% extends "layout.html" %}
+{% block titulo %}Prever confronto{% endblock %}
+{% block css %}
+<style>
+.arena{display:grid;grid-template-columns:1fr 130px 1fr;gap:18px;align-items:stretch}
+.clube{padding:26px 20px;text-align:center;position:relative;overflow:hidden}
+.clube img{width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 10px 26px rgba(0,0,0,.55));
+           transition:transform .25s}
+.clube:hover img{transform:scale(1.06) rotate(-2deg)}
+.clube .nome{font-family:var(--cond);font-weight:900;font-size:26px;text-transform:uppercase;
+             letter-spacing:.04em;margin:12px 0 14px;min-height:30px}
+.clube .papel{font-family:var(--cond);letter-spacing:.2em;font-size:12px;color:var(--dim);
+              text-transform:uppercase;margin-bottom:14px}
+.vs{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.vs .x{font-family:var(--cond);font-weight:900;font-size:54px;color:var(--dim)}
+.resultado{margin-top:26px;display:none}
+.linhaP{display:grid;grid-template-columns:120px 1fr 90px;gap:14px;align-items:center;margin:12px 0}
+.linhaP .rot{font-family:var(--cond);font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--dim)}
+.linhaP .pct{font-family:var(--cond);font-weight:900;font-size:30px;text-align:right}
+.placares{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}
+.placar{text-align:center;padding:16px 8px}
+.placar .s{font-family:var(--cond);font-weight:900;font-size:34px}
+.placar .p{color:var(--dim);font-family:var(--cond);font-size:15px;margin-top:2px}
+.gridtiles{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:16px}
+.explica{margin-top:14px;color:var(--dim);font-size:13px}
+.erro{color:var(--vermelho);margin-top:14px;display:none}
+h2.sec{font-family:var(--cond);font-weight:900;text-transform:uppercase;letter-spacing:.08em;
+       font-size:22px;margin:28px 0 6px;color:var(--tx)}
+.sechint{font-size:13px;color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0}
+.shead2{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;
+        font-family:var(--cond);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:17px}
+.shead2 .mid{color:var(--dim);font-size:12px;letter-spacing:.12em;font-weight:700}
+.strow{display:grid;grid-template-columns:54px 1fr 54px;align-items:center;gap:14px;margin:11px 0}
+.snum{font-family:var(--cond);font-weight:900;font-size:19px;text-align:center}
+.smid{text-align:center}
+.slabel{font-family:var(--cond);text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--dim);margin-bottom:5px}
+.sbar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:rgba(255,255,255,.06)}
+.sbar i{transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.sbar .sh{background:linear-gradient(90deg,#9BE626,#C7FF29)}
+.sbar .sa{background:linear-gradient(90deg,#38BDF8,#7C3AED)}
+</style>
+{% endblock %}
+{% block corpo %}
+<div class="head">
+  <div><h1>Prever<br>Confronto</h1>
+    <div class="sub">Pronto para ler um jogo com o motor validado? Escolha os clubes — o modelo entrega V/E/D com banda, gols esperados e placares.</div></div>
+  <div class="seg" id="ligas">{% for lg in ligas %}<button data-lg="{{ lg }}" class="{{ 'on' if loop.first }}">{{ lg|nome_liga }}</button>{% endfor %}</div>
+</div>
+
+<div class="arena">
+  <div class="card clube fade">
+    <div class="papel">Mandante</div>
+    <img id="imgH" src="" alt="">
+    <div class="nome" id="nomeH">—</div>
+    <select id="selH"></select>
+  </div>
+  <div class="vs"><div class="x">VS</div>
+    <button class="pill volt" id="go">Prever</button></div>
+  <div class="card clube fade">
+    <div class="papel">Visitante</div>
+    <img id="imgA" src="" alt="">
+    <div class="nome" id="nomeA">—</div>
+    <select id="selA"></select>
+  </div>
+</div>
+<div class="erro card" id="erro"></div>
+
+<div class="print-head"><div class="t">SCB · Confronto</div><div class="m" id="printmeta"></div></div>
+<div class="resultado" id="res">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <h2 class="sec">Leitura do modelo</h2>
+    <div class="noprint" style="display:flex;gap:10px">
+      <button class="pill ghost" onclick="window.print()">Imprimir / PDF</button>
+      <button class="pill ghost" id="copiar">Copiar resumo</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="linhaP"><div class="rot" id="rotV">Vitória casa</div><div class="bar"><i id="bV" style="background:linear-gradient(90deg,#9BE626,#C7FF29)"></i></div><div class="pct" id="pV">–</div></div>
+    <div class="linhaP"><div class="rot">Empate</div><div class="bar"><i id="bE" style="background:linear-gradient(90deg,#64748B,#94A3B8)"></i></div><div class="pct" id="pE">–</div></div>
+    <div class="linhaP"><div class="rot" id="rotD">Vitória fora</div><div class="bar"><i id="bD" style="background:linear-gradient(90deg,#7C3AED,#A78BFA)"></i></div><div class="pct" id="pD">–</div></div>
+    <div class="explica" id="explica"></div>
+  </div>
+
+  <h2 class="sec">Mercados da mesma matriz</h2>
+  <div class="tiles gridtiles">
+    <div class="tile"><div class="k">Gols esperados</div><div class="v" id="lams">–</div></div>
+    <div class="tile"><div class="k">Over 2.5</div><div class="v" id="over">–</div></div>
+    <div class="tile"><div class="k">Ambos marcam</div><div class="v" id="btts">–</div></div>
+    <div class="tile"><div class="k">Banda P(V) 16–84</div><div class="v" id="banda">–</div></div>
+  </div>
+
+  <h2 class="sec">Placares mais prováveis</h2>
+  <div class="placares" id="top5"></div>
+
+  <h2 class="sec">Perfil estatístico <span class="sechint">· médias por jogo, não previsão deste confronto</span></h2>
+  <div class="card" id="statsCard">
+    <div id="statsBody"></div>
+    <div class="explica" id="statsNota"></div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+const TIMES = {{ times | tojson }};
+const NOMES = {{ nomes_liga | tojson }};      // código interno -> rótulo (E0 -> PRE)
+const nomeLiga = c => NOMES[c] || c;
+let liga = "{{ ligas[0] }}";
+const $ = id => document.getElementById(id);
+function badge(n){ return "/badge/" + encodeURIComponent(n) + ".svg?v=2"; }  // v=2: fura o cache antigo de 24h (QA-10)
+function encher(){
+  const ts = TIMES[liga] || [];
+  for (const [sel, img, nome, i] of [["selH","imgH","nomeH",0],["selA","imgA","nomeA",1]]){
+    const s = $(sel);
+    s.innerHTML = ts.map(t => `<option>${t}</option>`).join("");
+    s.selectedIndex = Math.min(i, ts.length-1);
+    s.onchange = () => { $(img).src = badge(s.value); $(nome).textContent = s.value; };
+    s.onchange();
+  }
+}
+document.querySelectorAll("#ligas button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#ligas button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); liga = b.dataset.lg; encher(); $("res").style.display = "none";
+});
+encher();
+$("go").onclick = async () => {
+  $("erro").style.display = "none"; $("go").disabled = true; $("go").textContent = "Calculando…";
+  try{
+    const q = new URLSearchParams({league: liga, home: $("selH").value, away: $("selA").value});
+    const r = await fetch("/api/predict?" + q); const o = await r.json();
+    if (o.erro) throw new Error(o.erro);
+    $("res").style.display = "block";
+    $("rotV").textContent = $("selH").value.split(" ")[0];
+    $("rotD").textContent = $("selA").value.split(" ")[0];
+    const pct = x => (100*x).toFixed(1) + "%";
+    for (const [k, b, p] of [["p_v","bV","pV"],["p_e","bE","pE"],["p_d","bD","pD"]]){
+      $(p).textContent = pct(o[k]); $(b).style.width = "0";
+      requestAnimationFrame(() => setTimeout(() => $(b).style.width = (100*o[k]) + "%", 40));
+    }
+    $("lams").textContent = o.lambda_a.toFixed(2) + " x " + o.lambda_b.toFixed(2);
+    $("over").textContent = pct(o.p_over25);
+    $("btts").textContent = pct(o.p_btts);
+    $("banda").textContent = pct(o.band_lo) + " – " + pct(o.band_hi);
+    $("top5").innerHTML = o.top5.map(([s,p]) =>
+      `<div class="tile placar"><div class="s">${s}</div><div class="p">${pct(p)}</div></div>`).join("");
+    $("explica").textContent = `dr ${o.dr>=0?"+":""}${o.dr.toFixed(1)} (elo ${o.elo_home.toFixed(0)} − ${o.elo_away.toFixed(0)} · forma ${o.form_home>=0?"+":""}${o.form_home.toFixed(1)}/${o.form_away>=0?"+":""}${o.form_away.toFixed(1)} · mando +${o.mando.toFixed(0)}) · σ_dr ${o.sigma_dr.toFixed(0)} · ${o.versao}`;
+    window._ultimo = {o, home: $("selH").value, away: $("selA").value, liga};
+    $("printmeta").textContent = `${$("selH").value} × ${$("selA").value} · ${nomeLiga(liga)} · ${o.versao} · gerado em ${new Date().toLocaleString("pt-BR")} · probabilidade, nunca certeza`;
+    renderStats(liga, $("selH").value, $("selA").value);
+    $("res").scrollIntoView({behavior:"smooth", block:"start"});
+  }catch(e){ $("erro").textContent = e.message; $("erro").style.display = "block"; }
+  $("go").disabled = false; $("go").textContent = "Prever";
+};
+async function renderStats(lg, home, away){
+  const body = $("statsBody"), nota = $("statsNota");
+  body.innerHTML = ""; nota.textContent = "carregando estatísticas…";
+  try{
+    const r = await fetch("/api/matchstats?" + new URLSearchParams({league: lg, home, away}));
+    const o = await r.json();
+    if (!o.home || !o.away){
+      nota.textContent = "Sem estatísticas de jogo para esta liga — a fonte (football-data) não publica escanteios/cartões do Brasileirão.";
+      return;
+    }
+    const linhas = [["Chutes", o.home.shots, o.away.shots], ["Chutes no gol", o.home.sot, o.away.sot],
+      ["Escanteios", o.home.corners, o.away.corners], ["Faltas", o.home.fouls, o.away.fouls],
+      ["Amarelos", o.home.yellow, o.away.yellow], ["Vermelhos", o.home.red, o.away.red]];
+    body.innerHTML = `<div class="shead2"><span>${home}</span><span class="mid">médias/jogo</span><span>${away}</span></div>`
+      + linhas.map(([l,h,a]) => statRow(l,h,a)).join("");
+    const nH = o.home.n, nA = o.away.n;
+    nota.textContent = `médias dos últimos ${nH===nA ? nH : Math.min(nH,nA)+"–"+Math.max(nH,nA)} jogos de cada time na base · descritivo, não é previsão deste jogo`;
+  }catch(e){ nota.textContent = ""; }
+}
+function statRow(label, hv, av){
+  const h = hv==null?0:hv, a = av==null?0:av, tot = (h+a)||1;
+  return `<div class="strow">
+    <span class="snum">${hv==null?"–":hv}</span>
+    <div class="smid"><div class="slabel">${label}</div>
+      <div class="sbar"><i class="sh" style="width:${100*h/tot}%"></i><i class="sa" style="width:${100*a/tot}%"></i></div></div>
+    <span class="snum">${av==null?"–":av}</span>
+  </div>`;
+}
+$("copiar").onclick = async () => {
+  if (!window._ultimo) return;
+  const {o, home, away, liga} = window._ultimo;
+  const pc = x => (100*x).toFixed(1).replace(".", ",") + "%";
+  const txt = [`${home} × ${away} (${nomeLiga(liga)})`,
+    `V ${pc(o.p_v)} · E ${pc(o.p_e)} · D ${pc(o.p_d)}  [banda P(V) ${pc(o.band_lo)}–${pc(o.band_hi)}]`,
+    `gols esperados ${o.lambda_a.toFixed(2)} x ${o.lambda_b.toFixed(2)} · over2.5 ${pc(o.p_over25)} · ambos marcam ${pc(o.p_btts)}`,
+    `placares: ${o.top5.map(([s,p]) => `${s} (${pc(p)})`).join(" · ")}`,
+    `${o.versao} — probabilidade, nunca certeza — SCB`].join("\n");
+  await navigator.clipboard.writeText(txt);
+  $("copiar").textContent = "Copiado!";
+  setTimeout(() => $("copiar").textContent = "Copiar resumo", 1600);
+};
+</script>
+{% endblock %}

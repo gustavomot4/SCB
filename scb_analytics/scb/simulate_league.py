@@ -17,7 +17,9 @@ Uso:  python -m scb.simulate_league --league BRA --season 2026 [--sims 5000]
 from __future__ import annotations
 
 import argparse
+import csv
 from collections import defaultdict
+from datetime import date as _date
 from pathlib import Path
 from typing import Optional
 
@@ -28,6 +30,52 @@ from .features_pit import team_form
 from .ingest import DEFAULT_DB
 
 SEED = 12345
+_FIX = Path(__file__).resolve().parent.parent / "dados" / "fixtures.csv"
+
+
+def _season_of(league: str, d: _date) -> int:
+    """Ano-temporada de uma data. BRA = ano-calendário; ligas cruzadas (E0) = Ago–Mai."""
+    return d.year if league == "BRA" or d.month >= 7 else d.year - 1
+
+
+def fixtures_season(league: str) -> Optional[int]:
+    """Maior temporada presente no dados/fixtures.csv p/ a liga (None se não houver)."""
+    if not _FIX.exists():
+        return None
+    seasons = []
+    with _FIX.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            if (r.get("league") or "").strip() != league:
+                continue
+            try:
+                seasons.append(_season_of(league, _date.fromisoformat((r.get("date") or "").strip())))
+            except ValueError:
+                pass
+    return max(seasons) if seasons else None
+
+
+def _state_from_fixtures(conn, league: str, season: int):
+    """Pré-temporada: roster e turno-returno vêm do dados/fixtures.csv (matches ainda não
+    tem a temporada). Sem jogos disputados; força atual vem do ratings_current."""
+    names = set()
+    if _FIX.exists():
+        with _FIX.open(encoding="utf-8") as fh:
+            for r in csv.DictReader(fh):
+                if (r.get("league") or "").strip() != league:
+                    continue
+                try:
+                    s = _season_of(league, _date.fromisoformat((r.get("date") or "").strip()))
+                except ValueError:
+                    continue
+                if s == season:
+                    names.add((r.get("home") or "").strip())
+                    names.add((r.get("away") or "").strip())
+    ids = {n: tid for n, tid in conn.execute("SELECT name, team_id FROM teams")}
+    teams = sorted(ids[n] for n in names if n in ids)
+    remaining = [(h, a) for h in teams for a in teams if h != a]     # turno-returno cheio
+    elo = {r["team_id"]: r["elo"] for r in conn.execute("SELECT * FROM ratings_current")}
+    form = {t: team_form(conn, t, "9999-12-31")[0] for t in teams}
+    return teams, [], remaining, elo, form
 
 
 def current_state(conn, league: str, season: int):
@@ -36,6 +84,8 @@ def current_state(conn, league: str, season: int):
         """SELECT DISTINCT home_team_id FROM matches WHERE league=? AND season=?
            UNION SELECT DISTINCT away_team_id FROM matches WHERE league=? AND season=?""",
         (league, season, league, season))]
+    if not teams:                       # temporada ainda não começou -> roster do fixtures.csv
+        return _state_from_fixtures(conn, league, season)
     played = conn.execute(
         """SELECT home_team_id h, away_team_id a, home_score hs, away_score aws
            FROM matches WHERE league=? AND season=?""", (league, season)).fetchall()
@@ -48,14 +98,15 @@ def current_state(conn, league: str, season: int):
 
 
 def _standings_base(teams, played):
-    pts = defaultdict(int); wins = defaultdict(int); gd = defaultdict(int); gf = defaultdict(int)
+    pts = defaultdict(int); wins = defaultdict(int); draws = defaultdict(int)
+    losses = defaultdict(int); gd = defaultdict(int); gf = defaultdict(int)
     for r in played:
         h, a, hs, aws = r["h"], r["a"], r["hs"], r["aws"]
         gd[h] += hs - aws; gd[a] += aws - hs; gf[h] += hs; gf[a] += aws
-        if hs > aws: pts[h] += 3; wins[h] += 1
-        elif hs == aws: pts[h] += 1; pts[a] += 1
-        else: pts[a] += 3; wins[a] += 1
-    return pts, wins, gd, gf
+        if hs > aws: pts[h] += 3; wins[h] += 1; losses[a] += 1
+        elif hs == aws: pts[h] += 1; pts[a] += 1; draws[h] += 1; draws[a] += 1
+        else: pts[a] += 3; wins[a] += 1; losses[h] += 1
+    return pts, wins, draws, losses, gd, gf
 
 
 def run(conn, league: str, season: int, sims: int = 5000, seed: int = SEED,
@@ -76,21 +127,24 @@ def run(conn, league: str, season: int, sims: int = 5000, seed: int = SEED,
     idx = {t: i for i, t in enumerate(teams)}
     titulo = np.zeros(n); g4 = np.zeros(n); g6 = np.zeros(n); z4 = np.zeros(n)
     pos_sum = np.zeros(n); pts_sum = np.zeros(n)
+    v_sum = np.zeros(n); e_sum = np.zeros(n); d_sum = np.zeros(n)   # V/E/D esperados
     for _ in range(sims):
-        pts = dict(base[0]); wins = dict(base[1]); gd = dict(base[2]); gf = dict(base[3])
+        pts = dict(base[0]); wins = dict(base[1]); draws = dict(base[2])
+        losses = dict(base[3]); gd = dict(base[4]); gf = dict(base[5])
         for (h, a), (la, lb) in lam.items():
             hs = rng.poisson(la); aws = rng.poisson(lb)
             gd[h] = gd.get(h, 0) + hs - aws; gd[a] = gd.get(a, 0) + aws - hs
             gf[h] = gf.get(h, 0) + hs; gf[a] = gf.get(a, 0) + aws
-            if hs > aws: pts[h] = pts.get(h, 0) + 3; wins[h] = wins.get(h, 0) + 1
-            elif hs == aws: pts[h] = pts.get(h, 0) + 1; pts[a] = pts.get(a, 0) + 1
-            else: pts[a] = pts.get(a, 0) + 3; wins[a] = wins.get(a, 0) + 1
+            if hs > aws: pts[h] = pts.get(h, 0) + 3; wins[h] = wins.get(h, 0) + 1; losses[a] = losses.get(a, 0) + 1
+            elif hs == aws: pts[h] = pts.get(h, 0) + 1; pts[a] = pts.get(a, 0) + 1; draws[h] = draws.get(h, 0) + 1; draws[a] = draws.get(a, 0) + 1
+            else: pts[a] = pts.get(a, 0) + 3; wins[a] = wins.get(a, 0) + 1; losses[h] = losses.get(h, 0) + 1
         ordem = sorted(teams, key=lambda t: (pts.get(t, 0), wins.get(t, 0), gd.get(t, 0),
                                              gf.get(t, 0), rng.random()), reverse=True)
         for rank, t in enumerate(ordem):                # rank 0 = campeão
             i = idx[t]
             pos_sum[i] += rank + 1
             pts_sum[i] += pts.get(t, 0)
+            v_sum[i] += wins.get(t, 0); e_sum[i] += draws.get(t, 0); d_sum[i] += losses.get(t, 0)
             if rank == 0: titulo[i] += 1
             if rank < 4: g4[i] += 1
             if rank < 6: g6[i] += 1
@@ -101,7 +155,8 @@ def run(conn, league: str, season: int, sims: int = 5000, seed: int = SEED,
         i = idx[t]
         out.append({"team": nomes[t], "titulo": titulo[i] / sims, "g4": g4[i] / sims,
                     "g6": g6[i] / sims, "z4": z4[i] / sims,
-                    "pts_esp": pts_sum[i] / sims, "pos_media": pos_sum[i] / sims})
+                    "pts_esp": pts_sum[i] / sims, "pos_media": pos_sum[i] / sims,
+                    "v_esp": v_sum[i] / sims, "e_esp": e_sum[i] / sims, "d_esp": d_sum[i] / sims})
     out.sort(key=lambda r: -r["pts_esp"])
     return {"league": league, "season": season, "sims": sims, "seed": seed,
             "played": len(played), "remaining": len(remaining), "tabela": out}

@@ -78,6 +78,17 @@ def settle(conn) -> dict:
                AND ABS(julianday(m.date)-julianday(?)) <= 2""",
             (r["league"], r["home"], r["away"], r["date"])).fetchone()
         if row is None:
+            # fallback p/ jogo ADIADO: o par ORDENADO (casa,fora) é ÚNICO por temporada
+            # no turno-returno -> casar o jogo mais próximo APÓS o registro é seguro
+            row = conn.execute(
+                """SELECT m.home_score hs, m.away_score aws
+                   FROM matches m JOIN teams th ON th.team_id=m.home_team_id
+                   JOIN teams ta ON ta.team_id=m.away_team_id
+                   WHERE m.league=? AND th.name=? AND ta.name=?
+                   AND julianday(m.date) >= julianday(?) - 2
+                   ORDER BY m.date LIMIT 1""",
+                (r["league"], r["home"], r["away"], r["date"])).fetchone()
+        if row is None:
             n_aberto += 1
             continue
         hs, aws = row["hs"], row["aws"]
@@ -89,6 +100,47 @@ def settle(conn) -> dict:
         n_ok += 1
     _grava(linhas)
     return {"preenchidos": n_ok, "em_aberto": n_aberto}
+
+
+FIXTURES = Path(__file__).resolve().parent.parent / "dados" / "fixtures.csv"
+
+
+def auto(conn, dias: int = 4, hoje: Optional[str] = None) -> dict:
+    """Registra TODOS os jogos do calendário (dados/fixtures.csv) que vencem em até
+    `dias` — o botão de 1 clique da rodada. Idempotente (re-registrar não duplica).
+
+    O calendário é colado 1x por temporada (a fonte não traz futuro — lacuna
+    declarada). Formato: league,date,home,away (date ISO ou dd/mm/aaaa).
+    """
+    from .ingest import parse_date
+    if not FIXTURES.exists():
+        return {"erro": f"calendário não encontrado: {FIXTURES.name} "
+                        f"(copie o .example e cole a tabela da temporada)"}
+    h = _date.fromisoformat(hoje) if hoje else _date.today()
+    novos, ja, fora, erros = [], 0, 0, []
+    with FIXTURES.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            iso = parse_date(r.get("date", "")) or (r.get("date") or "").strip()
+            try:
+                d = _date.fromisoformat(iso)
+            except ValueError:
+                erros.append(f"data inválida: {r}")
+                continue
+            if not (0 <= (d - h).days <= dias):
+                fora += 1
+                continue
+            try:
+                out = register(conn, r["league"].strip(), r["home"].strip(),
+                               r["away"].strip(), iso)
+            except (ValueError, KeyError) as e:
+                erros.append(f"{r.get('home')}x{r.get('away')}: {e}")
+                continue
+            if out["ja_registrado"]:
+                ja += 1
+            else:
+                novos.append(f"{r['home']} x {r['away']} ({iso})")
+    return {"novos": novos, "n_novos": len(novos), "ja_registrados": ja,
+            "fora_da_janela": fora, "erros": erros}
 
 
 def report() -> dict:
@@ -111,7 +163,21 @@ def main(argv: Optional[list] = None) -> int:
     r.add_argument("away"); r.add_argument("--date", required=True); r.add_argument("--db", default=str(DEFAULT_DB))
     s = sub.add_parser("settle"); s.add_argument("--db", default=str(DEFAULT_DB))
     sub.add_parser("report")
+    a = sub.add_parser("auto", help="registra os jogos do fixtures.csv que vencem em até --dias")
+    a.add_argument("--dias", type=int, default=4); a.add_argument("--db", default=str(DEFAULT_DB))
     args = ap.parse_args(argv)
+    if args.cmd == "auto":
+        with db.session(args.db) as conn:
+            out = auto(conn, dias=args.dias)
+        if "erro" in out:
+            print(out["erro"]); return 1
+        print(f"auto: {out['n_novos']} novos registrados | {out['ja_registrados']} já estavam "
+              f"| {out['fora_da_janela']} fora da janela")
+        for n in out["novos"]:
+            print(f"  + {n}")
+        for e in out["erros"]:
+            print(f"  ! {e}")
+        return 0
     if args.cmd == "register":
         with db.session(args.db) as conn:
             out = register(conn, args.league, args.home, args.away, args.date)

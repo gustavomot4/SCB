@@ -37,5 +37,10 @@ Prompt do papel (abaixo) + [[CONTEXT]] + só o arquivo do momento → pedir **de
 - [[04-auditor-evolucao]] · Fase 5 — busca céptica de melhorias
 - [[05-revisao-entrega]] · Fase 6 — empacotar e conferir
 
+## Operação e resultados
+- [[Operacao BRA 2026]] — runbook da rodada (1 clique na web)
+- [[Backtest baseline (2026-07-16)]] — os números do portão da M4
+- [[POC-M1-dados (2026-07-15)]] — inventário da fonte
+
 ## Estado (espelho rápido — a verdade mora no [[CONTEXT]])
-Fase 1 **concluída** (plano + contrato congelados em 2026-07-15). Próximo: **M1 — POC de dados** (ver [[BACKLOG]]).
+**M0–M7.1 executadas** (2026-07-17): modelo `scb-v0.3-mando-e0` validado (BRA 0,6131 / E0 0,5894) · web no ar · operação em 1 clique · 73 testes. Falta **M7.2 (empacotamento)**; evolução futura: Q-07/Q-08.

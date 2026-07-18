@@ -1,0 +1,9 @@
+chave,registrado_em,league,date,home,away,p_v,p_e,p_d,lambda_a,lambda_b,p_over25,p_btts,versao,home_score,away_score,brier
+2026-07-17|Bahia|Chapecoense-SC|BRA,2026-07-17,BRA,2026-07-17,Bahia,Chapecoense-SC,0.747547,0.186404,0.066050,2.1324,0.6067,0.515877,0.400911,scb-v0.3-mando-e0,,,
+2026-07-17|Fluminense|Bragantino|BRA,2026-07-17,BRA,2026-07-17,Fluminense,Bragantino,0.500352,0.265082,0.234566,1.5091,1.0033,0.459366,0.493296,scb-v0.3-mando-e0,,,
+2026-07-21|Atletico-MG|Bahia|BRA,2026-07-17,BRA,2026-07-21,Atletico-MG,Bahia,0.489012,0.266516,0.244472,1.4842,1.0191,0.457046,0.494223,scb-v0.3-mando-e0,,,
+2026-07-17|Mirassol|Gremio|BRA,2026-07-17,BRA,2026-07-17,Mirassol,Gremio,0.486143,0.266603,0.247254,1.4781,1.0230,0.456476,0.494417,scb-v0.3-mando-e0,,,
+2026-07-22|Coritiba|Palmeiras|BRA,2026-07-18,BRA,2026-07-22,Coritiba,Palmeiras,0.229519,0.264357,0.506124,0.9952,1.5218,0.460545,0.492738,scb-v0.3-mando-e0,,,
+2026-07-22|Chapecoense-SC|Flamengo RJ|BRA,2026-07-18,BRA,2026-07-22,Chapecoense-SC,Flamengo RJ,0.090710,0.205227,0.704064,0.6878,2.0049,0.504571,0.430348,scb-v0.3-mando-e0,,,
+2026-07-22|Internacional|Cruzeiro|BRA,2026-07-18,BRA,2026-07-22,Internacional,Cruzeiro,0.402218,0.276856,0.320926,1.2923,1.1413,0.439036,0.493671,scb-v0.3-mando-e0,,,
+2026-07-22|Sao Paulo|Athletico-PR|BRA,2026-07-18,BRA,2026-07-22,Sao Paulo,Athletico-PR,0.434503,0.274798,0.290699,1.3632,1.0961,0.445719,0.495494,scb-v0.3-mando-e0,,,

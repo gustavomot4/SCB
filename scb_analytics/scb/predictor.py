@@ -41,6 +41,7 @@ class PredictParams:
     w_ad: float = 0.0            # perna AD: OFF até o portão da liga (D-05; no SCM validou 0,5)
     clamp_lo: float = 0.02
     clamp_hi: float = 0.96
+    dc_rho: float = 0.0          # Dixon-Coles τ(ρ) na matriz (D-27; 0 = Poisson puro)
     curve: Optional[dict] = field(default=None)   # curva de empate DA LIGA (D-07)
 
 
@@ -52,10 +53,13 @@ def tm_of(dr: float, p: PredictParams) -> float:
     return p.t_base + p.kappa_tm * abs(dr) / 100.0
 
 
-def lambdas(dr: float, p: PredictParams, datk_a: float = 0.0, datk_b: float = 0.0):
-    """λ_A, λ_B com piso que CONSERVA o total T_m (D-22): o desconto sai do favorito."""
-    gd = gd_of(dr, p)
-    tm = tm_of(dr, p)
+def lambdas(dr: float, p: PredictParams, datk_a: float = 0.0, datk_b: float = 0.0,
+            gd_extra: float = 0.0, tm_extra: float = 0.0):
+    """λ_A, λ_B com piso que CONSERVA o total (D-22): o desconto sai do favorito.
+    `gd_extra` desloca SÓ a margem; `tm_extra` desloca SÓ o TOTAL (over/BTTS) — pontos de
+    injeção de candidatos do canal de gols sem tocar a perna Elo-direto. Default 0 = inócuo."""
+    gd = gd_of(dr, p) + gd_extra
+    tm = tm_of(dr, p) + tm_extra
     la = (tm + gd) / 2.0
     lb = (tm - gd) / 2.0
     lmin = p.lambda_min
@@ -79,27 +83,40 @@ def _pois_vec(lam: float, kmax: int) -> list:
     return out
 
 
-def poisson_reads(lam_a: float, lam_b: float, max_goals: int = 10) -> dict:
-    """V/E/D, over2.5, BTTS e top-5 placares da MESMA matriz (Poisson-condicional, A1)."""
+def poisson_reads(lam_a: float, lam_b: float, max_goals: int = 10,
+                  dc_rho: float = 0.0) -> dict:
+    """V/E/D, over2.5, BTTS e top-5 da MESMA matriz (A1). Com dc_rho≠0 aplica o
+    τ de Dixon-Coles nas células de placar baixo e renormaliza (D-27; ρ=0 ≡ puro)."""
     pa = _pois_vec(lam_a, max_goals)
     pb = _pois_vec(lam_b, max_goals)
-    pv = pe = pd = over = 0.0
-    cells = []
+    cells = {}
     for i in range(max_goals + 1):
         for j in range(max_goals + 1):
-            pij = pa[i] * pb[j]
-            cells.append(((i, j), pij))
-            if i > j:
-                pv += pij
-            elif i == j:
-                pe += pij
-            else:
-                pd += pij
-            if i + j >= 3:
-                over += pij
-    btts = (1 - math.exp(-lam_a)) * (1 - math.exp(-lam_b))
-    cells.sort(key=lambda c: -c[1])
-    top5 = [(f"{i}x{j}", round(q, 4)) for (i, j), q in cells[:5]]
+            cells[(i, j)] = pa[i] * pb[j]
+    if dc_rho:
+        cells[(0, 0)] *= max(0.0, 1.0 - lam_a * lam_b * dc_rho)
+        cells[(0, 1)] *= 1.0 + lam_a * dc_rho
+        cells[(1, 0)] *= 1.0 + lam_b * dc_rho
+        cells[(1, 1)] *= 1.0 - dc_rho
+        s = sum(cells.values())
+        cells = {k: v / s for k, v in cells.items()}
+    pv = pe = pd = over = 0.0
+    for (i, j), pij in cells.items():
+        if i > j:
+            pv += pij
+        elif i == j:
+            pe += pij
+        else:
+            pd += pij
+        if i + j >= 3:
+            over += pij
+    if dc_rho:
+        btts = 1.0 - sum(cells[(0, j)] for j in range(max_goals + 1)) \
+               - sum(cells[(i, 0)] for i in range(max_goals + 1)) + cells[(0, 0)]
+    else:
+        btts = (1 - math.exp(-lam_a)) * (1 - math.exp(-lam_b))
+    top = sorted(cells.items(), key=lambda c: -c[1])[:5]
+    top5 = [(f"{i}x{j}", round(q, 4)) for (i, j), q in top]
     return {"pv": pv, "pe": pe, "pd": pd, "over25": over, "btts": btts, "top5": top5}
 
 
@@ -146,10 +163,12 @@ def _clamp_norm(triple, lo, hi):
 
 
 def predict(dr: float, sigma_dr: float, p: PredictParams,
-            datk_a: float = 0.0, datk_b: float = 0.0, ad_ved=None) -> dict:
-    """Previsão de 1 confronto: Poisson + Elo-direto (+ AD se w_ad>0) -> ensemble."""
-    la, lb = lambdas(dr, p, datk_a=datk_a, datk_b=datk_b)
-    pois = poisson_reads(la, lb, p.max_goals)
+            datk_a: float = 0.0, datk_b: float = 0.0, ad_ved=None,
+            gd_extra: float = 0.0, tm_extra: float = 0.0) -> dict:
+    """Previsão de 1 confronto: Poisson + Elo-direto (+ AD se w_ad>0) -> ensemble.
+    `gd_extra`/`tm_extra` afetam só a Poisson (margem/total), não a perna Elo-direto."""
+    la, lb = lambdas(dr, p, datk_a=datk_a, datk_b=datk_b, gd_extra=gd_extra, tm_extra=tm_extra)
+    pois = poisson_reads(la, lb, p.max_goals, dc_rho=p.dc_rho)
     elo = elo_direct_read(dr, sigma_dr, p)
     cp = _clamp_norm((pois["pv"], pois["pe"], pois["pd"]), p.clamp_lo, p.clamp_hi)
     ce = _clamp_norm((elo["pv"], elo["pe"], elo["pd"]), p.clamp_lo, p.clamp_hi)
@@ -180,7 +199,7 @@ def params_for(conn, league: str, base: Optional[PredictParams] = None) -> Predi
                          max_goals=b.max_goals, draw_eps=b.draw_eps,
                          n_strata=b.n_strata, w_poisson=b.w_poisson, w_elo=b.w_elo,
                          w_ad=b.w_ad, clamp_lo=b.clamp_lo, clamp_hi=b.clamp_hi,
-                         curve=curve)
+                         dc_rho=config.dc_rho_for(league), curve=curve)
 
 
 def run(conn, incremental: bool = False, base: Optional[PredictParams] = None) -> dict:

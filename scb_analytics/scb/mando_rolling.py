@@ -24,9 +24,11 @@ from typing import Optional
 
 import numpy as np
 
-from . import backtest_harness as bh
 from . import config, db, draw_curve, predictor
 from .ingest import DEFAULT_DB
+
+# nota: backtest_harness é importado DENTRO de gate() (lazy) para o features_pit
+# poder importar este módulo sem puxar a cadeia inteira (adoção Q-04/D-26)
 
 W_GRID = [730.0, 1825.0, 3650.0]
 MIN_N = 200
@@ -39,8 +41,11 @@ def elo_inv(p: float) -> float:
 
 
 def delta_series(d: np.ndarray, pts_home: np.ndarray, we_home: np.ndarray,
-                 W: float, min_n: int = MIN_N) -> np.ndarray:
-    """δ(d_i) PIT: inversão Elo da (pontuação real − esperada) do mandante na janela."""
+                 W: float, min_n: Optional[int] = None) -> np.ndarray:
+    """δ(d_i) PIT: inversão Elo da (pontuação real − esperada) do mandante na janela.
+    min_n=None lê MIN_N do módulo EM RUNTIME (default no def congelaria o valor)."""
+    if min_n is None:
+        min_n = MIN_N
     cs_a = np.concatenate([[0.0], np.cumsum(pts_home)])
     cs_w = np.concatenate([[0.0], np.cumsum(we_home)])
     hi = np.searchsorted(d, d, side="left")
@@ -91,7 +96,40 @@ def _probs(conn, league: str, rows, mask, delta, n_strata: int):
     return A(P), np.asarray(Y, int), A(OU), A(BT), A(yo), A(yb)
 
 
+def deltas_by_match(conn, league: str, W: float = 1825.0) -> dict:
+    """{match_id: δ} PIT para o wiring no features_pit (adoção D-26). W=5a (gate D-21)."""
+    rows = conn.execute(
+        """SELECT m.match_id, julianday(m.date) d, m.home_score hs, m.away_score aws, mr.we_home
+           FROM matches m JOIN match_ratings mr USING (match_id)
+           WHERE m.league=? ORDER BY m.date, m.match_id""", (league,)).fetchall()
+    d = np.array([r["d"] for r in rows])
+    pts = np.array([1.0 if r["hs"] > r["aws"] else (0.5 if r["hs"] == r["aws"] else 0.0)
+                    for r in rows])
+    we_h = np.array([r["we_home"] for r in rows])
+    delta = delta_series(d, pts, we_h, W)
+    return {r["match_id"]: float(delta[i]) for i, r in enumerate(rows)}
+
+
+def delta_today(conn, league: str, W: float = 1825.0) -> float:
+    """δ vigente p/ um jogo de HOJE (porta da frente). Inclui o último dia jogado."""
+    rows = conn.execute(
+        """SELECT julianday(m.date) d, m.home_score hs, m.away_score aws, mr.we_home
+           FROM matches m JOIN match_ratings mr USING (match_id)
+           WHERE m.league=? ORDER BY m.date""", (league,)).fetchall()
+    if len(rows) < MIN_N:
+        return 0.0
+    d_last = rows[-1]["d"]
+    sel = [r for r in rows if r["d"] > d_last - W]
+    if len(sel) < MIN_N:
+        return 0.0
+    a = sum(1.0 if r["hs"] > r["aws"] else (0.5 if r["hs"] == r["aws"] else 0.0)
+            for r in sel) / len(sel)
+    w = sum(r["we_home"] for r in sel) / len(sel)
+    return float(np.clip(elo_inv(a) - elo_inv(w), -CAP, CAP))
+
+
 def gate(conn, league: str, burn_in: int = 2, n_strata: int = 100, B: int = 10_000) -> dict:
+    from . import backtest_harness as bh   # lazy (ver nota no topo)
     rows, d, season, pts, we = _serie(conn, league)
     seasons = sorted(set(season.tolist()))
     test = seasons[burn_in:]

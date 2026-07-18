@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+{% block titulo %}Jogos & placares{% endblock %}
+{% block css %}
+<style>
+.navrod{display:none;align-items:center;justify-content:center;gap:18px;margin:6px 0 22px}
+.navrod button{background:var(--panel2);border:1px solid var(--line);color:var(--tx);width:46px;height:46px;
+               border-radius:12px;font-size:22px;cursor:pointer;transition:all .15s;line-height:1}
+.navrod button:hover:not(:disabled){border-color:var(--volt);color:var(--volt);transform:scale(1.05)}
+.navrod button:disabled{opacity:.28;cursor:default}
+.navrod .mid{text-align:center;min-width:210px}
+.navrod .rn{font-family:var(--cond);font-weight:900;font-size:27px;text-transform:uppercase;letter-spacing:.05em}
+.navrod .rd{font-family:var(--cond);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:1px}
+.datahdr{font-family:var(--cond);text-transform:uppercase;letter-spacing:.16em;font-size:13px;
+         color:var(--dim);margin:24px 0 12px;display:flex;align-items:center;gap:14px}
+.datahdr::after{content:"";flex:1;height:1px;background:var(--line)}
+.jc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 22px 16px;margin-bottom:10px;
+    transition:transform .15s,border-color .15s;cursor:pointer}
+.jc:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.2)}
+.jc-data{font-family:var(--cond);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);
+         text-align:center;margin-bottom:10px}
+.jc-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px}
+.jc-team{display:flex;align-items:center;gap:12px;min-width:0}
+.jc-team.h{justify-content:flex-end;text-align:right}
+.jc-team img{width:40px;height:40px;flex:none;object-fit:contain}
+.jc-nome{font-family:var(--cond);font-weight:800;font-size:21px;text-transform:uppercase;letter-spacing:.02em;
+         overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jc-placar{font-family:var(--cond);font-weight:900;font-size:32px;display:flex;align-items:center;gap:12px;
+           padding:4px 18px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;line-height:1}
+.jc-placar span{color:var(--dim);font-size:19px}
+.jc-foot{display:flex;justify-content:center;gap:8px;margin-top:13px;flex-wrap:wrap}
+.jc-foot .chip{font-family:var(--cond);font-weight:800;font-size:12px;padding:3px 11px;border-radius:7px;
+               letter-spacing:.06em;background:rgba(255,255,255,.06);color:var(--dim)}
+.jc-foot .chip.win{background:#C7FF29;color:#101400}
+.jc-foot .chip.emp{background:rgba(139,92,246,.30);color:#E9E1FF}
+.jc-det{display:none;margin-top:13px;padding-top:12px;border-top:1px solid var(--line);
+        font-family:var(--cond);color:var(--dim);font-size:13px;letter-spacing:.05em;text-align:center;text-transform:uppercase}
+.jc.open .jc-det{display:block}
+.jc-det b{color:var(--tx)}
+.spin{color:var(--dim);font-family:var(--cond);letter-spacing:.14em;text-transform:uppercase;padding:36px;text-align:center}
+@media(max-width:640px){.jc-nome{font-size:15px}.jc-placar{font-size:25px;padding:4px 12px}.jc-team img{width:32px;height:32px;object-fit:contain}}
+</style>
+{% endblock %}
+{% block corpo %}
+<div class="head">
+  <div><h1>Jogos &amp;<br>Placares</h1>
+    <div class="sub">Cada rodada com o placar mais provável do modelo — a mesma matriz do Prever Confronto. Use as setas pra trocar de rodada e clique num jogo pra ver os placares alternativos. Não é resultado: é probabilidade.</div></div>
+  <div class="seg" id="ligas">{% for lg in ligas %}<button data-lg="{{ lg }}" class="{{ 'on' if loop.first }}">{{ lg|nome_liga }}</button>{% endfor %}</div>
+</div>
+<div class="navrod" id="navrod">
+  <button id="rodPrev" aria-label="rodada anterior">‹</button>
+  <div class="mid"><div class="rn" id="rodNum">—</div><div class="rd" id="rodData">—</div></div>
+  <button id="rodNext" aria-label="próxima rodada">›</button>
+</div>
+<div id="lista"><div class="spin">Calculando placares…</div></div>
+<div class="disc" style="margin-top:26px">placar mais provável = moda da matriz de Poisson do modelo · V/E/D = probabilidade de cada resultado · probabilidade, nunca certeza</div>
+{% endblock %}
+{% block js %}
+<script>
+const $ = id => document.getElementById(id);
+const NOMES = {{ nomes_liga | tojson }};
+const nomeLiga = c => NOMES[c] || c;
+function badge(n){ return "/badge/" + encodeURIComponent(n) + ".svg?v=2"; }
+const DIA  = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+const DIA3 = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const pc = x => (100*x).toFixed(0) + "%";
+const primeiro = n => n.split(" ")[0];
+const parseData = iso => { const p = iso.split("-").map(Number); return new Date(p[0], p[1]-1, p[2]); };
+const curta = iso => { const p = iso.split("-"); return `${p[2]}/${p[1]}`; };
+function diaData(iso){ const p = iso.split("-").map(Number); const dt = new Date(p[0],p[1]-1,p[2]);
+  return `${DIA3[dt.getDay()]} · ${String(p[2]).padStart(2,"0")}/${String(p[1]).padStart(2,"0")}`; }
+function dataLonga(iso){ const p = iso.split("-").map(Number); const dt = new Date(p[0],p[1]-1,p[2]);
+  return `${DIA[dt.getDay()]} · ${String(p[2]).padStart(2,"0")}/${String(p[1]).padStart(2,"0")}/${p[0]}`; }
+function faixa(datas){ const u = [...new Set(datas)].sort(); const y = u[u.length-1].split("-")[0];
+  return (u.length === 1 ? curta(u[0]) : `${curta(u[0])} – ${curta(u[u.length-1])}`) + "/" + y; }
+
+let liga = "{{ ligas[0] }}";
+let dados = [], rodadas = [], ptr = 0;
+
+function cardHTML(j, comData){
+  const g = j.score.split("x");
+  const mx = Math.max(j.p_v, j.p_e, j.p_d);
+  const cH = j.p_v === mx ? "win" : "", cE = j.p_e === mx ? "emp" : "", cA = j.p_d === mx ? "win" : "";
+  const alts = j.top3.slice(1).map(([s,p]) => `${s.replace("x","–")} (${pc(p)})`).join(" · ") || "—";
+  const tag = comData && j.date ? `<div class="jc-data">${diaData(j.date)}</div>` : "";
+  return `<div class="jc fade" onclick="this.classList.toggle('open')">${tag}
+    <div class="jc-row">
+      <div class="jc-team h"><span class="jc-nome">${j.home}</span><img src="${badge(j.home)}" loading="lazy" alt=""></div>
+      <div class="jc-placar">${g[0]}<span>×</span>${g[1]}</div>
+      <div class="jc-team a"><img src="${badge(j.away)}" loading="lazy" alt=""><span class="jc-nome">${j.away}</span></div>
+    </div>
+    <div class="jc-foot">
+      <span class="chip ${cH}">${primeiro(j.home)} ${pc(j.p_v)}</span>
+      <span class="chip ${cE}">Empate ${pc(j.p_e)}</span>
+      <span class="chip ${cA}">${primeiro(j.away)} ${pc(j.p_d)}</span>
+    </div>
+    <div class="jc-det">placar mais provável <b>${g[0]}–${g[1]}</b> (${pc(j.score_p)}) · outros: ${alts}</div>
+  </div>`;
+}
+
+function renderRodada(){
+  const rd = rodadas[ptr];
+  const jogos = dados.filter(j => j.round === rd).sort((a,b) => (a.date+a.home).localeCompare(b.date+b.home));
+  $("rodNum").textContent = "Rodada " + rd;
+  $("rodData").textContent = faixa(jogos.map(j => j.date));
+  $("rodPrev").disabled = ptr === 0;
+  $("rodNext").disabled = ptr === rodadas.length - 1;
+  $("lista").innerHTML = jogos.map(j => cardHTML(j, true)).join("");
+}
+
+function renderPorData(js){                       // fallback: calendário sem coluna round
+  let html = "", atual = "";
+  js.slice().sort((a,b) => (a.date+a.home).localeCompare(b.date+b.home)).forEach(j => {
+    if (j.date !== atual){ atual = j.date; html += `<div class="datahdr">${dataLonga(j.date)}</div>`; }
+    html += cardHTML(j, false);
+  });
+  $("lista").innerHTML = html;
+}
+
+function rodadaInicial(){
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  for (let i = 0; i < rodadas.length; i++){
+    const maxd = dados.filter(j => j.round === rodadas[i]).map(j => parseData(j.date)).sort((a,b) => b-a)[0];
+    if (maxd && maxd >= hoje) return i;
+  }
+  return rodadas.length - 1;                       // temporada toda no passado -> última
+}
+
+async function carregar(lg){
+  $("navrod").style.display = "none";
+  $("lista").innerHTML = '<div class="spin">Calculando placares…</div>';
+  const r = await fetch("/api/fixtures?league=" + lg);
+  const o = await r.json();
+  dados = o.jogos || [];
+  if (!dados.length){
+    $("lista").innerHTML = '<div class="card" style="text-align:center;color:var(--dim);padding:40px">'
+      + 'Sem jogos no calendário desta liga.<br>Cole a tabela da temporada em <code>dados/fixtures.csv</code>.</div>';
+    return;
+  }
+  if (dados.some(j => j.round != null)){
+    rodadas = [...new Set(dados.filter(j => j.round != null).map(j => j.round))].sort((a,b) => a-b);
+    ptr = rodadaInicial();
+    $("navrod").style.display = "flex";
+    renderRodada();
+  } else {
+    renderPorData(dados);                           // calendário sem rodada -> agrupa por data
+  }
+}
+
+$("rodPrev").onclick = () => { if (ptr > 0){ ptr--; renderRodada(); window.scrollTo({top:0,behavior:"smooth"}); } };
+$("rodNext").onclick = () => { if (ptr < rodadas.length-1){ ptr++; renderRodada(); window.scrollTo({top:0,behavior:"smooth"}); } };
+document.addEventListener("keydown", e => {
+  if ($("navrod").style.display === "none") return;
+  if (e.key === "ArrowLeft") $("rodPrev").click();
+  if (e.key === "ArrowRight") $("rodNext").click();
+});
+document.querySelectorAll("#ligas button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#ligas button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); liga = b.dataset.lg; carregar(liga);
+});
+carregar(liga);
+</script>
+{% endblock %}

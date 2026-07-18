@@ -195,6 +195,39 @@ def _store_odds_row(conn, family: str, row: dict, natural_key: str,
     return n
 
 
+# estatísticas de jogo do football-data (só nas ligas 'main'/E0). (col_no_banco, campo_fd)
+_STAT_COLS = [("ht_home", "HTHG"), ("ht_away", "HTAG"),
+              ("shots_home", "HS"), ("shots_away", "AS"),
+              ("sot_home", "HST"), ("sot_away", "AST"),
+              ("fouls_home", "HF"), ("fouls_away", "AF"),
+              ("corners_home", "HC"), ("corners_away", "AC"),
+              ("yellow_home", "HY"), ("yellow_away", "AY"),
+              ("red_home", "HR"), ("red_away", "AR")]
+
+
+def _store_stats_row(conn, row: dict, match_id: Optional[int]) -> int:
+    """Upsert das estatísticas do jogo (escanteios/cartões/chutes) em match_stats.
+    Idempotente por match_id. Se a linha não traz NENHUMA stat (BRA / temporada antiga),
+    não cria registro — lacuna fica declarada como ausência, não como zeros inventados."""
+    if match_id is None:
+        return 0
+    vals = {col: _int(row.get(src)) for col, src in _STAT_COLS}
+    ref = (row.get("Referee") or "").strip() or None
+    if ref is None and all(v is None for v in vals.values()):
+        return 0
+    conn.execute(
+        """INSERT OR REPLACE INTO match_stats
+           (match_id, ht_home, ht_away, shots_home, shots_away, sot_home, sot_away,
+            fouls_home, fouls_away, corners_home, corners_away,
+            yellow_home, yellow_away, red_home, red_away, referee)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+        (match_id, vals["ht_home"], vals["ht_away"], vals["shots_home"], vals["shots_away"],
+         vals["sot_home"], vals["sot_away"], vals["fouls_home"], vals["fouls_away"],
+         vals["corners_home"], vals["corners_away"], vals["yellow_home"], vals["yellow_away"],
+         vals["red_home"], vals["red_away"], ref))
+    return 1
+
+
 def load_matches(conn, league: str, family: str, rows: list[dict],
                  season: Optional[int] = None, guard_dups: bool = False) -> dict:
     """Linhas do football-data -> teams + matches + odds_hist. Idempotente (natural_key).
@@ -204,7 +237,7 @@ def load_matches(conn, league: str, family: str, rows: list[dict],
     """
     cols = (("Home", "Away", "HG", "AG") if family == "extra"
             else ("HomeTeam", "AwayTeam", "FTHG", "FTAG"))
-    n_rows = n_ins = n_skip = n_dup = n_odds = 0
+    n_rows = n_ins = n_skip = n_dup = n_odds = n_stats = 0
     for row in rows:
         n_rows += 1
         home, away = (row.get(cols[0]) or "").strip(), (row.get(cols[1]) or "").strip()
@@ -235,11 +268,12 @@ def load_matches(conn, league: str, family: str, rows: list[dict],
             n_ins += 1
         mid = conn.execute("SELECT match_id FROM matches WHERE natural_key=?",
                            (nk,)).fetchone()
-        n_odds += _store_odds_row(conn, family, row, nk,
-                                  mid["match_id"] if mid else None, iso)
+        mid_id = mid["match_id"] if mid else None
+        n_odds += _store_odds_row(conn, family, row, nk, mid_id, iso)
+        n_stats += _store_stats_row(conn, row, mid_id)
     conn.commit()
     return {"rows": n_rows, "inserted": n_ins, "skipped": n_skip,
-            "dup_guarded": n_dup, "odds_rows": n_odds}
+            "dup_guarded": n_dup, "odds_rows": n_odds, "stats_rows": n_stats}
 
 
 def update_seasons(conn) -> None:

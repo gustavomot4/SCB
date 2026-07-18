@@ -116,7 +116,8 @@ def collect(conn, league: str, burn_in: int = 2, n_strata: Optional[int] = None)
     for S in test_seasons:
         curve = draw_curve.build(conn, league, max_season=S - 1)      # POR FOLD (anti-leak)
         params = predictor.PredictParams(
-            t_base=config.t_base_for(league), n_strata=base_p.n_strata, curve=curve)
+            t_base=config.t_base_for(league), n_strata=base_p.n_strata,
+            dc_rho=config.dc_rho_for(league), curve=curve)   # D-27: DC por liga
         tr = conn.execute(
             """SELECT AVG(home_score>away_score), AVG(home_score=away_score)
                FROM matches WHERE league=? AND season<?""", (league, S)).fetchone()

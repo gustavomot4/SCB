@@ -14,14 +14,19 @@ data: 2026-07-16
 - [ ] **[M6.7] Rebuild da v0.2 na SUA máquina** — `python -m pytest -q` (esperado **63**) → `python -m scb.elo_engine` → `python -m scb.features_pit` → `python -m scb.draw_curve` → `python -m scb.predictor` → `python -m scb.backtest_harness` (esperado **BRA 0,6131** / E0 0,5899) → `python -m scb.simulate_league --season 2026`
 - [ ] **[OPERAÇÃO] Registrar a próxima rodada do BRA 2026 antes do kickoff** ([[Operacao BRA 2026]]) — toda rodada, sem exceção
 
-## 🔜 Fila de evolução (1 por sessão, cada um com portão)
+## 🔜 Próximo
 
-- [ ] **Q-04: adoção do mando rolling na E0** (D-21) — wiring por liga + gate de confirmação
-- [ ] **Q-05: adoção do Dixon-Coles na E0** (D-23) — exige 2º gate (re-blend do 1X2)
-- [ ] **C4 viagem/distância** (coordenadas estáticas R$0; σ primeiro) — portão
-- [ ] **C6 H por clube** (shrinkage forte obrigatório) — portão
-- [ ] **Banda/σ_dr** (sub-cobre extremos — D-17) — portão de cobertura
-- [ ] **[M7] Web + empacotamento** (telas: prever/tabela/prospectivo; CHECKLIST de entrega; prompts/05)
+- [ ] **[v0.3+M7] ▶ GUSTAVO: rebuild + web** — `pip install -r requirements.txt` → `python -m pytest -q` (esperado **71**) → `elo_engine` → `features_pit` → `draw_curve` → `predictor` (18200 [scb-v0.3-mando-e0]) → `backtest_harness` (**BRA 0,6131 / E0 0,5894**) → **duplo clique no `Abrir SCB.bat`** (ou `python -m scb.web --open`)
+- [ ] **[M7.2] Empacotamento final** — CHECKLIST de entrega (prompts/05): zip sem deps/segredos, README sincronizado, abrir e conferir
+- [ ] **[evolução futura] Q-07 banda E0 (números na D-28) · Q-08: C4 viagem (curadoria de coordenadas) · C6 H por clube (pronto-para-rodar)**
+- [x] **[M7.1] WEB ENTREGUE (D-29)** — estilo EA FC (nav lateral condensada, dark+vinheta, cards, trilho de temporada, barras animadas, placares em tiles); escudos SVG por cores reais + override local `static/logos/`; 3 telas + launcher; badges com 5 testes (71); Flask lazy (roda sem Flask nos testes)
+- [x] **[M7.1b] Feedback do usuário aplicado** — QA-04 contraste dos chips (sólidos, texto escuro no volt); `scripts/baixar_escudos.py` (PNGs reais, uso pessoal — VOCÊ roda); Imprimir/PDF + Copiar resumo nas telas de confronto e tabela (D-30)
+
+## ✅ Fila da E0 fechada em 2026-07-16
+
+- [x] **Q-04 EXECUTADA (D-26): mando rolling na E0 → `scb-v0.3-mando-e0`** — E0 0,5894 (ECE 0,0290, gap mercado −0,0156); BRA intacto; δ −41,5 Elo embutido (2023+); +3 testes (66)
+- [x] **Q-05 FECHADA (D-27): DC rejeitado no 2º gate** — ganho do empate dilui no ensemble (eco D-39 SCM); `dc_rho` fica OFF no predictor
+- [x] **Banda MEDIDA (D-28)**: σ×1,3 → E0 8/10 faixas (+29% largura), BRA neutro → Q-07
 
 ## ✅ Feito (resumo — detalhe no CHANGELOG e DECISIONS)
 

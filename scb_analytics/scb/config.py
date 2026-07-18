@@ -23,8 +23,26 @@ T_BASE_LIGA = {"BRA": 2.40, "E0": 2.70, "default": 2.6}   # placeholder medido M
 USE_MKT_DRIFT = False
 DRIFT_W_DIAS = 3650.0
 
-MODEL_VERSION = "scb-v0.2-rho-bra"   # v0.2: 1ª adoção (D-25). REBUILD OBRIGATÓRIO:
-                                     # elo_engine + features_pit + draw_curve + predictor
+# D-26 (Q-04): mando por janela móvel PIT, POR LIGA — ADOTADO na E0 (gate D-21:
+# 1X2 +0,00180 IC>0; δ vigente ~−37 Elo). BRA rejeitado (fica 0). W=5a (gate).
+MANDO_ROLLING = {"E0": True, "default": False}
+MANDO_ROLLING_W = 1825.0
+
+# D-27 (Q-05): Dixon-Coles — 2º GATE REJEITOU o re-blend do 1X2 na E0
+# (Δ+0,00005 IC cruza; ganho do canal do empate dilui no ensemble — eco do D-39 SCM).
+# Capacidade fica no predictor (dc_rho), TESTADA e OFF. ρ=0 ≡ Poisson puro.
+DC_RHO = {"default": 0.0}
+
+MODEL_VERSION = "scb-v0.3-mando-e0"  # v0.3: adoção D-26 (mando rolling E0).
+                                     # REBUILD OBRIGATÓRIO (features mudam na E0).
+
+
+def mando_rolling_for(league: str) -> bool:
+    return MANDO_ROLLING.get(league, MANDO_ROLLING["default"])
+
+
+def dc_rho_for(league: str) -> float:
+    return DC_RHO.get(league, DC_RHO["default"])
 
 
 def k_for(league: str) -> float:

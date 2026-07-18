@@ -1,0 +1,177 @@
+{% extends "layout.html" %}
+{% block titulo %}Tabela simulada{% endblock %}
+{% block css %}
+<style>
+.rail{margin:6px 0 24px;padding:22px}
+.rail .rotulo{font-family:var(--cond);letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:var(--dim)}
+.trilho{position:relative;height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin:16px 0 8px}
+.trilho i{position:absolute;left:0;top:0;height:100%;border-radius:3px;
+          background:linear-gradient(90deg,#9BE626,#C7FF29);transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.marcos{display:flex;justify-content:space-between;font-family:var(--cond);color:var(--dim);
+        font-size:13px;letter-spacing:.08em}
+.marco b{color:var(--tx)}
+table{width:100%;border-collapse:separate;border-spacing:0 8px}
+th{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:12px;
+   color:var(--dim);text-align:left;padding:0 14px}
+th.num, td.num{text-align:right}
+tr.linha td{background:var(--panel2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+            padding:10px 14px}
+tr.linha td:first-child{border-left:1px solid var(--line);border-radius:12px 0 0 12px}
+tr.linha td:last-child{border-right:1px solid var(--line);border-radius:0 12px 12px 0}
+tr.linha{transition:transform .15s}
+tr.linha:hover td{background:#1D222C}
+.clubecel{display:flex;align-items:center;gap:12px;font-family:var(--cond);font-weight:800;
+          font-size:19px;letter-spacing:.03em;text-transform:uppercase}
+.clubecel img{width:34px;height:34px;object-fit:contain}
+.pos{font-family:var(--cond);font-weight:900;font-size:20px;color:var(--dim);width:34px}
+.prob{font-family:var(--cond);font-weight:900;font-size:17px;padding:3px 10px;border-radius:8px;display:inline-block;min-width:64px;text-align:center}
+.ptsbar{display:flex;align-items:center;gap:10px}
+.ptsbar .bar{flex:1}
+.ptsbar b{font-family:var(--cond);font-size:18px;width:44px;text-align:right}
+.legenda{color:var(--dim);font-size:12px;margin-top:10px;font-family:var(--cond);letter-spacing:.1em;text-transform:uppercase}
+.spin{color:var(--dim);font-family:var(--cond);letter-spacing:.14em;text-transform:uppercase;padding:30px;text-align:center}
+.ved{font-family:var(--cond);font-weight:800;color:var(--dim);white-space:nowrap;letter-spacing:.02em}
+.ved b{color:var(--tx)}
+/* ===== ficha do clube (clique) ===== */
+.clubecel[data-team]{cursor:pointer}
+.clubecel[data-team]:hover{color:var(--volt)}
+.modalbg{display:none;position:fixed;inset:0;background:rgba(5,7,10,.72);z-index:50;
+         align-items:center;justify-content:center;padding:20px}
+.modalbg.on{display:flex}
+.modalcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;
+           padding:26px 28px;max-width:460px;width:100%;position:relative;
+           box-shadow:0 24px 80px rgba(0,0,0,.6);animation:fade .25s ease both}
+.modalcard .fechar{position:absolute;top:12px;right:16px;background:none;border:none;
+                   color:var(--dim);font-size:28px;cursor:pointer;line-height:1}
+.mt-nome{font-family:var(--cond);font-weight:900;font-size:28px;text-transform:uppercase;
+         letter-spacing:.03em;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.mt-nome img{width:44px;height:44px;object-fit:contain}
+.mt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mt-cell{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.mt-cell .k{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:11px;color:var(--dim)}
+.mt-cell .v{font-family:var(--cond);font-weight:900;font-size:23px;margin-top:2px}
+.mt-nota{color:var(--dim);font-size:11px;margin-top:14px;font-family:var(--cond);letter-spacing:.08em;text-transform:uppercase}
+</style>
+{% endblock %}
+{% block corpo %}
+<div class="head">
+  <div><h1>Tabela<br>Simulada</h1>
+    <div class="sub">Monte Carlo da temporada: 5.000 futuros possíveis a partir de agora — jogos disputados travados como verdade, o resto amostrado da Poisson do modelo.</div></div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <div class="seg" id="ligas"><button data-lg="BRA" class="on">BRA</button><button data-lg="E0">PRE</button></div>
+    <button class="pill ghost" onclick="window.print()">Imprimir / PDF</button>
+    <button class="pill ghost" id="copiar">Copiar resumo</button>
+  </div>
+</div>
+<div class="print-head"><div class="t">SCB · Tabela simulada</div><div class="m" id="printmeta"></div></div>
+
+<div class="card rail fade">
+  <div class="rotulo">Progresso da temporada</div>
+  <div class="trilho"><i id="prog"></i></div>
+  <div class="marcos"><span class="marco"><b id="mJog">–</b> jogados</span>
+    <span class="marco" id="mTemp">—</span>
+    <span class="marco"><b id="mRest">–</b> restantes</span></div>
+</div>
+
+<div id="corpo"><div class="spin">Simulando 5.000 temporadas…</div></div>
+<div class="legenda">título · G4 · G6 = vagas continentais · Z4 = rebaixamento · V–E–D e ptsE = vitórias/empates/derrotas e pontos esperados na média das simulações · clique no clube p/ ver o Elo. Seed fixa: recarregar não muda o futuro — só jogo novo muda.</div>
+
+<div id="modalTime" class="modalbg">
+  <div class="modalcard">
+    <button class="fechar" id="mtFechar" aria-label="fechar">×</button>
+    <div class="mt-nome" id="mtNome">—</div>
+    <div class="mt-grid" id="mtGrid"></div>
+    <div class="mt-nota">Elo interno do modelo · forma = passo recente · nunca certeza</div>
+  </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+const $ = id => document.getElementById(id);
+const NOMES = {{ nomes_liga | tojson }};      // código interno -> rótulo (E0 -> PRE)
+const nomeLiga = c => NOMES[c] || c;
+function badge(n){ return "/badge/" + encodeURIComponent(n) + ".svg?v=2"; }  // v=2: fura o cache antigo de 24h (QA-10)
+function corProb(p, tipo){
+  /* QA-04: chips sólidos com texto de alto contraste (o glow verde-sobre-verde era ilegível) */
+  if (tipo === "z4"){ if (p >= .5) return "background:#FB4D5C;color:#16060A;font-weight:900";
+                      if (p >= .1) return "background:rgba(251,77,92,.22);color:#FFC9CF";
+                      return "color:#8A93A6"; }
+  if (p >= .5) return "background:#C7FF29;color:#101400;font-weight:900";
+  if (p >= .15) return "background:rgba(139,92,246,.30);color:#E9E1FF";
+  if (p >= .02) return "background:rgba(255,255,255,.09);color:#EDF1F7";
+  return "color:#8A93A6";
+}
+let ultimaSim = null;
+async function carregar(lg){
+  $("corpo").innerHTML = '<div class="spin">Simulando 5.000 temporadas…</div>';
+  const r = await fetch("/api/simulate?league=" + lg); const o = await r.json();
+  ultimaSim = o;
+  $("printmeta").textContent = `${nomeLiga(o.league)} ${o.season} · ${o.played} jogados, ${o.remaining} restantes · ${o.sims} simulações · {{ versao }} · gerado em ${new Date().toLocaleString("pt-BR")} · probabilidade, nunca certeza`;
+  $("mJog").textContent = o.played; $("mRest").textContent = o.remaining;
+  $("mTemp").textContent = nomeLiga(o.league) + " " + o.season + " · " + o.sims + " sims";
+  $("prog").style.width = (100 * o.played / (o.played + o.remaining)) + "%";
+  const pc = x => (100*x).toFixed(1) + "%";
+  const maxPts = Math.max(...o.tabela.map(t => t.pts_esp));
+  $("corpo").innerHTML = `<table>
+    <tr><th></th><th>Clube</th><th class="num">Título</th><th class="num">G4</th>
+    <th class="num">G6</th><th class="num">Z4</th><th class="num">V–E–D</th><th style="width:24%">Pontos esperados</th></tr>
+    ${o.tabela.map((t,i) => `<tr class="linha fade" style="animation-delay:${i*35}ms">
+      <td class="pos">${i+1}</td>
+      <td><div class="clubecel" data-team="${t.team}" title="ver ficha do clube"><img src="${badge(t.team)}" loading="lazy">${t.team}</div></td>
+      <td class="num"><span class="prob" style="${corProb(t.titulo)}">${pc(t.titulo)}</span></td>
+      <td class="num"><span class="prob" style="${corProb(t.g4)}">${pc(t.g4)}</span></td>
+      <td class="num"><span class="prob" style="${corProb(t.g6)}">${pc(t.g6)}</span></td>
+      <td class="num"><span class="prob" style="${corProb(t.z4,'z4')}">${pc(t.z4)}</span></td>
+      <td class="num"><span class="ved"><b>${Math.round(t.v_esp)}</b>–${Math.round(t.e_esp)}–<b>${Math.round(t.d_esp)}</b></span></td>
+      <td><div class="ptsbar"><div class="bar"><i style="width:${100*t.pts_esp/maxPts}%;
+        background:linear-gradient(90deg,#38BDF8,#8B5CF6)"></i></div><b>${t.pts_esp.toFixed(1)}</b></div></td>
+    </tr>`).join("")}</table>`;
+}
+document.querySelectorAll("#ligas button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#ligas button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); carregar(b.dataset.lg);
+});
+carregar("BRA");
+
+/* ===== ficha do clube (clique na linha) ===== */
+$("corpo").addEventListener("click", e => {
+  const cel = e.target.closest(".clubecel[data-team]");
+  if (cel) verTime(cel.dataset.team);
+});
+function fecharTime(){ $("modalTime").classList.remove("on"); }
+$("mtFechar").onclick = fecharTime;
+$("modalTime").addEventListener("click", e => { if (e.target.id === "modalTime") fecharTime(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") fecharTime(); });
+async function verTime(name){
+  const lg = ultimaSim ? ultimaSim.league : "BRA";
+  try{
+    const r = await fetch("/api/team?league=" + lg + "&team=" + encodeURIComponent(name));
+    const o = await r.json();
+    if (o.erro) return;
+    $("mtNome").innerHTML = `<img src="${badge(o.team)}" alt="">${o.team}`;
+    const forma = (o.form >= 0 ? "+" : "") + o.form.toFixed(1);
+    const cells = [
+      ["Elo atual", Math.round(o.elo)],
+      ["Ranking Elo", o.elo_rank ? `${o.elo_rank}º de ${o.elo_total}` : "—"],
+      ["Forma recente", forma],
+      ["Jogos no histórico", o.n_games],
+    ];
+    $("mtGrid").innerHTML = cells.map(([k,v]) =>
+      `<div class="mt-cell"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+    $("modalTime").classList.add("on");
+  }catch(e){ /* clique não deve quebrar a tela */ }
+}
+$("copiar").onclick = async () => {
+  if (!ultimaSim) return;
+  const pc = x => (100*x).toFixed(1).replace(".", ",") + "%";
+  const linhas = ultimaSim.tabela.map((t,i) =>
+    `${String(i+1).padStart(2)}. ${t.team} — título ${pc(t.titulo)} · G4 ${pc(t.g4)} · Z4 ${pc(t.z4)} · ${Math.round(t.v_esp)}-${Math.round(t.e_esp)}-${Math.round(t.d_esp)} (V-E-D) · ${t.pts_esp.toFixed(1)} ptsE`);
+  const txt = [`TABELA SIMULADA — ${nomeLiga(ultimaSim.league)} ${ultimaSim.season}`,
+    `${ultimaSim.played} jogados · ${ultimaSim.remaining} restantes · ${ultimaSim.sims} sims · {{ versao }}`,
+    "", ...linhas, "", "Probabilidade, nunca certeza — SCB"].join("\n");
+  await navigator.clipboard.writeText(txt);
+  $("copiar").textContent = "Copiado!";
+  setTimeout(() => $("copiar").textContent = "Copiar resumo", 1600);
+};
+</script>
+{% endblock %}

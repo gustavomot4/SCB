@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+{% block titulo %}Registro prospectivo{% endblock %}
+{% block css %}
+<style>
+.painel{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:26px}
+.tile .v.grande{font-size:44px}
+.aviso{color:var(--ambar);font-family:var(--cond);letter-spacing:.1em;text-transform:uppercase;font-size:13px}
+.reg{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;
+     background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:8px}
+.reg .jogo{font-family:var(--cond);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.03em}
+.reg .meta{color:var(--dim);font-size:12px;margin-top:2px}
+.reg .probs{display:flex;gap:8px}
+.reg .probs span{font-family:var(--cond);font-weight:800;font-size:14px;padding:3px 9px;border-radius:7px;
+                 background:rgba(255,255,255,.06);color:var(--dim)}
+.reg .veredito{font-family:var(--cond);font-weight:900;font-size:16px;text-align:right;min-width:110px}
+.reg .veredito small{display:block;font-weight:700;color:var(--dim);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.aberto{color:var(--ambar)} .fechado{color:var(--volt)}
+.vazio{padding:44px;text-align:center;color:var(--dim)}
+.vazio code{color:var(--tx);background:rgba(255,255,255,.06);padding:2px 8px;border-radius:6px}
+</style>
+{% endblock %}
+{% block corpo %}
+<div class="head">
+  <div><h1>Registro<br>Prospectivo</h1>
+    <div class="sub">O experimento impossível de trapacear: previsões gravadas ANTES do kickoff, imutáveis. É isto que separa modelo validado de planilha de torcedor.</div></div>
+</div>
+
+<div class="card noprint" style="margin-bottom:22px">
+  <h2 style="font-family:var(--cond);font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-size:20px;margin-bottom:12px">Registrar jogo (antes do kickoff)</h2>
+  <div style="display:grid;grid-template-columns:110px 1fr 1fr 170px auto;gap:10px;align-items:center">
+    <select id="rLiga">{% for lg in ligas %}<option value="{{ lg }}">{{ lg|nome_liga }}</option>{% endfor %}</select>
+    <select id="rHome"></select>
+    <select id="rAway"></select>
+    <input id="rData" type="date" style="background:var(--panel2);border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:12px 14px;font-family:var(--cond);font-size:16px">
+    <button class="pill volt" id="rGo">Registrar</button>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap">
+    <button class="pill" id="rAuto">Registrar rodada (calendário, ≤4 dias)</button>
+    <button class="pill ghost" id="rSettle">Liquidar resultados (settle)</button>
+    <span id="rMsg" style="color:var(--dim);font-size:13px"></span>
+  </div>
+  <div style="color:var(--dim);font-size:12px;margin-top:8px">
+    O botão de rodada lê <code>dados/fixtures.csv</code> (cole a tabela da temporada 1x —
+    formato no <code>.example</code>; a fonte de resultados não publica calendário futuro).</div>
+</div>
+
+<div class="painel">
+  <div class="tile fade"><div class="k">Jogos registrados</div><div class="v grande">{{ n }}</div></div>
+  <div class="tile fade"><div class="k">Liquidados</div><div class="v grande">{{ n_fech }}</div></div>
+  <div class="tile fade"><div class="k">Brier prospectivo</div>
+    <div class="v grande">{% if brier is not none %}{{ '%.4f' % brier }}{% else %}—{% endif %}</div>
+    <div class="k">uniforme = 0,667</div></div>
+  <div class="tile fade"><div class="k">Potência</div>
+    <div class="v">{% if n_fech >= 60 %}OK{% else %}n baixo{% endif %}</div>
+    {% if n_fech < 60 %}<div class="aviso">siga registrando — sem potência p/ afirmar skill</div>{% endif %}</div>
+</div>
+
+{% if linhas %}
+  {% for r in linhas %}
+  <div class="reg fade" style="animation-delay:{{ loop.index0 * 30 }}ms">
+    <div><div class="jogo">{{ r.home }} × {{ r.away }}</div>
+      <div class="meta">{{ r.league|nome_liga }} · {{ r.date }} · registrado {{ r.registrado_em }} · {{ r.versao }}</div></div>
+    <div class="probs"><span>V {{ '%.0f' % (r.p_v|float * 100) }}%</span>
+      <span>E {{ '%.0f' % (r.p_e|float * 100) }}%</span>
+      <span>D {{ '%.0f' % (r.p_d|float * 100) }}%</span></div>
+    {% if r.brier %}
+      <div class="veredito fechado">{{ r.home_score }}–{{ r.away_score }}<small>brier {{ '%.3f' % (r.brier|float) }}</small></div>
+    {% else %}
+      <div class="veredito aberto">EM ABERTO<small>aguarda settle</small></div>
+    {% endif %}
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="card vazio">Nenhum jogo registrado ainda.<br><br>
+  Antes do kickoff da rodada: <code>python -m scb.registrar register BRA "Casa" "Fora" --date AAAA-MM-DD</code><br>
+  Depois dos jogos: <code>python -m scb.registrar settle</code> — e esta tela vira sua auditoria viva.</div>
+{% endif %}
+{% endblock %}
+{% block js %}
+<script>
+const TIMES = {{ times | tojson }};
+const $ = id => document.getElementById(id);
+function encherTimes(){
+  const ts = TIMES[$("rLiga").value] || [];
+  $("rHome").innerHTML = ts.map(t => `<option>${t}</option>`).join("");
+  $("rAway").innerHTML = ts.map(t => `<option>${t}</option>`).join("");
+  if (ts.length > 1) $("rAway").selectedIndex = 1;
+}
+$("rLiga").onchange = encherTimes; encherTimes();
+$("rData").value = new Date().toISOString().slice(0, 10);
+$("rGo").onclick = async () => {
+  $("rGo").disabled = true;
+  try{
+    const r = await fetch("/api/registrar", {method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({league: $("rLiga").value, home: $("rHome").value,
+                            away: $("rAway").value, date: $("rData").value})});
+    const o = await r.json();
+    if (o.erro) throw new Error(o.erro);
+    $("rMsg").textContent = o.ja_registrado ? "Já estava registrado (imutável — nada mudou)."
+      : `Registrado: V ${(100*o.p_v).toFixed(0)}% · E ${(100*o.p_e).toFixed(0)}% · D ${(100*o.p_d).toFixed(0)}%`;
+    if (!o.ja_registrado) setTimeout(() => location.reload(), 900);
+  }catch(e){ $("rMsg").textContent = "Erro: " + e.message; }
+  $("rGo").disabled = false;
+};
+$("rAuto").onclick = async () => {
+  $("rAuto").disabled = true;
+  const r = await fetch("/api/registrar-auto", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({dias: 4})});
+  const o = await r.json();
+  if (o.erro){ $("rMsg").textContent = o.erro; }
+  else {
+    $("rMsg").textContent = `Rodada: ${o.n_novos} novos · ${o.ja_registrados} já estavam · ${o.fora_da_janela} fora da janela` +
+      (o.erros.length ? ` · ${o.erros.length} erros (ver terminal)` : "");
+    if (o.n_novos > 0) setTimeout(() => location.reload(), 1200);
+  }
+  $("rAuto").disabled = false;
+};
+$("rSettle").onclick = async () => {
+  $("rSettle").disabled = true;
+  const r = await fetch("/api/settle", {method:"POST"});
+  const o = await r.json();
+  $("rMsg").textContent = `Settle: ${o.preenchidos} preenchidos, ${o.em_aberto} em aberto.`;
+  if (o.preenchidos > 0) setTimeout(() => location.reload(), 900);
+  $("rSettle").disabled = false;
+};
+</script>
+{% endblock %}

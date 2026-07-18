@@ -9,7 +9,7 @@ data: 2026-07-15
 
 Port evoluído do **SCM** (sistema de análises da Copa 2026) para **ligas de pontos corridos**, com o Brasileirão como entrega e a Premier League como liga de validação. Mesmo motor auditável (Elo → Poisson → ensemble), mesmas regras de negócio, **melhorado onde a liga permite** (odds automáticas com fechamento, simulador de tabela, mando medido, novos candidatos ao portão).
 
-**Estado:** Fase 1 concluída — [[PLANO]] v1.0 e contrato congelados (D-11, 2026-07-15). Próximo: M1 (POC de dados). Nenhum código ainda.
+**Estado (2026-07-17):** M0–M7.1 executadas — modelo oficial **`scb-v0.3-mando-e0`** validado por walk-forward (BRA 0,6131 / E0 0,5894), web no ar (`scb_analytics/Abrir SCB.bat`), operação em 1 clique, 73 testes. Falta M7.2 (empacotamento). A verdade viva mora no [[CONTEXT]].
 
 ## Este repositório é um vault Obsidian
 
@@ -43,11 +43,11 @@ Este repositório segue o **pipeline pessoal de projetos com IA** (6 fases, 5 re
 |---|---|---|---|
 | 0 — Bootstrap | este kit | CONTEXT ≤1 pág + aceite escrito | ✅ 2026-07-14 |
 | 1 — Planejamento | [[PLANO]] + contrato | **aprovação do Gustavo → congela** | ✅ 2026-07-15 (D-11) |
-| 2 — Dados/Schema | M1 (POC football-data) + M2 (ingest/schema) | migration roda; contagens batem | 🔜 |
-| 3 — Implementação | M3 (motor, módulo a módulo) + M4 (backtest) | pytest por módulo; **portão do baseline** | fila |
-| 4 — QA adversarial | após M5 (sim/registro) e M7 (web) | crítico/alto corrigidos c/ QA-NN | fila |
-| 5 — Evolução | M6 (fila do portão C1–C6) | IC>0 + guardas, um por vez | fila |
-| 6 — Entrega | M7 (empacotamento) | CHECKLIST completo | fila |
+| 2 — Dados/Schema | M1 (POC) + M2 (ingest/schema) | migration roda; contagens batem | ✅ (D-13..D-16; BRA 5.496/E0 12.704) |
+| 3 — Implementação | M3 (motor) + M4 (backtest) | pytest por módulo; **portão do baseline** | ✅ (D-17: BRA 0,6146/E0 0,5899 → v0.3: 0,6131/0,5894) |
+| 4 — QA adversarial | contínua (QA-01..QA-10 achados e corrigidos) | crítico/alto corrigidos c/ QA-NN | ✅ em regime |
+| 5 — Evolução | M6 (fila do portão, 9 gates) | IC>0 + guardas, um por vez | ✅ 2 adoções (D-25/D-26) · 7 rejeições · Q-07/Q-08 abertas |
+| 6 — Entrega | M5 operação + M7.1 web · **M7.2 empacote** | CHECKLIST completo | 🔜 M7.2 |
 
 ## Origem e material de referência
 

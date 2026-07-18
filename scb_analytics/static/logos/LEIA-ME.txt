@@ -1,0 +1,7 @@
+Escudos oficiais sao marca registrada — por isso a web gera badges SVG com as cores
+reais de cada clube (cores nao sao protegiveis). Imersao com R$0 e sem ToS.
+
+QUER OS ESCUDOS DE VERDADE (uso pessoal)? Salve um PNG aqui com o nome do slug:
+  flamengo-rj.png · palmeiras.png · sao-paulo.png · man-city.png · nott-m-forest.png ...
+(slug = nome do football-data em minusculas, sem acento, espacos viram hifen)
+A web usa o PNG automaticamente no lugar do badge gerado. Decisao e responsabilidade suas.

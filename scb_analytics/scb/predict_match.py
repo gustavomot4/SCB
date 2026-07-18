@@ -39,6 +39,9 @@ def predict_now(conn, league: str, home: str, away: str,
     fh, dh, nh = team_form(conn, h["team_id"], "9999-12-31", fp)
     fa, da, na = team_form(conn, a["team_id"], "9999-12-31", fp)
     dr = rh["elo"] - ra["elo"] + (fh - fa) + config.h_for(league)     # produção = backtest
+    if config.mando_rolling_for(league):                              # D-26 (mesma fórmula do features)
+        from . import mando_rolling
+        dr += mando_rolling.delta_today(conn, league, config.MANDO_ROLLING_W)
     sr_h = sigma_r(rh["n_games"], ep) * vol_mult(dh, nh)
     sr_a = sigma_r(ra["n_games"], ep) * vol_mult(da, na)
     sigma_dr = math.sqrt(sr_h ** 2 + sr_a ** 2 + (fp.sigma_ajuste_c * dh) ** 2

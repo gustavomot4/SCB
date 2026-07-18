@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCB — {% block titulo %}{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800;900&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,{{ '<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><path d=%22M16 2 L29 6 V17 C29 24 23 29 16 31 C9 29 3 24 3 17 V6 Z%22 fill=%22%23C7FF29%22/></svg>' }}">
+<style>
+:root{
+  --bg:#0A0C0F; --panel:#13161C; --panel2:#181C24; --line:rgba(255,255,255,.08);
+  --tx:#F2F4F8; --dim:#8A93A6; --volt:#C7FF29; --roxo:#8B5CF6; --azul:#38BDF8;
+  --vermelho:#FB4D5C; --ambar:#FFB454;
+  --cond:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  --body:'Barlow',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1200px 600px at 75% -10%, rgba(139,92,246,.14), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(199,255,41,.07), transparent 55%),
+    repeating-linear-gradient(115deg, transparent 0 46px, rgba(255,255,255,.012) 46px 47px),
+    var(--bg);
+  color:var(--tx); font-family:var(--body); min-height:100vh; overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+/* ===== nav lateral (estilo menu FC) ===== */
+nav{padding:34px 0 34px 34px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;
+    display:flex;flex-direction:column;gap:6px;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent)}
+.logo{font-family:var(--cond);font-weight:900;font-size:34px;letter-spacing:.04em;margin-bottom:34px}
+.logo em{font-style:normal;color:var(--volt)}
+nav a{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;
+      font-weight:700;font-size:17px;color:var(--dim);padding:9px 0;transition:all .18s;position:relative}
+nav a:hover{color:var(--tx);transform:translateX(4px)}
+nav a.on{color:var(--tx);font-weight:900;font-size:24px;letter-spacing:.08em}
+nav a.on::before{content:"";position:absolute;left:-34px;top:12%;height:76%;width:4px;background:var(--volt);border-radius:2px}
+.navfoot{margin-top:auto;font-size:11px;color:var(--dim);line-height:1.7;padding-right:22px}
+.chip{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 10px;
+      font-family:var(--cond);letter-spacing:.1em;font-size:12px;color:var(--dim);text-transform:uppercase}
+.chip.volt{color:var(--volt);border-color:rgba(199,255,41,.35)}
+/* ===== área principal ===== */
+main{padding:38px 46px 70px}
+.head h1{font-family:var(--cond);font-weight:900;text-transform:uppercase;font-size:52px;
+         letter-spacing:.03em;line-height:.95}
+.head .sub{color:var(--dim);margin-top:8px;max-width:640px}
+.head{margin-bottom:30px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+/* cards e tiles */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.tiles{display:grid;gap:12px}
+.tile{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+      transition:transform .18s, border-color .18s}
+.tile:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.2)}
+.tile .k{font-family:var(--cond);text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--dim)}
+.tile .v{font-family:var(--cond);font-weight:900;font-size:34px;margin-top:2px}
+.tile .v small{font-size:16px;color:var(--dim);font-weight:700}
+/* botão pill (estilo "Play Rivals") */
+.pill{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(90deg,#3B82F6,#8B5CF6);
+      border:none;border-radius:999px;color:#fff;font-family:var(--cond);font-weight:800;
+      text-transform:uppercase;letter-spacing:.12em;font-size:16px;padding:13px 30px;cursor:pointer;
+      transition:transform .15s, box-shadow .15s}
+.pill:hover{transform:scale(1.04);box-shadow:0 8px 30px rgba(139,92,246,.35)}
+.pill.volt{background:linear-gradient(90deg,#9BE626,#C7FF29);color:#0A0C0F}
+.pill:disabled{opacity:.4;cursor:default;transform:none}
+/* seletor de liga (toggle) */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{background:transparent;border:none;color:var(--dim);font-family:var(--cond);
+            font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:14px;
+            padding:9px 22px;cursor:pointer;transition:all .15s}
+.seg button.on{background:var(--tx);color:#0A0C0F}
+/* barras de probabilidade */
+.bar{height:14px;border-radius:7px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.bar i{display:block;height:100%;width:0;border-radius:7px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+/* selects */
+select{appearance:none;background:var(--panel2);border:1px solid var(--line);color:var(--tx);
+       border-radius:12px;padding:12px 16px;font-family:var(--cond);font-weight:700;font-size:18px;
+       letter-spacing:.04em;width:100%;cursor:pointer}
+select:focus{outline:none;border-color:var(--volt)}
+.pill.ghost{background:transparent;border:1px solid var(--line);color:var(--dim)}
+.pill.ghost:hover{color:var(--tx);border-color:rgba(255,255,255,.35);box-shadow:none}
+.fade{animation:fade .5s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* ===== impressão / PDF (compartilhar) ===== */
+.print-head{display:none}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff !important;color:#111}
+  .shell{display:block}
+  nav,.pill,.seg,select,.disc,.noprint{display:none !important}
+  main{padding:0}
+  .print-head{display:block;border-bottom:3px solid #111;margin-bottom:14px;padding-bottom:8px}
+  .print-head .t{font-family:var(--cond);font-weight:900;text-transform:uppercase;font-size:28px;color:#111}
+  .print-head .m{font-size:11px;color:#555}
+  .head h1{color:#111;font-size:34px}
+  .head .sub{color:#555}
+  .card,.tile,tr.linha td,.reg{background:#fff !important;border-color:#ccc !important;color:#111}
+  .tile .k,.reg .meta,th{color:#666 !important}
+  .tile .v,.clubecel,.pos,.reg .jogo{color:#111 !important}
+  .bar{background:#eee}
+  .fade{animation:none}
+}
+.disc{border-top:1px solid var(--line);margin-top:38px;padding-top:14px;color:var(--dim);
+      font-family:var(--cond);letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+@media(max-width:900px){.shell{grid-template-columns:1fr}nav{position:static;height:auto;flex-direction:row;
+  flex-wrap:wrap;align-items:center;padding:18px}nav a.on::before{display:none}main{padding:22px}}
+</style>
+{% block css %}{% endblock %}
+</head>
+<body>
+<div class="shell">
+  <nav>
+    <div class="logo">SCB<em>26</em></div>
+    <a href="/predict" class="{{ 'on' if tela=='predict' }}">Prever Confronto</a>
+    <a href="/tabela" class="{{ 'on' if tela=='tabela' }}">Tabela Simulada</a>
+    <a href="/jogos" class="{{ 'on' if tela=='jogos' }}">Jogos</a>
+    <a href="/prospectivo" class="{{ 'on' if tela=='prospectivo' }}">Prospectivo</a>
+    <div class="navfoot">
+      <span class="chip volt">{{ versao }}</span><br><br>
+      Motor Elo → Poisson → ensemble, validado por backtest walk-forward.<br><br>
+      Probabilidade, nunca certeza.<br>Não é ferramenta de aposta.
+    </div>
+  </nav>
+  <main>{% block corpo %}{% endblock %}
+    <div class="disc">SCB · local e gratuito · mercado é régua, não meta · escudos genéricos gerados por cores
+    (solte um PNG em static/logos/ para usar o seu)</div>
+  </main>
+</div>
+{% block js %}{% endblock %}
+</body>
+</html>
