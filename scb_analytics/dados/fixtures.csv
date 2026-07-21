@@ -1,14 +1,197 @@
 league,round,date,home,away
-BRA,19,2026-07-16,Botafogo RJ,Santos
-BRA,19,2026-07-16,Vitoria,Vasco
-BRA,19,2026-07-16,Mirassol,Gremio
-BRA,19,2026-07-17,Fluminense,Bragantino
 BRA,19,2026-07-21,Atletico-MG,Bahia
-BRA,19,2026-07-22,Coritiba,Palmeiras
 BRA,19,2026-07-22,Chapecoense-SC,Flamengo RJ
+BRA,19,2026-07-22,Coritiba,Palmeiras
 BRA,19,2026-07-22,Internacional,Cruzeiro
 BRA,19,2026-07-22,Sao Paulo,Athletico-PR
+BRA,4,2026-07-23,Botafogo RJ,Vitoria
 BRA,19,2026-07-23,Corinthians,Remo
+BRA,20,2026-07-25,Athletico-PR,Internacional
+BRA,20,2026-07-25,Santos,Chapecoense-SC
+BRA,20,2026-07-25,Vasco,Mirassol
+BRA,20,2026-07-26,Bahia,Corinthians
+BRA,20,2026-07-26,Bragantino,Coritiba
+BRA,20,2026-07-26,Cruzeiro,Botafogo RJ
+BRA,20,2026-07-26,Flamengo RJ,Sao Paulo
+BRA,20,2026-07-26,Gremio,Fluminense
+BRA,20,2026-07-26,Palmeiras,Atletico-MG
+BRA,20,2026-07-26,Remo,Vitoria
+BRA,21,2026-07-29,Fluminense,Bahia
+BRA,21,2026-07-29,Internacional,Flamengo RJ
+BRA,21,2026-07-29,Mirassol,Remo
+BRA,21,2026-07-29,Vitoria,Palmeiras
+BRA,21,2026-07-30,Corinthians,Athletico-PR
+BRA,21,2026-07-30,Coritiba,Cruzeiro
+BRA,22,2026-08-08,Botafogo RJ,Fluminense
+BRA,22,2026-08-08,Coritiba,Chapecoense-SC
+BRA,22,2026-08-08,Gremio,Sao Paulo
+BRA,22,2026-08-08,Remo,Atletico-MG
+BRA,22,2026-08-09,Bahia,Vasco
+BRA,22,2026-08-09,Bragantino,Corinthians
+BRA,22,2026-08-09,Cruzeiro,Mirassol
+BRA,22,2026-08-09,Flamengo RJ,Vitoria
+BRA,22,2026-08-09,Palmeiras,Internacional
+BRA,22,2026-08-09,Santos,Athletico-PR
+BRA,23,2026-08-15,Athletico-PR,Bragantino
+BRA,23,2026-08-15,Atletico-MG,Gremio
+BRA,23,2026-08-15,Sao Paulo,Coritiba
+BRA,23,2026-08-16,Chapecoense-SC,Bahia
+BRA,23,2026-08-16,Corinthians,Cruzeiro
+BRA,23,2026-08-16,Fluminense,Palmeiras
+BRA,23,2026-08-16,Mirassol,Flamengo RJ
+BRA,23,2026-08-16,Vasco,Santos
+BRA,23,2026-08-16,Vitoria,Botafogo RJ
+BRA,23,2026-08-17,Internacional,Remo
+BRA,24,2026-08-22,Cruzeiro,Flamengo RJ
+BRA,24,2026-08-22,Fluminense,Remo
+BRA,24,2026-08-22,Internacional,Atletico-MG
+BRA,24,2026-08-23,Bragantino,Gremio
+BRA,24,2026-08-23,Chapecoense-SC,Sao Paulo
+BRA,24,2026-08-23,Coritiba,Corinthians
+BRA,24,2026-08-23,Palmeiras,Vasco
+BRA,24,2026-08-23,Santos,Mirassol
+BRA,24,2026-08-23,Vitoria,Bahia
+BRA,24,2026-08-24,Botafogo RJ,Athletico-PR
+BRA,25,2026-08-30,Athletico-PR,Fluminense
+BRA,25,2026-08-30,Atletico-MG,Vitoria
+BRA,25,2026-08-30,Bahia,Internacional
+BRA,25,2026-08-30,Corinthians,Santos
+BRA,25,2026-08-30,Flamengo RJ,Botafogo RJ
+BRA,25,2026-08-30,Gremio,Chapecoense-SC
+BRA,25,2026-08-30,Mirassol,Palmeiras
+BRA,25,2026-08-30,Remo,Coritiba
+BRA,25,2026-08-30,Sao Paulo,Bragantino
+BRA,25,2026-08-30,Vasco,Cruzeiro
+BRA,26,2026-09-06,Botafogo RJ,Palmeiras
+BRA,26,2026-09-06,Bragantino,Bahia
+BRA,26,2026-09-06,Corinthians,Chapecoense-SC
+BRA,26,2026-09-06,Coritiba,Mirassol
+BRA,26,2026-09-06,Cruzeiro,Athletico-PR
+BRA,26,2026-09-06,Fluminense,Vasco
+BRA,26,2026-09-06,Internacional,Santos
+BRA,26,2026-09-06,Remo,Flamengo RJ
+BRA,26,2026-09-06,Sao Paulo,Atletico-MG
+BRA,26,2026-09-06,Vitoria,Gremio
+BRA,27,2026-09-13,Atletico-MG,Fluminense
+BRA,27,2026-09-13,Bahia,Remo
+BRA,27,2026-09-13,Botafogo RJ,Bragantino
+BRA,27,2026-09-13,Chapecoense-SC,Internacional
+BRA,27,2026-09-13,Coritiba,Athletico-PR
+BRA,27,2026-09-13,Flamengo RJ,Corinthians
+BRA,27,2026-09-13,Gremio,Vasco
+BRA,27,2026-09-13,Mirassol,Vitoria
+BRA,27,2026-09-13,Palmeiras,Sao Paulo
+BRA,27,2026-09-13,Santos,Cruzeiro
+BRA,28,2026-09-20,Athletico-PR,Bahia
+BRA,28,2026-09-20,Atletico-MG,Chapecoense-SC
+BRA,28,2026-09-20,Corinthians,Fluminense
+BRA,28,2026-09-20,Flamengo RJ,Bragantino
+BRA,28,2026-09-20,Gremio,Palmeiras
+BRA,28,2026-09-20,Mirassol,Botafogo RJ
+BRA,28,2026-09-20,Remo,Santos
+BRA,28,2026-09-20,Sao Paulo,Internacional
+BRA,28,2026-09-20,Vasco,Coritiba
+BRA,28,2026-09-20,Vitoria,Cruzeiro
+BRA,29,2026-10-07,Athletico-PR,Atletico-MG
+BRA,29,2026-10-07,Botafogo RJ,Vasco
+BRA,29,2026-10-07,Bragantino,Mirassol
+BRA,29,2026-10-07,Cruzeiro,Sao Paulo
+BRA,29,2026-10-07,Fluminense,Coritiba
+BRA,29,2026-10-07,Internacional,Corinthians
+BRA,29,2026-10-07,Palmeiras,Bahia
+BRA,29,2026-10-07,Remo,Gremio
+BRA,29,2026-10-07,Santos,Flamengo RJ
+BRA,29,2026-10-07,Vitoria,Chapecoense-SC
+BRA,30,2026-10-11,Atletico-MG,Santos
+BRA,30,2026-10-11,Bahia,Mirassol
+BRA,30,2026-10-11,Bragantino,Cruzeiro
+BRA,30,2026-10-11,Chapecoense-SC,Athletico-PR
+BRA,30,2026-10-11,Coritiba,Botafogo RJ
+BRA,30,2026-10-11,Flamengo RJ,Fluminense
+BRA,30,2026-10-11,Gremio,Internacional
+BRA,30,2026-10-11,Palmeiras,Corinthians
+BRA,30,2026-10-11,Sao Paulo,Vitoria
+BRA,30,2026-10-11,Vasco,Remo
+BRA,31,2026-10-18,Athletico-PR,Palmeiras
+BRA,31,2026-10-18,Atletico-MG,Coritiba
+BRA,31,2026-10-18,Bahia,Flamengo RJ
+BRA,31,2026-10-18,Botafogo RJ,Chapecoense-SC
+BRA,31,2026-10-18,Corinthians,Vitoria
+BRA,31,2026-10-18,Fluminense,Santos
+BRA,31,2026-10-18,Gremio,Cruzeiro
+BRA,31,2026-10-18,Mirassol,Internacional
+BRA,31,2026-10-18,Remo,Bragantino
+BRA,31,2026-10-18,Sao Paulo,Vasco
+BRA,32,2026-10-25,Chapecoense-SC,Fluminense
+BRA,32,2026-10-25,Coritiba,Gremio
+BRA,32,2026-10-25,Cruzeiro,Remo
+BRA,32,2026-10-25,Flamengo RJ,Atletico-MG
+BRA,32,2026-10-25,Internacional,Botafogo RJ
+BRA,32,2026-10-25,Mirassol,Sao Paulo
+BRA,32,2026-10-25,Palmeiras,Bragantino
+BRA,32,2026-10-25,Santos,Bahia
+BRA,32,2026-10-25,Vasco,Corinthians
+BRA,32,2026-10-25,Vitoria,Athletico-PR
+BRA,33,2026-10-28,Atletico-MG,Cruzeiro
+BRA,33,2026-10-28,Bahia,Sao Paulo
+BRA,33,2026-10-28,Bragantino,Chapecoense-SC
+BRA,33,2026-10-28,Corinthians,Mirassol
+BRA,33,2026-10-28,Coritiba,Vitoria
+BRA,33,2026-10-28,Fluminense,Internacional
+BRA,33,2026-10-28,Gremio,Athletico-PR
+BRA,33,2026-10-28,Remo,Botafogo RJ
+BRA,33,2026-10-28,Santos,Palmeiras
+BRA,33,2026-10-28,Vasco,Flamengo RJ
+BRA,34,2026-11-04,Athletico-PR,Vasco
+BRA,34,2026-11-04,Botafogo RJ,Atletico-MG
+BRA,34,2026-11-04,Bragantino,Santos
+BRA,34,2026-11-04,Chapecoense-SC,Mirassol
+BRA,34,2026-11-04,Cruzeiro,Bahia
+BRA,34,2026-11-04,Flamengo RJ,Gremio
+BRA,34,2026-11-04,Internacional,Coritiba
+BRA,34,2026-11-04,Palmeiras,Remo
+BRA,34,2026-11-04,Sao Paulo,Corinthians
+BRA,34,2026-11-04,Vitoria,Fluminense
+BRA,35,2026-11-18,Corinthians,Botafogo RJ
+BRA,35,2026-11-18,Coritiba,Santos
+BRA,35,2026-11-18,Cruzeiro,Palmeiras
+BRA,35,2026-11-18,Flamengo RJ,Athletico-PR
+BRA,35,2026-11-18,Gremio,Bahia
+BRA,35,2026-11-18,Mirassol,Atletico-MG
+BRA,35,2026-11-18,Remo,Chapecoense-SC
+BRA,35,2026-11-18,Sao Paulo,Fluminense
+BRA,35,2026-11-18,Vasco,Internacional
+BRA,35,2026-11-18,Vitoria,Bragantino
+BRA,36,2026-11-22,Athletico-PR,Remo
+BRA,36,2026-11-22,Atletico-MG,Corinthians
+BRA,36,2026-11-22,Bahia,Coritiba
+BRA,36,2026-11-22,Botafogo RJ,Sao Paulo
+BRA,36,2026-11-22,Bragantino,Vasco
+BRA,36,2026-11-22,Chapecoense-SC,Cruzeiro
+BRA,36,2026-11-22,Fluminense,Mirassol
+BRA,36,2026-11-22,Internacional,Vitoria
+BRA,36,2026-11-22,Palmeiras,Flamengo RJ
+BRA,36,2026-11-22,Santos,Gremio
+BRA,37,2026-11-29,Atletico-MG,Vasco
+BRA,37,2026-11-29,Botafogo RJ,Bahia
+BRA,37,2026-11-29,Chapecoense-SC,Palmeiras
+BRA,37,2026-11-29,Corinthians,Gremio
+BRA,37,2026-11-29,Coritiba,Flamengo RJ
+BRA,37,2026-11-29,Fluminense,Cruzeiro
+BRA,37,2026-11-29,Internacional,Bragantino
+BRA,37,2026-11-29,Mirassol,Athletico-PR
+BRA,37,2026-11-29,Sao Paulo,Remo
+BRA,37,2026-11-29,Vitoria,Santos
+BRA,38,2026-12-02,Athletico-PR,Sao Paulo
+BRA,38,2026-12-02,Bahia,Atletico-MG
+BRA,38,2026-12-02,Bragantino,Fluminense
+BRA,38,2026-12-02,Cruzeiro,Internacional
+BRA,38,2026-12-02,Flamengo RJ,Chapecoense-SC
+BRA,38,2026-12-02,Gremio,Mirassol
+BRA,38,2026-12-02,Palmeiras,Coritiba
+BRA,38,2026-12-02,Remo,Corinthians
+BRA,38,2026-12-02,Santos,Botafogo RJ
+BRA,38,2026-12-02,Vasco,Vitoria
 E0,1,2026-08-21,Arsenal,Coventry
 E0,1,2026-08-22,Hull,Man United
 E0,1,2026-08-22,Everton,Crystal Palace

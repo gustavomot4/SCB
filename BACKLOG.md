@@ -16,7 +16,7 @@ data: 2026-07-16
 
 ## 🔜 Próximo
 
-- [ ] **[v0.3+M7] ▶ GUSTAVO: rebuild + web** — `pip install -r requirements.txt` → `python -m pytest -q` (esperado **71**) → `elo_engine` → `features_pit` → `draw_curve` → `predictor` (18200 [scb-v0.3-mando-e0]) → `backtest_harness` (**BRA 0,6131 / E0 0,5894**) → **duplo clique no `Abrir SCB.bat`** (ou `python -m scb.web --open`)
+- [x] **[v0.4+M7] GUSTAVO: rebuild FEITO** — `scb-v0.4-sot-goals-e0` confirmado (85 testes; predictor 18200; backtest **BRA 0,6131 / E0 0,5894**). ▶ Pendente agora: registrar cada rodada · terminar o backfill de placar/posse do BRA (`baixar_stats_bra.py`, resumível — cota baixa/429) · `baixar_escudos_bra.py` (escudos oficiais)
 - [ ] **[M7.2] Empacotamento final** — CHECKLIST de entrega (prompts/05): zip sem deps/segredos, README sincronizado, abrir e conferir
 - [ ] **[evolução futura] Q-07 banda E0 (números na D-28) · Q-08: C4 viagem (curadoria de coordenadas) · C6 H por clube (pronto-para-rodar)**
 - [x] **[M7.1] WEB ENTREGUE (D-29)** — estilo EA FC (nav lateral condensada, dark+vinheta, cards, trilho de temporada, barras animadas, placares em tiles); escudos SVG por cores reais + override local `static/logos/`; 3 telas + launcher; badges com 5 testes (71); Flask lazy (roda sem Flask nos testes)

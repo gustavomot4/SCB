@@ -9,7 +9,7 @@ data: 2026-07-15
 
 Port evoluído do **SCM** (sistema de análises da Copa 2026) para **ligas de pontos corridos**, com o Brasileirão como entrega e a Premier League como liga de validação. Mesmo motor auditável (Elo → Poisson → ensemble), mesmas regras de negócio, **melhorado onde a liga permite** (odds automáticas com fechamento, simulador de tabela, mando medido, novos candidatos ao portão).
 
-**Estado (2026-07-17):** M0–M7.1 executadas — modelo oficial **`scb-v0.3-mando-e0`** validado por walk-forward (BRA 0,6131 / E0 0,5894), web no ar (`scb_analytics/Abrir SCB.bat`), operação em 1 clique, 73 testes. Falta M7.2 (empacotamento). A verdade viva mora no [[CONTEXT]].
+**Estado (2026-07-21):** M0–M7.1 executadas — modelo oficial **`scb-v0.4-sot-goals-e0`** (walk-forward BRA 0,6131 / E0 0,5894; ECE 1,1%/2,3%), web com **5 telas** (Prever Confronto · Tabela [Simulada + **Classificação real**] · **Calibração** · Jogos · Prospectivo), BRA com stats, **resultados** e **escudos oficiais** via API-Futebol (2ª fonte), operação em 1 clique. Falta M7.2 (empacotamento). A verdade viva mora no [[CONTEXT]].
 
 ## Este repositório é um vault Obsidian
 

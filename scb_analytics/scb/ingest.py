@@ -18,8 +18,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import difflib
 import json
+import re
 import sys
+import unicodedata
 from datetime import datetime
 from pathlib import Path
 from typing import Optional, Union
@@ -323,6 +326,163 @@ def load_extra(conn, path: Union[str, Path], leagues: dict) -> dict:
     return {"inserted": n_ins, "dup_guarded": n_dup, "skipped": n_skip}
 
 
+# ------------------------------------------------ 2ª fonte: stats do BRA (D-34, API-Football)
+BRA_STATS = DADOS / "bra_stats.csv"
+
+# API-Football usa nomes cheios; o banco segue o padrão football-data. Alias dos AMBÍGUOS
+# (o resto casa por normalização + similaridade + o par casa/fora na data). Chave normalizada.
+_BRA_ALIAS = {
+    "flamengo": "Flamengo RJ", "botafogo": "Botafogo RJ", "sao paulo": "Sao Paulo",
+    "atletico mineiro": "Atletico-MG", "atletico mg": "Atletico-MG",
+    "athletico paranaense": "Athletico-PR", "athletico pr": "Athletico-PR",
+    "atletico paranaense": "Athletico-PR", "vasco gama": "Vasco", "vasco": "Vasco",
+    "gremio": "Gremio", "red bull bragantino": "Bragantino", "rb bragantino": "Bragantino",
+    "bragantino": "Bragantino", "chapecoense": "Chapecoense-SC", "vitoria": "Vitoria",
+    "america mineiro": "America-MG", "atletico goianiense": "Atletico-GO",
+}
+def _norm_bra(name: str) -> str:
+    s = unicodedata.normalize("NFKD", name or "").encode("ascii", "ignore").decode().lower()
+    s = re.sub(r"\b(fc|ec|sc|ac|sa|futebol|clube|esporte|de|do|da)\b", " ", s)
+    return re.sub(r"[^a-z0-9]+", " ", s).strip()
+
+
+def parse_apifutebol_stats(p: dict) -> Optional[dict]:
+    """Detalhe de partida da API-Futebol (api-futebol.com.br) -> linha do bra_stats.csv. PURO
+    (sem rede), testável. Mapeia: finalizacao.no_gol = chutes NO GOL (SoT), finalizacao.total =
+    chutes, escanteios, faltas; cartões contados pelos arrays; HT pelos gols do 1º tempo.
+    None se o jogo não tem estatísticas (não terminado -> mandante/visitante vêm como [])."""
+    est = p.get("estatisticas") or {}
+    m, v = est.get("mandante"), est.get("visitante")
+    if not isinstance(m, dict) or not isinstance(v, dict) or not m or not v:
+        return None
+
+    def fin(side, k):
+        return (side.get("finalizacao") or {}).get(k)
+
+    def pct(s):                                     # "78%" -> 78 (None se não vier)
+        try:
+            return int(str(s).replace("%", "").strip())
+        except (ValueError, TypeError, AttributeError):
+            return None
+
+    cart = p.get("cartoes") or {}
+    amar, verm = cart.get("amarelo") or {}, cart.get("vermelho") or {}
+    n = lambda d, lado: len(d.get(lado) or [])
+    gols = p.get("gols") or {}
+    ht = lambda lado: sum(1 for g in (gols.get(lado) or [])
+                          if g.get("periodo_slug") == "primeiro-tempo")
+    return {
+        "date": (p.get("data_realizacao_iso") or "")[:10] or None,
+        "home": (p.get("time_mandante") or {}).get("nome_popular"),
+        "away": (p.get("time_visitante") or {}).get("nome_popular"),
+        "home_score": p.get("placar_mandante"), "away_score": p.get("placar_visitante"),
+        "sot_home": fin(m, "no_gol"), "sot_away": fin(v, "no_gol"),
+        "shots_home": fin(m, "total"), "shots_away": fin(v, "total"),
+        "corners_home": m.get("escanteios"), "corners_away": v.get("escanteios"),
+        "fouls_home": m.get("faltas"), "fouls_away": v.get("faltas"),
+        "yellow_home": n(amar, "mandante"), "yellow_away": n(amar, "visitante"),
+        "red_home": n(verm, "mandante"), "red_away": n(verm, "visitante"),
+        "ht_home": ht("mandante"), "ht_away": ht("visitante"),
+        "possession_home": pct(m.get("posse_de_bola")), "possession_away": pct(v.get("posse_de_bola")),
+        "pass_acc_home": pct((m.get("passes") or {}).get("precisao")),
+        "pass_acc_away": pct((v.get("passes") or {}).get("precisao")),
+        "tackles_home": m.get("desarmes"), "tackles_away": v.get("desarmes"),
+        "saves_home": (m.get("defensivo") or {}).get("defesas"),
+        "saves_away": (v.get("defensivo") or {}).get("defesas"),
+    }
+
+
+def _bra_team_id(conn, api_name, known, cache):
+    if api_name in cache:
+        return cache[api_name]
+    n = _norm_bra(api_name)
+    dbname = _BRA_ALIAS.get(n)
+    if dbname is None:                                  # sem alias -> normaliza + similaridade
+        exact = [k for k in known if _norm_bra(k) == n]
+        if exact:
+            dbname = exact[0]
+        else:
+            m = difflib.get_close_matches(n, [_norm_bra(k) for k in known], n=1, cutoff=0.84)
+            dbname = next((k for k in known if _norm_bra(k) == m[0]), None) if m else None
+    tid = None
+    if dbname:
+        r = conn.execute("SELECT team_id FROM teams WHERE name=?", (dbname,)).fetchone()
+        tid = r["team_id"] if r else None
+    cache[api_name] = tid
+    return tid
+
+
+def load_bra_stats(conn, path: Union[str, Path]) -> int:
+    """bra_stats.csv (API-Futebol, D-34) -> match_stats do BRA. Casa por (par de times + data
+    ±2d). Idempotente (INSERT OR REPLACE por match_id).
+
+    Se o jogo NÃO está em matches (football-data ainda não publicou a rodada) e a API traz o
+    PLACAR, insere o resultado em matches — mesma lógica do resultados_extra (D-80), com a
+    guarda de quase-duplicata ±2d (D-82). Sem placar E sem jogo no banco = pula (não inventa).
+    É isto que destrava o 'Liquidar resultados' do Prospectivo para rodadas recém-jogadas."""
+    known = [r[0] for r in conn.execute(
+        """SELECT DISTINCT t.name FROM teams t JOIN matches m
+           ON t.team_id IN (m.home_team_id, m.away_team_id) WHERE m.league='BRA'""")]
+    cache: dict = {}
+    name_of: dict = {}
+
+    def _nm(tid):                                            # team_id -> nome do banco (natural_key)
+        if tid not in name_of:
+            name_of[tid] = conn.execute("SELECT name FROM teams WHERE team_id=?", (tid,)).fetchone()[0]
+        return name_of[tid]
+
+    n_ok = n_new = 0
+    for r in read_rows(path):
+        iso = parse_date(r.get("date", "")) or (r.get("date") or "").strip()
+        hid = _bra_team_id(conn, (r.get("home") or "").strip(), known, cache)
+        aid = _bra_team_id(conn, (r.get("away") or "").strip(), known, cache)
+        if not iso or hid is None or aid is None:
+            continue
+        gi = lambda k: _int(r.get(k))
+        row = conn.execute(
+            """SELECT match_id FROM matches WHERE league='BRA' AND home_team_id=? AND away_team_id=?
+               AND ABS(julianday(date)-julianday(?)) <= 2""", (hid, aid, iso)).fetchone()
+        if row is None:
+            hs, as_ = gi("home_score"), gi("away_score")    # jogo faltante: usa o placar da API
+            if hs is None or as_ is None:
+                continue                                     # sem placar -> não inventa jogo
+            nk = f"{iso}|{_nm(hid)}|{_nm(aid)}|BRA"
+            if _near_duplicate(conn, hid, aid, "BRA", iso, nk) is not None:
+                continue                                     # quase-duplicata já existe (D-82)
+            cur = conn.execute(
+                """INSERT OR IGNORE INTO matches
+                   (league, season, date, home_team_id, away_team_id, home_score, away_score, natural_key)
+                   VALUES ('BRA', ?, ?, ?, ?, ?, ?, ?)""",
+                (season_from_date(iso, "ano-calendario"), iso, hid, aid, hs, as_, nk))
+            mrow = conn.execute("SELECT match_id FROM matches WHERE natural_key=?", (nk,)).fetchone()
+            if mrow is None:
+                continue
+            match_id = mrow["match_id"]
+            n_new += cur.rowcount
+        else:
+            match_id = row["match_id"]
+        conn.execute(
+            """INSERT OR REPLACE INTO match_stats
+               (match_id, ht_home, ht_away, shots_home, shots_away, sot_home, sot_away,
+                fouls_home, fouls_away, corners_home, corners_away,
+                yellow_home, yellow_away, red_home, red_away, referee,
+                possession_home, possession_away, pass_acc_home, pass_acc_away,
+                tackles_home, tackles_away, saves_home, saves_away)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NULL,?,?,?,?,?,?,?,?)""",
+            (match_id, gi("ht_home"), gi("ht_away"), gi("shots_home"), gi("shots_away"),
+             gi("sot_home"), gi("sot_away"), gi("fouls_home"), gi("fouls_away"),
+             gi("corners_home"), gi("corners_away"), gi("yellow_home"), gi("yellow_away"),
+             gi("red_home"), gi("red_away"),
+             gi("possession_home"), gi("possession_away"), gi("pass_acc_home"), gi("pass_acc_away"),
+             gi("tackles_home"), gi("tackles_away"), gi("saves_home"), gi("saves_away")))
+        n_ok += 1
+    conn.commit()
+    if n_new:
+        print(f"  + {n_new} resultados do BRA (API-Futebol) inseridos em matches "
+              f"(football-data ainda não publicou)")
+    return n_ok
+
+
 # ---------------------------------------------------------------- dedup (D-82)
 def find_near_duplicates(conn, window_days: int = 2) -> list:
     """Pares quase-idênticos (mesma orientação+liga+placar, datas ±window, chaves diferentes).
@@ -431,6 +591,10 @@ def ingest_all(db_path=DEFAULT_DB, leagues: Optional[dict] = None,
         update_seasons(conn)
         db.set_meta(conn, "source", "football-data.co.uk")
         db.set_meta(conn, "leagues", ",".join(sorted(stats)))
+        if BRA_STATS.exists():                                # 2ª fonte declarada (D-34)
+            nb = load_bra_stats(conn, BRA_STATS)
+            db.set_meta(conn, "bra_stats_source", "api-football.com")
+            print(f"  + stats BRA (API-Futebol): {nb} jogos casados em match_stats")
     return stats
 
 

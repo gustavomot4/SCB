@@ -41,3 +41,33 @@ def test_delta_respeita_cap():
     delta = np.clip(30.0 * edge, -sot_edge.CAP, sot_edge.CAP)
     assert delta[0] == sot_edge.CAP and delta[1] == -sot_edge.CAP
     assert abs(delta[2] - 15.0) < 1e-9      # dentro do teto passa direto
+
+
+def test_over_btts_tm_desacoplado():
+    # D-33: tm_extra=0 -> idêntico ao Poisson base; +total -> mais over2.5; -total -> menos
+    from scb import predictor
+    la, lb = 1.6, 1.0
+    base = predictor.poisson_reads(la, lb)
+    o0, b0 = sot_edge.over_btts_tm(la, lb, 0.0)
+    assert abs(o0 - base["over25"]) < 1e-9 and abs(b0 - base["btts"]) < 1e-9
+    assert sot_edge.over_btts_tm(la, lb, 0.6)[0] > base["over25"]     # mais gols -> mais over
+    assert sot_edge.over_btts_tm(la, lb, -0.6)[0] < base["over25"]    # menos gols -> menos over
+
+
+def test_roll_pit_anti_lookahead():
+    # baseline móvel PIT: usa só o passado (posição 0 = NaN; depois a média das anteriores)
+    x = np.array([2.0, 4.0, 6.0])
+    out = sot_edge._roll_pit(x, L=10)
+    assert np.isnan(out[0])                 # nada antes -> NaN
+    assert abs(out[1] - 2.0) < 1e-9         # média de [2]
+    assert abs(out[2] - 3.0) < 1e-9         # média de [2,4] (NÃO inclui o 6 do próprio i)
+
+
+def test_adocao_flag_e_neutralidade(conn):
+    # D-33 adotado: flag por liga + neutralidade onde a liga não usa SoT-gols
+    from scb import config, db
+    assert config.sot_goals_for("E0") is True
+    assert config.sot_goals_for("BRA") is False and config.sot_goals_for("XX") is False
+    db.get_or_create_team(conn, "A"); db.get_or_create_team(conn, "B")
+    assert sot_edge.tm_extra_map(conn, "BRA") == {}                 # liga OFF -> mapa vazio
+    assert sot_edge.tm_extra_today(conn, "BRA", "A", "B") == 0.0    # e δ 0 na porta da frente

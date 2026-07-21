@@ -24,6 +24,7 @@ Prompt do papel (abaixo) + [[CONTEXT]] + só o arquivo do momento → pedir **de
 - [[CHECKLIST]] — portões de aceite por tipo de entrega
 
 ## Contexto para agentes (a "memória destilada" do SCM)
+- [[Aprendizados para agentes]] — **lições deste projeto p/ os próximos** (o que seguir, o que evitar; honesto)
 - [[REGRAS-DE-NEGOCIO]] — as 7 inegociáveis + regras de trabalho
 - [[MODELO-MATEMATICO]] — contrato SCB v1.0 (congelado): o que fica/sai/recalibra/candidatos C1–C7
 - [[HERANCA-SCM]] — mapa de port módulo a módulo + lições pagas
@@ -43,4 +44,4 @@ Prompt do papel (abaixo) + [[CONTEXT]] + só o arquivo do momento → pedir **de
 - [[POC-M1-dados (2026-07-15)]] — inventário da fonte
 
 ## Estado (espelho rápido — a verdade mora no [[CONTEXT]])
-**M0–M7.1 executadas** (2026-07-17): modelo `scb-v0.3-mando-e0` validado (BRA 0,6131 / E0 0,5894) · web no ar · operação em 1 clique · 73 testes. Falta **M7.2 (empacotamento)**; evolução futura: Q-07/Q-08.
+**M0–M7.1 executadas** (2026-07-21): modelo `scb-v0.4-sot-goals-e0` (BRA 0,6131 / E0 0,5894; ECE 1,1%/2,3%) · web com **5 telas** (nova **Calibração** + **Classificação real**) · BRA com stats, **resultados** e **escudos oficiais** via API-Futebol · operação em 1 clique · testes verdes. Falta **M7.2 (empacotamento)**; evolução futura: Q-01/Q-07/Q-08.

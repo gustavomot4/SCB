@@ -1,29 +1,20 @@
-# Escudos pendentes do BRA 2026 — lista manual (10 minutos, uma vez)
+# Escudos do BRA — RESOLVIDO (2026-07-21, D-37)
 
-As fontes públicas do GitHub se esgotaram (5 repositórios varridos; o FCLOGO/CBF tinha
-só 4 clubes brasileiros). Para os 16 que faltam: abra um site de escudos
-(ex.: escudosweb.com ou logodetimes.com), clique no clube, **salvar imagem como…**
-dentro de `scb_analytics/static/logos/` com EXATAMENTE o nome abaixo (png ou svg).
-A web usa na hora (F5). Uso pessoal/estudo.
+> **Este arquivo ficou obsoleto.** A lista manual abaixo não é mais necessária.
 
-| Clube | Salvar como |
-|---|---|
-| Bragantino | `bragantino.png` |
-| Athletico-PR | `athletico-pr.png` |
-| Bahia | `bahia.png` |
-| Cruzeiro | `cruzeiro.png` |
-| Corinthians | `corinthians.png` |
-| Atlético-MG | `atletico-mg.png` |
-| São Paulo | `sao-paulo.png` |
-| Coritiba | `coritiba.png` |
-| Vitória | `vitoria.png` |
-| Internacional | `internacional.png` |
-| Grêmio | `gremio.png` |
-| Santos | `santos.png` |
-| Mirassol | `mirassol.png` |
-| Remo | `remo.png` |
-| Vasco | `vasco.png` |
-| Chapecoense | `chapecoense-sc.png` |
+Os 16 clubes que faltavam agora vêm dos **escudos oficiais do CDN da API-Futebol**, mapeados
+1 a 1 por clube (100% casaram). Basta rodar, uma vez:
 
-Já resolvidos automaticamente: Palmeiras, Flamengo, Fluminense, Botafogo (+ Premier completa).
-Clubes históricos que aparecerem sem arquivo seguem com o badge de cores — comportamento correto.
+```
+cd scb_analytics
+python scripts/baixar_escudos_bra.py            # os 20 oficiais do BRA (sem chave, sem cota)
+python scripts/baixar_escudos.py                # Premier (GitHub) — Coventry/Hull inclusos
+```
+
+Depois, no navegador, **Ctrl+F5**. Por que mudou: o matcher por semelhança do GitHub (D-30)
+chutava e deixava clubes brasileiros de fora; a própria 2ª fonte de dados (D-34) já entrega o
+escudo certo de cada clube. O CDN é público, então não gasta a cota (baixa) da API.
+
+Histórico (o que era a lista manual): Bragantino, Athletico-PR, Bahia, Cruzeiro, Corinthians,
+Atlético-MG, São Paulo, Coritiba, Vitória, Internacional, Grêmio, Santos, Mirassol, Remo,
+Vasco, Chapecoense — todos cobertos agora pelo script.

@@ -33,8 +33,17 @@ MANDO_ROLLING_W = 1825.0
 # Capacidade fica no predictor (dc_rho), TESTADA e OFF. ρ=0 ≡ Poisson puro.
 DC_RHO = {"default": 0.0}
 
-MODEL_VERSION = "scb-v0.3-mando-e0"  # v0.3: adoção D-26 (mando rolling E0).
-                                     # REBUILD OBRIGATÓRIO (features mudam na E0).
+# D-33: SoT-total DESACOPLADO no canal de gols (over2.5/BTTS) — ADOTADO na E0.
+# Gate: gols Δ+0,00133 IC[+0,00058,+0,00210]; 1X2/placar/ECE INTOCADOS (desacoplado);
+# kill-switch corr −0,01 (independente do Elo). BRA = OFF (a fonte não traz chutes).
+# δ_gols = clip(θ·(SoT-total PIT − baseline móvel PIT), ±1,0 gol), aplicado SÓ ao over/BTTS.
+SOT_GOALS = {"E0": True, "default": False}
+SOT_K = 10            # janela (jogos) do rolling de SoT-envolvimento [gate]
+SOT_THETA = 0.08      # gols por unidade de desvio de SoT-total [gate]
+SOT_BASE_L = 380      # janela (jogos) da baseline móvel PIT anti-deriva [gate]
+
+MODEL_VERSION = "scb-v0.4-sot-goals-e0"  # v0.4: adoção D-33 (SoT-total no canal de gols,
+                                         # E0). REBUILD OBRIGATÓRIO (over/BTTS mudam na E0).
 
 
 def mando_rolling_for(league: str) -> bool:
@@ -43,6 +52,10 @@ def mando_rolling_for(league: str) -> bool:
 
 def dc_rho_for(league: str) -> float:
     return DC_RHO.get(league, DC_RHO["default"])
+
+
+def sot_goals_for(league: str) -> bool:
+    return SOT_GOALS.get(league, SOT_GOALS["default"])
 
 
 def k_for(league: str) -> float:

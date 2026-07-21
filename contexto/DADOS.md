@@ -15,13 +15,14 @@ data: 2026-07-14
 |---|---|---|---|
 | **football-data.co.uk — família EXTRA** (`new/BRA.csv`) | resultados Série A + odds 1X2 **de FECHAMENTO apenas** (PSC/MaxC/AvgC/BFEC/B365C — **medido na M1, D-13**; sem abertura, sem OU/AH) | **fonte primária do Brasileirão**: base do Elo, V/E/D realizado, **régua de mercado e CLV automáticos no backtest**; em produção pré-jogo, mercado = captura manual opcional | formato reduzido: **sem** chutes/escanteios/cartões; desde **2012** [medido]; atualização semanal (lag na rodada); Pinnacle instável desde 07/2025 → AvgC/B365C recentes [medir no run]; arquivo único multi-temporada (coluna Season = ano-calendário) |
 | **football-data.co.uk — família MAIN** (`E0.csv` por temporada) | Premier League: resultados + odds ~10 casas + chutes/escanteios/cartões/faltas, desde 1993 | **liga de validação do port** (dado rico e longo); candidatos extras (suspensão projetada) | páginas por temporada (1 CSV/ano) |
+| **API-Futebol** (api-futebol.com.br, grátis) — 2ª fonte do BRA (D-34/D-36) | stats de jogo do Brasileirão (chutes/SoT via `finalizacao.no_gol`, escanteios, faltas, cartões, posse, passes, desarmes, defesas) **e** o PLACAR/resultado | preenche a lacuna de stats do BRA (exibição) **e** os RESULTADOS que o football-data ainda não publicou (insere em `matches`, à la `resultados_extra`/D-80) → **destrava o settle** | **cota baixa** (429 fácil → download resumível/self-healing, recentes 1º); VOCÊ roda com a chave `live_...` (env `APIFUTEBOL_KEY`, Bearer); grátis = **só a edição corrente** (sem histórico multi-ano → termo de modelo do BRA bloqueado); escudos oficiais via CDN público (D-37) |
 | `notes.txt` do football-data | dicionário oficial das colunas | contrato do parser | ler na M1 e versionar no repo |
 | **Kaggle — Campeonato Brasileiro** (adaoduque) / openfootball | resultados históricos longos, sem odds | **candidato** p/ aquecer o Elo pré-odds [decidir na M1 → D-NN] | qualidade/dedup a auditar; sem odds |
 | Tabelas públicas da Série B (posição final) | prior manual de promovido | cold start (contrato §3.4) | entrada manual, 4 linhas/ano |
 | Coordenadas das cidades-sede (estático) | distância de viagem | candidato C4 | tabela curada 1× no repo |
 | Calendário de outras competições (Libertadores/Copa do Brasil/estaduais) | congestão total | candidato C1 (fase 2) | **lacuna declarada**: não vem no football-data; fonte grátis estruturada a definir — até lá, congestão = intra-liga |
 
-**Lacunas declaradas (não inventar):** escalações/lesões estruturadas grátis (desfalques seguem JSON manual) · xG do Brasileirão (FBref é ToS-restrito → consulta manual apenas; StatsBomb não cobre) · minuto do gol (mercados de tempo ficam fora) · cartões/escanteios do BRA (mercados ficam fora — lição D-72).
+**Lacunas declaradas (não inventar):** escalações/lesões estruturadas grátis (desfalques seguem JSON manual) · xG do Brasileirão (FBref é ToS-restrito; SoT da API-Futebol serve de proxy, mas rejeitado no portão do BRA por falta de histórico) · minuto do gol (mercados de tempo ficam fora) · **histórico multi-ano do BRA na API-Futebol** (o grátis só dá a edição corrente → o termo SoT-gols do BRA, à la D-33, segue bloqueado). **RESOLVIDO (D-34/D-36):** cartões/escanteios/chutes **e resultados** do BRA agora vêm da API-Futebol (stats = exibição, o modelo não lê; resultados = preenchem `matches` p/ o settle).
 
 ## 2. Colunas MEDIDAS na M1 (2026-07-15; dicionário oficial: `scb_analytics/dados/notes.txt`)
 
@@ -45,6 +46,8 @@ odds_hist(match_id, source, stage,                                   -- stage: '
           p_home, p_draw, p_away)                                    -- de-vigged; brutas ficam no snapshot
 ratings_current / match_ratings / match_features / predictions / meta -- iguais ao SCM (PIT preservado)
 seasons(league, season, start_date, end_date)                        -- virada de temporada (regressão ρ)
+match_stats(match_id, ht, shots, sot, fouls, corners, yellow, red,   -- DESCRITIVO (o modelo não lê)
+            referee, possession, pass_acc, tackles, saves)           -- E0=football-data; +extras do BRA (API-Futebol, D-34/36)
 ```
 Restrições da stack declaradas no schema (lição SPO): SQLite sem enum → `stage`/`league` são TEXT com CHECK; datas ISO-8601 TEXT; probabilidade REAL em [0,1].
 

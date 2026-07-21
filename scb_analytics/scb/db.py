@@ -113,7 +113,12 @@ CREATE TABLE IF NOT EXISTS match_stats (
     corners_home INTEGER, corners_away INTEGER,   -- HC/AC
     yellow_home  INTEGER, yellow_away  INTEGER,   -- HY/AY
     red_home     INTEGER, red_away     INTEGER,   -- HR/AR
-    referee      TEXT
+    referee      TEXT,
+    -- extras da 2ª fonte (D-34, API-Futebol; NULL na E0/football-data):
+    possession_home INTEGER, possession_away INTEGER,   -- % posse de bola
+    pass_acc_home   INTEGER, pass_acc_away   INTEGER,   -- % precisão de passe
+    tackles_home    INTEGER, tackles_away    INTEGER,   -- desarmes
+    saves_home      INTEGER, saves_away      INTEGER    -- defesas do goleiro
 );
 """
 
@@ -136,8 +141,25 @@ def session(db_path: Union[str, Path]):
         conn.close()
 
 
+# Migração ADITIVA: colunas novas em tabela JÁ existente (CREATE IF NOT EXISTS não altera o
+# schema de uma tabela antiga). Idempotente via PRAGMA — roda no init de todo banco.
+_ADD_COLUMNS = {
+    "match_stats": [
+        ("possession_home", "INTEGER"), ("possession_away", "INTEGER"),
+        ("pass_acc_home", "INTEGER"), ("pass_acc_away", "INTEGER"),
+        ("tackles_home", "INTEGER"), ("tackles_away", "INTEGER"),
+        ("saves_home", "INTEGER"), ("saves_away", "INTEGER"),
+    ],
+}
+
+
 def init_schema(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA)
+    for table, cols in _ADD_COLUMNS.items():
+        have = {r[1] for r in conn.execute(f"PRAGMA table_info({table})")}
+        for name, typ in cols:
+            if name not in have:
+                conn.execute(f"ALTER TABLE {table} ADD COLUMN {name} {typ}")
     conn.commit()
 
 

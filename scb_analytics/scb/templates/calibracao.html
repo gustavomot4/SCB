@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% block titulo %}Calibração{% endblock %}
+{% block css %}
+<style>
+.head .sub{max-width:700px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 8px}
+.metric{background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.metric .k{font-family:var(--cond);text-transform:uppercase;letter-spacing:.12em;font-size:12px;color:var(--dim)}
+.metric .v{font-family:var(--cond);font-weight:900;font-size:38px;margin-top:4px;line-height:1}
+.metric .s{font-family:var(--cond);color:var(--dim);font-size:13px;margin-top:5px;letter-spacing:.03em}
+.metric.destaque{border-color:var(--volt);box-shadow:0 0 0 1px rgba(199,255,41,.18)}
+.metric.destaque .v{color:var(--volt)}
+.card2{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px 24px;margin:14px 0}
+.card2 h2{font-family:var(--cond);text-transform:uppercase;letter-spacing:.06em;font-size:22px;margin:0 0 6px}
+.card2 .desc{color:var(--dim);font-size:13px;line-height:1.55;margin-bottom:16px;max-width:660px}
+.gaptrack{position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,#3a2030,#22384a,#1f3a2c);margin:30px 0 40px}
+.gaptrack .fill{position:absolute;left:0;top:0;height:100%;border-radius:6px;background:linear-gradient(90deg,#38BDF8,#C7FF29);opacity:.85}
+.gaptrack .mk{position:absolute;top:-7px;width:3px;height:26px;background:var(--tx);border-radius:2px}
+.gaptrack .lab{position:absolute;top:22px;font-family:var(--cond);font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;transform:translateX(-50%);white-space:nowrap}
+.relwrap{display:flex;gap:26px;flex-wrap:wrap;align-items:center}
+.reltxt{flex:1;min-width:240px;color:var(--dim);font-size:13px;line-height:1.6}
+.spin{color:var(--dim);font-family:var(--cond);letter-spacing:.14em;text-transform:uppercase;padding:30px;text-align:center}
+</style>
+{% endblock %}
+{% block corpo %}
+<div class="head">
+  <div><h1>Calibração</h1>
+    <div class="sub">O modelo acerta? E chega perto do mercado? Medido sobre as previsões walk-forward (Elo pré-jogo, sem espiar o futuro) contra o que de fato aconteceu.</div></div>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <div class="seg" id="ligas"><button data-lg="BRA" class="on">BRA</button><button data-lg="E0">PRE</button></div>
+  </div>
+</div>
+<div id="corpo"><div class="spin">Medindo…</div></div>
+{% endblock %}
+{% block js %}
+<script>
+const $ = id => document.getElementById(id);
+async function carregar(lg){
+  $("corpo").innerHTML = '<div class="spin">Medindo…</div>';
+  const o = await (await fetch("/api/calibracao?league=" + lg)).json();
+  if (!o.tem){ $("corpo").innerHTML = '<div class="spin">Sem previsões para esta liga.</div>'; return; }
+  const m = o.mercado;
+  let mercadoHTML = "";
+  if (m){
+    const pos = Math.max(2, Math.min(98, m.fecha_pct));
+    const atras = m.gap > 0;
+    mercadoHTML = `<div class="card2">
+      <h2>Comparado ao mercado</h2>
+      <div class="desc">O mercado (odds de fechamento, sem a margem da casa) é o benchmark mais difícil que existe — junta muita informação e dinheiro esperto. Brier menor = melhor. Lembre: o modelo usa só resultados passados (Elo), nenhuma notícia de escalação ou lesão.</div>
+      <div class="grid3">
+        <div class="metric destaque"><div class="k">Modelo</div><div class="v">${m.modelo.toFixed(3)}</div><div class="s">Brier · ${m.n} jogos</div></div>
+        <div class="metric"><div class="k">Mercado</div><div class="v">${m.mercado.toFixed(3)}</div><div class="s">odds de fechamento</div></div>
+        <div class="metric"><div class="k">Chute</div><div class="v">${m.base.toFixed(3)}</div><div class="s">taxa-base (piso)</div></div>
+      </div>
+      <div class="gaptrack">
+        <div class="fill" style="width:${pos}%"></div>
+        <div class="mk" style="left:${pos}%"></div>
+        <div class="lab" style="left:0%;transform:translateX(0)">chute</div>
+        <div class="lab" style="left:${pos}%;color:var(--volt)">modelo</div>
+        <div class="lab" style="left:100%;transform:translateX(-100%)">mercado</div>
+      </div>
+      <div class="desc">O modelo fecha <b style="color:var(--volt)">${m.fecha_pct}%</b> da distância entre o chute e o mercado — e fica ${atras ? ("<b>" + m.gap.toFixed(3) + "</b> atrás do") : ("<b>à frente</b> do")} mercado. Chegar perto de um modelo local e grátis já é um bom sinal.</div>
+    </div>`;
+  }
+  const calibHTML = `<div class="card2">
+    <h2>O modelo é confiável?</h2>
+    <div class="desc">Quando ele diz "70%", acontece perto de 70%? Cada ponto é uma faixa de probabilidade das ${o.n} previsões; a linha tracejada é a calibração perfeita. Quanto mais colados na linha, mais você pode confiar nas porcentagens.</div>
+    <div class="relwrap">${reliabSVG(o.reliab)}
+      <div class="reltxt">
+        <div class="metric" style="margin-bottom:14px"><div class="k">Erro de calibração (ECE)</div><div class="v" style="font-size:32px">${o.ece.toFixed(1)}%</div><div class="s">quanto menor, mais confiável</div></div>
+        Ponto <b style="color:#38BDF8">acima</b> da linha = o modelo foi modesto (aconteceu mais do que previu). <b style="color:#FB4D5C">Abaixo</b> = confiante demais. O tamanho do ponto é quantos casos caíram naquela faixa.
+      </div>
+    </div>
+  </div>`;
+  $("corpo").innerHTML = mercadoHTML + calibHTML;
+}
+function reliabSVG(bins){
+  const S = 300, P = 40, W = S - 2 * P, FF = "'Barlow Condensed',sans-serif";
+  const x = v => P + v / 100 * W, y = v => P + (1 - v / 100) * W;
+  let grid = "";
+  for (let t = 0; t <= 100; t += 20){
+    grid += `<line x1="${x(t)}" y1="${P}" x2="${x(t)}" y2="${P + W}" stroke="rgba(255,255,255,.05)"/>`
+          + `<line x1="${P}" y1="${y(t)}" x2="${P + W}" y2="${y(t)}" stroke="rgba(255,255,255,.05)"/>`
+          + `<text x="${x(t)}" y="${P + W + 16}" fill="#8A93A6" font-size="10" text-anchor="middle" font-family="${FF}">${t}</text>`
+          + `<text x="${P - 8}" y="${y(t) + 3}" fill="#8A93A6" font-size="10" text-anchor="end" font-family="${FF}">${t}</text>`;
+  }
+  const pts = bins.map(b => [x((b.lo + b.hi) / 2), y(b.obs), b]);
+  const poly = pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  const dots = pts.map(([px, py, b]) => {
+    const over = b.obs >= b.pred;
+    return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${Math.min(9, 3 + Math.log10(b.n)).toFixed(1)}" `
+         + `fill="${over ? '#38BDF8' : '#FB4D5C'}" fill-opacity=".85"><title>${b.lo}-${b.hi}%: previu ${b.pred}%, aconteceu ${b.obs}% (${b.n} casos)</title></circle>`;
+  }).join("");
+  return `<svg viewBox="0 0 ${S} ${S}" width="300" height="300" style="flex:0 0 auto">
+    ${grid}
+    <line x1="${x(0)}" y1="${y(0)}" x2="${x(100)}" y2="${y(100)}" stroke="#8A93A6" stroke-dasharray="5 5" stroke-width="1.5"/>
+    <polyline points="${poly}" fill="none" stroke="rgba(199,255,41,.6)" stroke-width="2"/>
+    ${dots}
+    <text x="${P + W / 2}" y="${S - 3}" fill="#EDF1F7" font-size="11" text-anchor="middle" font-family="${FF}" letter-spacing="1">PREVISTO %</text>
+    <text x="13" y="${P + W / 2}" fill="#EDF1F7" font-size="11" text-anchor="middle" font-family="${FF}" letter-spacing="1" transform="rotate(-90 13 ${P + W / 2})">ACONTECEU %</text>
+  </svg>`;
+}
+document.querySelectorAll("#ligas button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("#ligas button").forEach(x => x.classList.remove("on"));
+  b.classList.add("on"); carregar(b.dataset.lg);
+});
+carregar("BRA");
+</script>
+{% endblock %}

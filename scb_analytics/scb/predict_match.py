@@ -52,6 +52,13 @@ def predict_now(conn, league: str, home: str, away: str,
     out.update({"dr": dr, "sigma_dr": sigma_dr, "elo_home": rh["elo"], "elo_away": ra["elo"],
                 "form_home": fh, "form_away": fa, "mando": config.h_for(league),
                 "versao": config.MODEL_VERSION})
+    if config.sot_goals_for(league):                    # D-33: SoT-total SÓ no over2.5/BTTS
+        from . import sot_edge
+        tm = sot_edge.tm_extra_today(conn, league, home, away)
+        if tm:
+            out["p_over25"], out["p_btts"] = sot_edge.over_btts_tm(
+                out["lambda_a"], out["lambda_b"], tm, p.max_goals)
+        out["sot_tm"] = tm
     if market:                                          # blend opcional (peso ≤0,20, D-09)
         mix = odds.blend({"p_v": out["p_v"], "p_e": out["p_e"], "p_d": out["p_d"]}, market)
         out["com_mercado"] = mix

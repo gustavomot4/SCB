@@ -94,6 +94,58 @@ def _roll_pit(x: np.ndarray, L: int) -> np.ndarray:
     return out
 
 
+def over_btts_tm(la: float, lb: float, tm_extra: float, max_goals: int = 10):
+    """Recalcula (over2.5, BTTS) com o TOTAL deslocado por tm_extra, margem preservada — o
+    candidato DESACOPLADO (D-33): SÓ as saídas de gols mudam; 1X2/placar seguem no λ base."""
+    gd = la - lb
+    tot = max(0.2, la + lb + tm_extra)
+    la2 = max(0.05, (tot + gd) / 2.0)
+    lb2 = max(0.05, (tot - gd) / 2.0)
+    r = predictor.poisson_reads(la2, lb2, max_goals)
+    return r["over25"], r["btts"]
+
+
+# ---------- wiring de PRODUÇÃO (D-33 adotado): δ_gols PIT por jogo e "hoje" ----------
+def tm_extra_map(conn, league: str) -> dict:
+    """{match_id: δ_gols} PIT p/ predictor.run e backtest (D-33). Vazio se a liga não usa
+    SoT-gols. δ = clip(θ·(SoT-total − baseline móvel PIT), ±CAP_TM), anti look-ahead."""
+    if not config.sot_goals_for(league):
+        return {}
+    rows = _serie(conn, league)
+    tot = total_series(rows, config.SOT_K)
+    base = _roll_pit(tot, config.SOT_BASE_L)
+    feat = np.where(np.isnan(tot) | np.isnan(base), 0.0, tot - base)
+    delta = np.clip(config.SOT_THETA * feat, -CAP_TM, CAP_TM)
+    return {r["match_id"]: float(delta[i]) for i, r in enumerate(rows)}
+
+
+def tm_extra_today(conn, league: str, home: str, away: str) -> float:
+    """δ_gols vigente p/ um jogo de HOJE (porta da frente): SoT-envolvimento recente dos dois
+    times vs a baseline móvel da liga, do último dado. 0 se a liga não usa SoT-gols."""
+    if not config.sot_goals_for(league):
+        return 0.0
+
+    def involve(name):
+        vals = [x[0] for x in conn.execute(
+            """SELECT ms.sot_home + ms.sot_away FROM match_stats ms JOIN matches m USING(match_id)
+               JOIN teams t ON t.name=? WHERE m.league=? AND ms.sot_home IS NOT NULL
+                 AND (m.home_team_id=t.team_id OR m.away_team_id=t.team_id)
+               ORDER BY m.date DESC LIMIT ?""", (name, league, config.SOT_K)).fetchall()]
+        return sum(vals) / len(vals) if len(vals) >= MIN_HIST else None
+
+    ih, ia = involve(home), involve(away)
+    if ih is None or ia is None:
+        return 0.0
+    b = conn.execute(
+        """SELECT AVG(s) FROM (SELECT ms.sot_home + ms.sot_away s
+           FROM match_stats ms JOIN matches m USING(match_id)
+           WHERE m.league=? AND ms.sot_home IS NOT NULL ORDER BY m.date DESC LIMIT ?)""",
+        (league, config.SOT_BASE_L)).fetchone()[0]
+    if b is None:
+        return 0.0
+    return float(np.clip(config.SOT_THETA * ((ih + ia) / 2.0 - b), -CAP_TM, CAP_TM))
+
+
 def _probs(conn, league, rows, mask, delta, n_strata, channel="dr"):
     """Walk-forward (curva por fold). channel='dr' soma δ ao dr (afeta tudo); 'gd' passa δ
     como gd_extra — só a margem da Poisson, dr e perna Elo-direto intactos."""
@@ -109,12 +161,18 @@ def _probs(conn, league, rows, mask, delta, n_strata, channel="dr"):
                                                n_strata=n_strata, curve=curve)
         if channel == "dr":
             o = predictor.predict(r["dr_adj"] + delta[i], r["sigma_dr"], cache[S])
+            ov, bt = o["p_over25"], o["p_btts"]
         elif channel == "gd":
             o = predictor.predict(r["dr_adj"], r["sigma_dr"], cache[S], gd_extra=delta[i])
-        else:
+            ov, bt = o["p_over25"], o["p_btts"]
+        elif channel == "tm":
             o = predictor.predict(r["dr_adj"], r["sigma_dr"], cache[S], tm_extra=delta[i])
+            ov, bt = o["p_over25"], o["p_btts"]
+        else:  # tm_goals (D-33): 1X2/placar do λ BASE; over/BTTS do total deslocado (desacoplado)
+            o = predictor.predict(r["dr_adj"], r["sigma_dr"], cache[S])
+            ov, bt = over_btts_tm(o["lambda_a"], o["lambda_b"], delta[i], cache[S].max_goals)
         P.append((o["p_v"], o["p_e"], o["p_d"]))
-        OU.append(o["p_over25"]); BT.append(o["p_btts"])
+        OU.append(ov); BT.append(bt)
         Y.append(0 if r["hs"] > r["aws"] else (1 if r["hs"] == r["aws"] else 2))
         yo.append(1.0 if r["hs"] + r["aws"] >= 3 else 0.0)
         yb.append(1.0 if r["hs"] > 0 and r["aws"] > 0 else 0.0)
@@ -140,8 +198,9 @@ def gate(conn, league: str, burn_in: int = 2, n_strata: int = 100, B: int = 10_0
         print(f"\n== {league}: a fonte não tem stats de jogo — candidato não se aplica ==")
         return {"league": league, "passa": False, "nota": "sem stats na fonte"}
     grid, cap, un = ({"dr": (THETA_GRID, CAP, "Elo"), "gd": (THETA_GRID_GD, CAP_GD, "gols"),
-                      "tm": (THETA_GRID_TM, CAP_TM, "gols")})[channel]
-    target = "gols" if channel == "tm" else "1x2"      # o alvo do gate acompanha o canal
+                      "tm": (THETA_GRID_TM, CAP_TM, "gols"),
+                      "tm_goals": (THETA_GRID_TM, CAP_TM, "gols")})[channel]
+    target = "gols" if channel in ("tm", "tm_goals") else "1x2"   # o alvo acompanha o canal
     smin = min(stats_seasons)
     rows = [r for r in all_rows if r["season"] >= smin]     # só a era com stats
     season = np.array([r["season"] for r in rows])
@@ -154,7 +213,7 @@ def gate(conn, league: str, burn_in: int = 2, n_strata: int = 100, B: int = 10_0
     zero = np.zeros(len(rows))
 
     def feature(K):
-        if channel == "tm":
+        if channel in ("tm", "tm_goals"):
             tot = total_series(rows, K)
             base = _roll_pit(tot, 380)                   # baseline móvel PIT (drift-robusto)
             return np.where(np.isnan(tot) | np.isnan(base), 0.0, tot - base)
@@ -193,9 +252,14 @@ def gate(conn, league: str, burn_in: int = 2, n_strata: int = 100, B: int = 10_0
     corr = float(np.corrcoef(dv, ref)[0, 1]) if dv.std() > 0 else 0.0
     if target == "1x2":
         passa = lo > 0 and ghi > 0 and ece1 <= ece0 + 0.01 and abs(corr) < 0.95
+    elif channel == "tm_goals":                        # 1X2/placar/ECE idênticos por construção
+        passa = glo > 0 and abs(d1x2.mean()) < 1e-9 and abs(corr) < 0.95
     else:
         passa = glo > 0 and hi > 0 and ece1 <= ece0 + 0.01 and abs(corr) < 0.95
-    v1 = "PASSA ✅ (alvo)" if (target == "1x2" and lo > 0) else ("guarda ok" if hi > 0 else "REGRIDE ❌")
+    if channel == "tm_goals":
+        v1 = "idêntico (desacoplado) ✅"
+    else:
+        v1 = "PASSA ✅ (alvo)" if (target == "1x2" and lo > 0) else ("guarda ok" if hi > 0 else "REGRIDE ❌")
     vg = "PASSA ✅ (alvo)" if (target == "gols" and glo > 0) else ("guarda ok" if ghi > 0 else "REGRIDE ❌")
     print(f"\n== {league} — proxy xG/SoT [canal={channel}, alvo={target}] "
           f"(K*={K}, θ*={th:g} {un}/feat; validação {test[meio]}..{test[-1]}, n={len(Y)}) ==")

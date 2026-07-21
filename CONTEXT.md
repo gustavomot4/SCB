@@ -2,7 +2,7 @@
 tags: [projeto, contexto, scb]
 status: atual
 tipo: contexto
-data: 2026-07-15
+data: 2026-07-21
 ---
 
 # CONTEXT.md — SCB (Sistema Campeonato Brasileiro)
@@ -27,7 +27,7 @@ Python 3.11+ · NumPy/pandas · **SQLite** (sem enum nativo; `natural_key` + gua
 - **Docs:** este arquivo ≤ 1 página; decisão nova = **D-NN** no [[DECISIONS]]; bug = **QA-NN** citado no commit.
 
 ## Estado atual
-**MODELO OFICIAL: `scb-v0.3-mando-e0`** (D-17 baseline + adoções D-25 ρ=0,30 no BRA e D-26 mando rolling na E0). M4 walk-forward: **BRA 0,6131 · E0 0,5894 (ECE 0,0224/0,0290)**; mercado ~2pp à frente (régua, não meta). Fila de evolução: 9 gates, 2 adoções, 7 rejeições com números (D-19..D-27); abertas Q-07 (banda E0, números na D-28) e Q-08 (C4 exige coordenadas; C6 pronto-para-rodar). **M0–M7.1 EXECUTADAS** — pipeline dados→Elo→features→curvas→predictor→backtest→simulador→registro + **web estilo EA FC** (3 telas, escudos com override local, imprimir/copiar) + **operação em 1 clique** (`fixtures.csv` 1x/temporada + "Registrar rodada"/`registrar auto` agendável; settle liquida adiados — D-31). Testes: **73**. **Pendências:** registrar toda rodada do BRA 2026 ([[Operacao BRA 2026]]) · escudos manuais do BRA (`dados/escudos-pendentes.md`, 16 arquivos) · **M7.2 empacotamento** (prompts/05 + CHECKLIST) · Q-07/Q-08 na próxima sessão de evolução.
+**MODELO OFICIAL: `scb-v0.4-sot-goals-e0`** (D-17 baseline + D-25 ρ=0,30 no BRA + D-26 mando rolling na E0 + **D-33/D-35 SoT-total desacoplado no canal de gols da E0** — só over2.5/BTTS; 1X2/placar intocados). **Rebuild FEITO** (run do Gustavo: **85 testes verdes**, backtest confirmado). 1X2 walk-forward: **BRA 0,6131 · E0 0,5894** (ECE 0,0224/0,0290); over/BTTS da E0 melhoram (D-33: Δ+0,00133 IC[+0,00058,+0,00210]). Mercado à frente (régua, não meta): o modelo fecha **78% (E0) / 50% (BRA)** da distância taxa-base→mercado — agora VISÍVEL na aba **Calibração** (D-39). Evolução: D-19..D-35 (2 adoções, SoT-diferencial rejeitado D-32, SoT-total adotado D-33/35); abertas **Q-01** (peso do mercado no ensemble — números na Calibração), Q-07 (banda E0, D-28), Q-08 (C4 coordenadas / C6 pronto). **M0–M7.1 executadas** — pipeline dados→Elo→features→curvas→predictor→backtest→simulador→registro + **web estilo EA FC (5 telas)**: Prever Confronto · Tabela (**Simulada + Classificação real** D-38) · **Calibração** D-39 · Jogos · Prospectivo — + **operação em 1 clique** (`fixtures.csv` com o BRA 2026 inteiro, rodadas 19-38, D-38; "Registrar rodada"/`registrar auto`; settle D-31). **2ª fonte API-Futebol (D-34/D-36)**: traz stats **e resultados** do BRA — como o football-data não publicou julho, a API preenche `matches` e **destrava o settle**; escudos oficiais do BRA via CDN (D-37 — `escudos-pendentes.md` obsoleto). Artilharia foi construída e **cortada** (D-40, exibição sem valor preditivo). **Pendências:** registrar toda rodada do BRA 2026 ([[Operacao BRA 2026]]) · terminar o backfill de placar/posse do BRA nos dias grátis da API (cota baixa → 429; o fetcher é resumível e self-healing) · **M7.2 empacotamento** (prompts/05 + CHECKLIST) · Q-01/Q-07/Q-08 na próxima sessão de evolução.
 
 ## Mapa (contexto mínimo por sessão)
 Regras: [[REGRAS-DE-NEGOCIO]] · Contrato matemático: [[MODELO-MATEMATICO]] · Port/lições: [[HERANCA-SCM]] · Dados/schema: [[DADOS]] · Plano: [[PLANO]] · Decisões: [[DECISIONS]] · Tarefas: [[BACKLOG]] · Aceite: [[CHECKLIST]]

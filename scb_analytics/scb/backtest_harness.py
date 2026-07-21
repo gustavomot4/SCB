@@ -113,6 +113,8 @@ def collect(conn, league: str, burn_in: int = 2, n_strata: Optional[int] = None)
     base_p = predictor.PredictParams()
     if n_strata:
         base_p = predictor.PredictParams(n_strata=n_strata)
+    from . import sot_edge                                # lazy (D-33): δ_gols PIT por jogo
+    sot_map = sot_edge.tm_extra_map(conn, league)         # {} se a liga não usa SoT-gols
     for S in test_seasons:
         curve = draw_curve.build(conn, league, max_season=S - 1)      # POR FOLD (anti-leak)
         params = predictor.PredictParams(
@@ -144,7 +146,12 @@ def collect(conn, league: str, burn_in: int = 2, n_strata: Optional[int] = None)
                 mkt_mask.append(False)
             Y.append(_outcome(r["hs"], r["aws"]))
             LO.append(out["band_lo"]); HI.append(out["band_hi"])
-            OU.append(out["p_over25"]); BT.append(out["p_btts"])
+            tm = sot_map.get(r["match_id"], 0.0)          # D-33: SoT-total só no over2.5/BTTS
+            if tm:
+                ov, bt = sot_edge.over_btts_tm(out["lambda_a"], out["lambda_b"], tm, params.max_goals)
+            else:
+                ov, bt = out["p_over25"], out["p_btts"]
+            OU.append(ov); BT.append(bt)
             y_ou.append(1.0 if r["hs"] + r["aws"] >= 3 else 0.0)
             y_bt.append(1.0 if r["hs"] > 0 and r["aws"] > 0 else 0.0)
             seas.append(S)

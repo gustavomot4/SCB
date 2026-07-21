@@ -219,6 +219,8 @@ def run(conn, incremental: bool = False, base: Optional[PredictParams] = None) -
         """SELECT m.match_id, m.league, mf.dr_adj, mf.sigma_dr
            FROM matches m JOIN match_features mf USING (match_id)
            ORDER BY m.date, m.match_id""").fetchall()
+    from . import sot_edge                               # lazy: evita ciclo de import (D-33)
+    sot_maps: dict = {}
     n = 0
     for r in rows:
         if r["match_id"] in done:
@@ -226,7 +228,13 @@ def run(conn, incremental: bool = False, base: Optional[PredictParams] = None) -
         lg = r["league"]
         if lg not in by_league:
             by_league[lg] = params_for(conn, lg, base)
+            sot_maps[lg] = sot_edge.tm_extra_map(conn, lg)   # {} se a liga não usa SoT-gols
         out = predict(r["dr_adj"], r["sigma_dr"], by_league[lg])
+        p_over, p_btts = out["p_over25"], out["p_btts"]
+        tm = sot_maps[lg].get(r["match_id"], 0.0)       # D-33: SoT-total SÓ no over2.5/BTTS
+        if tm:
+            p_over, p_btts = sot_edge.over_btts_tm(out["lambda_a"], out["lambda_b"], tm,
+                                                   by_league[lg].max_goals)
         conn.execute(
             """INSERT OR REPLACE INTO predictions
                (match_id, versao_modelo, p_v, p_e, p_d, band_pv_lo, band_pv_hi,
@@ -234,7 +242,7 @@ def run(conn, incremental: bool = False, base: Optional[PredictParams] = None) -
                VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
             (r["match_id"], ver, out["p_v"], out["p_e"], out["p_d"],
              out["band_lo"], out["band_hi"], out["lambda_a"], out["lambda_b"],
-             out["p_over25"], out["p_btts"]))
+             p_over, p_btts))
         n += 1
     db.set_meta(conn, "model_version", ver)
     conn.commit()

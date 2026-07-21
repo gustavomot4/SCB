@@ -157,12 +157,15 @@ async function renderStats(lg, home, away){
     const r = await fetch("/api/matchstats?" + new URLSearchParams({league: lg, home, away}));
     const o = await r.json();
     if (!o.home || !o.away){
-      nota.textContent = "Sem estatísticas de jogo para esta liga — a fonte (football-data) não publica escanteios/cartões do Brasileirão.";
+      nota.textContent = "Sem estatísticas suficientes para este confronto ainda (Premier via football-data; Brasileirão via API-Football, se você tiver baixado com scripts/baixar_stats_bra.py).";
       return;
     }
-    const linhas = [["Chutes", o.home.shots, o.away.shots], ["Chutes no gol", o.home.sot, o.away.sot],
+    const linhas = [];
+    if (o.home.possession != null && o.away.possession != null)
+      linhas.push(["Posse de bola %", o.home.possession, o.away.possession]);
+    linhas.push(["Chutes", o.home.shots, o.away.shots], ["Chutes no gol", o.home.sot, o.away.sot],
       ["Escanteios", o.home.corners, o.away.corners], ["Faltas", o.home.fouls, o.away.fouls],
-      ["Amarelos", o.home.yellow, o.away.yellow], ["Vermelhos", o.home.red, o.away.red]];
+      ["Amarelos", o.home.yellow, o.away.yellow], ["Vermelhos", o.home.red, o.away.red]);
     body.innerHTML = `<div class="shead2"><span>${home}</span><span class="mid">médias/jogo</span><span>${away}</span></div>`
       + linhas.map(([l,h,a]) => statRow(l,h,a)).join("");
     const nH = o.home.n, nA = o.away.n;
