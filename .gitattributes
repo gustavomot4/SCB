@@ -1,0 +1,17 @@
+# Fim-de-linha: o repositório é LF. Evita o churn CRLF↔LF do Windows
+# (jul/2026: 44 arquivos apareceram "modificados" só por \r — nenhum dado mudou).
+# Com isto, o git normaliza para LF no commit e o `git status` para de acusar ruído.
+* text=auto eol=lf
+
+# Texto explícito → sempre LF no repo
+*.csv  text eol=lf
+*.svg  text eol=lf
+*.md   text eol=lf
+*.py   text eol=lf
+*.json text eol=lf
+*.txt  text eol=lf
+*.bat  text eol=crlf
+
+# Binários: nunca normalizar (PNG/sqlite contêm bytes 0x0D que não são fim-de-linha)
+*.png    binary
+*.sqlite binary
