@@ -1,0 +1,1898 @@
+[
+  {
+    "campeonato_id": 78,
+    "nome": "Amistosos",
+    "slug": "amistosos",
+    "nome_popular": "Amistosos",
+    "edicao_atual": {
+      "edicao_id": 345,
+      "temporada": "2026",
+      "nome": "Amistosos 2026",
+      "nome_popular": "Amistosos 2026",
+      "slug": "amistosos-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1136,
+      "nome": "Fase única",
+      "slug": "fase-unica-amistosos-2026",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/78/fases/1136"
+    },
+    "rodada_atual": {
+      "nome": "5ª Rodada",
+      "slug": "5a-rodada",
+      "rodada": 5,
+      "status": "encerrada"
+    },
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/amistosos.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/78"
+  },
+  {
+    "campeonato_id": 58,
+    "nome": "Campeonato Acreano",
+    "slug": "campeonato-acreano",
+    "nome_popular": "Acreano",
+    "edicao_atual": {
+      "edicao_id": 258,
+      "temporada": "2026",
+      "nome": "Campeonato Acreano 2026",
+      "nome_popular": "Acreano 2026",
+      "slug": "campeonato-acreano-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1059,
+      "nome": "Final",
+      "slug": "final-acreano-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/58/fases/1059"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-acreano.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/58"
+  },
+  {
+    "campeonato_id": 48,
+    "nome": "Campeonato Alagoano",
+    "slug": "campeonato-alagoano",
+    "nome_popular": "Alagoano",
+    "edicao_atual": {
+      "edicao_id": 253,
+      "temporada": "2026",
+      "nome": "Campeonato Alagoano 2026",
+      "nome_popular": "Alagoano 2026",
+      "slug": "campeonato-alagoano-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1047,
+      "nome": "Final",
+      "slug": "final-alagoano-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/48/fases/1047"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-alagoano.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/48"
+  },
+  {
+    "campeonato_id": 63,
+    "nome": "Campeonato Amapaense",
+    "slug": "campeonato-amapaense",
+    "nome_popular": "Amapaense",
+    "edicao_atual": {
+      "edicao_id": 252,
+      "temporada": "2026",
+      "nome": "Campeonato Amapaense 2026",
+      "nome_popular": "Amapaense 2026",
+      "slug": "campeonato-amapaense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1044,
+      "nome": "Final",
+      "slug": "final-amapaense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/63/fases/1044"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-amapaense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/63"
+  },
+  {
+    "campeonato_id": 52,
+    "nome": "Campeonato Amazonense",
+    "slug": "campeonato-amazonense",
+    "nome_popular": "Amazonense",
+    "edicao_atual": {
+      "edicao_id": 236,
+      "temporada": "2026",
+      "nome": "Campeonato Amazonense 2026",
+      "nome_popular": "Amazonense 2026",
+      "slug": "campeonato-amazonense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 976,
+      "nome": "Final",
+      "slug": "final-geral-amazonense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/52/fases/976"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-amazonense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/52"
+  },
+  {
+    "campeonato_id": 22,
+    "nome": "Campeonato Baiano",
+    "slug": "campeonato-baiano",
+    "nome_popular": "Baianão",
+    "edicao_atual": {
+      "edicao_id": 222,
+      "temporada": "2026",
+      "nome": "Campeonato Baiano 2026",
+      "nome_popular": "Campeonato Baiano 2026",
+      "slug": "campeonato-baiano-2026"
+    },
+    "fase_atual": {
+      "fase_id": 909,
+      "nome": "Final",
+      "slug": "final-baiano-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/22/fases/909"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-baiano.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/22"
+  },
+  {
+    "campeonato_id": 10,
+    "nome": "Campeonato Brasileiro",
+    "slug": "campeonato-brasileiro",
+    "nome_popular": "Brasileirão",
+    "edicao_atual": {
+      "edicao_id": 225,
+      "temporada": "2026",
+      "nome": "Campeonato Brasileiro 2026",
+      "nome_popular": "Brasileirão 2026",
+      "slug": "campeonato-brasileiro-2026"
+    },
+    "fase_atual": {
+      "fase_id": 921,
+      "nome": "Fase única",
+      "slug": "fase-unica-campeonato-brasileiro-2026",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/10/fases/921"
+    },
+    "rodada_atual": {
+      "nome": "19ª Rodada",
+      "slug": "19a-rodada",
+      "rodada": 19,
+      "status": "agendada"
+    },
+    "status": "andamento",
+    "tipo": "Pontos Corridos",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-brasileiro-serie-a-2024.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/10"
+  },
+  {
+    "campeonato_id": 30,
+    "nome": "Campeonato Brasileiro Feminino",
+    "slug": "campeonato-brasileiro-feminino",
+    "nome_popular": "Brasileirão Feminino",
+    "edicao_atual": {
+      "edicao_id": 335,
+      "temporada": "2026",
+      "nome": "Campeonato Brasileiro Feminino 2026",
+      "nome_popular": "Brasileirão Feminino 2026",
+      "slug": "campeonato-brasileiro-feminino-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1104,
+      "nome": "Primeira Fase",
+      "slug": "primeira-fase",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/30/fases/1104"
+    },
+    "rodada_atual": {
+      "nome": "13ª Rodada",
+      "slug": "13a-rodada",
+      "rodada": 13,
+      "status": "agendada"
+    },
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/brasileiro-seriea.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/30"
+  },
+  {
+    "campeonato_id": 31,
+    "nome": "Campeonato Brasileiro Feminino A2",
+    "slug": "campeonato-brasileiro-feminino-a2",
+    "nome_popular": "Brasileirão Feminino A2",
+    "edicao_atual": {
+      "edicao_id": 336,
+      "temporada": "2026",
+      "nome": "Campeonato Brasileiro Feminino A2 2026",
+      "nome_popular": "Brasileirão Feminino A2 2026",
+      "slug": "campeonato-brasileiro-feminino-a2-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1108,
+      "nome": "Primeira Fase",
+      "slug": "primeira-fase",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/31/fases/1108"
+    },
+    "rodada_atual": {
+      "nome": "13ª Rodada",
+      "slug": "13a-rodada",
+      "rodada": 13,
+      "status": "agendada"
+    },
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/brasileiro-seriea.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/31"
+  },
+  {
+    "campeonato_id": 14,
+    "nome": "Campeonato Brasileiro Série B",
+    "slug": "campeonato-brasileiro-serie-b",
+    "nome_popular": "Brasileirão Série B",
+    "edicao_atual": {
+      "edicao_id": 337,
+      "temporada": "2026",
+      "nome": "Campeonato Brasileiro Série B 2026",
+      "nome_popular": "Brasileirão Série B 2026",
+      "slug": "campeonato-brasileiro-serie-b-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1112,
+      "nome": "Fase Única",
+      "slug": "fase-unica",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/14/fases/1112"
+    },
+    "rodada_atual": {
+      "nome": "19ª Rodada",
+      "slug": "19a-rodada",
+      "rodada": 19,
+      "status": "agendada"
+    },
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/brasileiro-serieb.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/14"
+  },
+  {
+    "campeonato_id": 16,
+    "nome": "Campeonato Brasileiro Série C",
+    "slug": "campeonato-brasileiro-serie-c",
+    "nome_popular": "Brasileirão Série C",
+    "edicao_atual": {
+      "edicao_id": 340,
+      "temporada": "2026",
+      "nome": "Campeonato Brasileiro Série C 2026",
+      "nome_popular": "Brasileirão Série C 2026",
+      "slug": "campeonato-brasileiro-serie-c-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1122,
+      "nome": "Primeira Fase",
+      "slug": "primeira-fase",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/16/fases/1122"
+    },
+    "rodada_atual": {
+      "nome": "15ª Rodada",
+      "slug": "15a-rodada",
+      "rodada": 15,
+      "status": "agendada"
+    },
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/brasileiro-seriec.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/16"
+  },
+  {
+    "campeonato_id": 17,
+    "nome": "Campeonato Brasileiro Série D",
+    "slug": "campeonato-brasileiro-serie-d",
+    "nome_popular": "Brasileirão Série D",
+    "edicao_atual": {
+      "edicao_id": 346,
+      "temporada": "2026",
+      "nome": "Campeonato Brasileiro Série D 2026",
+      "nome_popular": "Brasileirão Série D 2026",
+      "slug": "campeonato-brasileiro-serie-d-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1140,
+      "nome": "Oitavas de Final",
+      "slug": "oitavas-de-final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/17/fases/1140"
+    },
+    "rodada_atual": null,
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/brasileiro-seried.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/17"
+  },
+  {
+    "campeonato_id": 34,
+    "nome": "Campeonato Brasileiro Sub-17",
+    "slug": "campeonato-brasileiro-sub-17",
+    "nome_popular": "Brasileirão Sub-17",
+    "edicao_atual": {
+      "edicao_id": 208,
+      "temporada": "2025",
+      "nome": "Campeonato Brasileiro Sub-17 2025",
+      "nome_popular": "Brasileirão Sub-17 2025",
+      "slug": "campeonato-brasileiro-sub-17-2025"
+    },
+    "fase_atual": {
+      "fase_id": 844,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/34/fases/844"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/brasileiro-seriea.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/34"
+  },
+  {
+    "campeonato_id": 33,
+    "nome": "Campeonato Brasileiro Sub-20",
+    "slug": "campeonato-brasileiro-sub-20",
+    "nome_popular": "Brasileirão Sub-20",
+    "edicao_atual": {
+      "edicao_id": 338,
+      "temporada": "2026",
+      "nome": "Campeonato Brasileiro Sub-20 2026",
+      "nome_popular": "Brasileirão Sub-20 2026",
+      "slug": "campeonato-brasileiro-sub-20-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1116,
+      "nome": "Semi Final",
+      "slug": "semi-final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/33/fases/1116"
+    },
+    "rodada_atual": null,
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/brasileiro-seriea.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/33"
+  },
+  {
+    "campeonato_id": 49,
+    "nome": "Campeonato Brasiliense",
+    "slug": "campeonato-brasiliense",
+    "nome_popular": "Brasiliense",
+    "edicao_atual": {
+      "edicao_id": 242,
+      "temporada": "2026",
+      "nome": "Campeonato Brasiliense 2026",
+      "nome_popular": "Brasiliense 2026",
+      "slug": "campeonato-brasiliense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1003,
+      "nome": "Final",
+      "slug": "final-brasiliense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/49/fases/1003"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-brasiliense.svg",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/49"
+  },
+  {
+    "campeonato_id": 32,
+    "nome": "Campeonato Capixaba",
+    "slug": "campeonato-capixaba",
+    "nome_popular": "Capixabão",
+    "edicao_atual": {
+      "edicao_id": 237,
+      "temporada": "2026",
+      "nome": "Campeonato Capixaba 2026",
+      "nome_popular": "Capixabão 2026",
+      "slug": "campeonato-capixaba-2026"
+    },
+    "fase_atual": {
+      "fase_id": 980,
+      "nome": "Final",
+      "slug": "final-capixaba-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/32/fases/980"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-capixaba.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/32"
+  },
+  {
+    "campeonato_id": 6,
+    "nome": "Campeonato Carioca",
+    "slug": "campeonato-carioca",
+    "nome_popular": "Carioca",
+    "edicao_atual": {
+      "edicao_id": 230,
+      "temporada": "2026",
+      "nome": "Campeonato Carioca 2026",
+      "nome_popular": "Carioca 2026",
+      "slug": "campeonato-carioca-2026"
+    },
+    "fase_atual": {
+      "fase_id": 943,
+      "nome": "Final",
+      "slug": "final-campeonato-carioca-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/6/fases/943"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/carioca.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/6"
+  },
+  {
+    "campeonato_id": 79,
+    "nome": "Campeonato Carioca A2",
+    "slug": "campeonato-carioca-a2",
+    "nome_popular": "Carioca A2",
+    "edicao_atual": {
+      "edicao_id": 348,
+      "temporada": "2026",
+      "nome": "Campeonato Carioca A2 2026",
+      "nome_popular": "Carioca A2 2026",
+      "slug": "campeonato-carioca-a2-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1155,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/79/fases/1155"
+    },
+    "rodada_atual": null,
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/carioca.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/79"
+  },
+  {
+    "campeonato_id": 13,
+    "nome": "Campeonato Catarinense",
+    "slug": "campeonato-catarinense",
+    "nome_popular": "Catarinense",
+    "edicao_atual": {
+      "edicao_id": 239,
+      "temporada": "2026",
+      "nome": "Campeonato Catarinense 2026",
+      "nome_popular": "Catarinense 2026",
+      "slug": "campeonato-catarinense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 989,
+      "nome": "Final",
+      "slug": "final-catarinense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/13/fases/989"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-catarinense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/13"
+  },
+  {
+    "campeonato_id": 23,
+    "nome": "Campeonato Cearense",
+    "slug": "campeonato-cearense",
+    "nome_popular": "Cearense",
+    "edicao_atual": {
+      "edicao_id": 223,
+      "temporada": "2026",
+      "nome": "Campeonato Cearense 2026",
+      "nome_popular": "Cearense 2026",
+      "slug": "campeonato-cearense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 916,
+      "nome": "Final",
+      "slug": "final-cearense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/23/fases/916"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-cearense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/23"
+  },
+  {
+    "campeonato_id": 11,
+    "nome": "Campeonato Gaúcho",
+    "slug": "campeonato-gaucho",
+    "nome_popular": "Gaúchão",
+    "edicao_atual": {
+      "edicao_id": 220,
+      "temporada": "2026",
+      "nome": "Campeonato Gaúcho 2026",
+      "nome_popular": "Campeonato Gaúcho 2026",
+      "slug": "campeonato-gaucho-2026"
+    },
+    "fase_atual": {
+      "fase_id": 901,
+      "nome": "Final",
+      "slug": "final-gaucho-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/11/fases/901"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-gaucho.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/11"
+  },
+  {
+    "campeonato_id": 21,
+    "nome": "Campeonato Goiano",
+    "slug": "campeonato-goiano",
+    "nome_popular": "Goianão",
+    "edicao_atual": {
+      "edicao_id": 250,
+      "temporada": "2026",
+      "nome": "Campeonato Goiano 2026",
+      "nome_popular": "Goianão 2026",
+      "slug": "campeonato-goiano-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1034,
+      "nome": "Final",
+      "slug": "final-goiano-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/21/fases/1034"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-goiano.jpeg",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/21"
+  },
+  {
+    "campeonato_id": 53,
+    "nome": "Campeonato Maranhense",
+    "slug": "campeonato-maranhense",
+    "nome_popular": "Maranhense",
+    "edicao_atual": {
+      "edicao_id": 244,
+      "temporada": "2026",
+      "nome": "Campeonato Maranhense 2026",
+      "nome_popular": "Maranhense 2026",
+      "slug": "campeonato-maranhense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1010,
+      "nome": "Final",
+      "slug": "final-maranhense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/53/fases/1010"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-maranhense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/53"
+  },
+  {
+    "campeonato_id": 28,
+    "nome": "Campeonato Mato-Grossense",
+    "slug": "campeonato-mato-grossense",
+    "nome_popular": "Mato-Grossense",
+    "edicao_atual": {
+      "edicao_id": 245,
+      "temporada": "2026",
+      "nome": "Campeonato Mato-Grossense 2026",
+      "nome_popular": "Mato-Grossense 2026",
+      "slug": "campeonato-mato-grossense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1015,
+      "nome": "Final",
+      "slug": "final-mato-grossense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/28/fases/1015"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-mato-grossense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/28"
+  },
+  {
+    "campeonato_id": 12,
+    "nome": "Campeonato Mineiro",
+    "slug": "campeonato-mineiro",
+    "nome_popular": "Mineiro",
+    "edicao_atual": {
+      "edicao_id": 232,
+      "temporada": "2026",
+      "nome": "Campeonato Mineiro 2026",
+      "nome_popular": "Mineiro 2026",
+      "slug": "campeonato-mineiro-2026"
+    },
+    "fase_atual": {
+      "fase_id": 952,
+      "nome": "Final",
+      "slug": "final-mineiro-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/12/fases/952"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-mineiro.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/12"
+  },
+  {
+    "campeonato_id": 27,
+    "nome": "Campeonato Paraense",
+    "slug": "campeonato-paraense",
+    "nome_popular": "Paraense",
+    "edicao_atual": {
+      "edicao_id": 224,
+      "temporada": "2026",
+      "nome": "Campeonato Paraense 2026",
+      "nome_popular": "Campeonato Paraense 2026",
+      "slug": "campeonato-paraense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 920,
+      "nome": "Final",
+      "slug": "final-paraense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/27/fases/920"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paraense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/27"
+  },
+  {
+    "campeonato_id": 55,
+    "nome": "Campeonato Paraibano",
+    "slug": "campeonato-paraibano",
+    "nome_popular": "Paraibano",
+    "edicao_atual": {
+      "edicao_id": 246,
+      "temporada": "2026",
+      "nome": "Campeonato Paraibano 2026",
+      "nome_popular": "Paraibano 2026",
+      "slug": "campeonato-paraibano-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1018,
+      "nome": "Final",
+      "slug": "final-paraibano-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/55/fases/1018"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-paraibano.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/55"
+  },
+  {
+    "campeonato_id": 26,
+    "nome": "Campeonato Paranaense",
+    "slug": "campeonato-paranaense",
+    "nome_popular": "Paranaense",
+    "edicao_atual": {
+      "edicao_id": 228,
+      "temporada": "2026",
+      "nome": "Campeonato Paranaense 2026",
+      "nome_popular": "Paranaense 2026",
+      "slug": "campeonato-paranaense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 934,
+      "nome": "Final",
+      "slug": "final-paranaense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/26/fases/934"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paranaense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/26"
+  },
+  {
+    "campeonato_id": 9,
+    "nome": "Campeonato Paulista",
+    "slug": "campeonato-paulista",
+    "nome_popular": "Paulistão",
+    "edicao_atual": {
+      "edicao_id": 219,
+      "temporada": "2026",
+      "nome": "Campeonato Paulista 2026",
+      "nome_popular": "Campeonato Paulista 2026",
+      "slug": "campeonato-paulista-2026"
+    },
+    "fase_atual": {
+      "fase_id": 896,
+      "nome": "Final",
+      "slug": "final-paulista-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/9/fases/896"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/9"
+  },
+  {
+    "campeonato_id": 40,
+    "nome": "Campeonato Paulista A2",
+    "slug": "campeonato-paulista-a2",
+    "nome_popular": "Paulistão A2",
+    "edicao_atual": {
+      "edicao_id": 229,
+      "temporada": "2026",
+      "nome": "Campeonato Paulista A2 2026",
+      "nome_popular": "Paulistão A2 2026",
+      "slug": "campeonato-paulista-serie-a2-2026"
+    },
+    "fase_atual": {
+      "fase_id": 938,
+      "nome": "Final",
+      "slug": "final-paulista-a2-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/40/fases/938"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/40"
+  },
+  {
+    "campeonato_id": 41,
+    "nome": "Campeonato Paulista A3",
+    "slug": "campeonato-paulista-a3",
+    "nome_popular": "Paulistão A3",
+    "edicao_atual": {
+      "edicao_id": 247,
+      "temporada": "2026",
+      "nome": "Campeonato Paulista A3 2026",
+      "nome_popular": "Paulistão A3 2026",
+      "slug": "campeonato-paulista-serie-a3-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1020,
+      "nome": "Quartas de final",
+      "slug": "quartas-de-final-campeonato-paulista-a3-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/41/fases/1020"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/41"
+  },
+  {
+    "campeonato_id": 61,
+    "nome": "Campeonato Paulista A4",
+    "slug": "campeonato-paulista-a4",
+    "nome_popular": "Paulistão A4",
+    "edicao_atual": {
+      "edicao_id": 240,
+      "temporada": "2026",
+      "nome": "Campeonato Paulista A4 2026",
+      "nome_popular": "Paulistão A4 2026",
+      "slug": "campeonato-paulista-serie-a4-2026"
+    },
+    "fase_atual": {
+      "fase_id": 995,
+      "nome": "Quartas de final",
+      "slug": "quartas-paulista-serie-a4-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/61/fases/995"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/61"
+  },
+  {
+    "campeonato_id": 36,
+    "nome": "Campeonato Paulista Feminino",
+    "slug": "campeonato-paulista-feminino",
+    "nome_popular": "Paulistão Feminino",
+    "edicao_atual": {
+      "edicao_id": 349,
+      "temporada": "2026",
+      "nome": "Campeonato Paulista Feminino 2026",
+      "nome_popular": "Paulistão Feminino 2026",
+      "slug": "campeonato-paulista-feminino-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1156,
+      "nome": "Primeira Fase",
+      "slug": "primeira-fase",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/36/fases/1156"
+    },
+    "rodada_atual": {
+      "nome": "5ª Rodada",
+      "slug": "5a-rodada",
+      "rodada": 5,
+      "status": "agendada"
+    },
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/36"
+  },
+  {
+    "campeonato_id": 38,
+    "nome": "Campeonato Paulista Sub-17",
+    "slug": "campeonato-paulista-sub-17",
+    "nome_popular": "Paulistão Sub-17",
+    "edicao_atual": {
+      "edicao_id": 115,
+      "temporada": "2024",
+      "nome": "Campeonato Paulista Sub-17 2024",
+      "nome_popular": "Paulista Sub-17 2024",
+      "slug": "campeonato-paulista-sub-17-2024"
+    },
+    "fase_atual": {
+      "fase_id": 530,
+      "nome": "Quartas de Final",
+      "slug": "quartas-de-final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/38/fases/530"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/38"
+  },
+  {
+    "campeonato_id": 37,
+    "nome": "Campeonato Paulista Sub-20",
+    "slug": "campeonato-paulista-sub-20",
+    "nome_popular": "Paulistão Sub-20",
+    "edicao_atual": {
+      "edicao_id": 117,
+      "temporada": "2024",
+      "nome": "Campeonato Paulista Sub-20 2024",
+      "nome_popular": "Paulista Sub-20 2024",
+      "slug": "campeonato-paulista-sub-20-2024"
+    },
+    "fase_atual": {
+      "fase_id": 542,
+      "nome": "Quartas de Final",
+      "slug": "quartas-de-final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/37/fases/542"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/37"
+  },
+  {
+    "campeonato_id": 25,
+    "nome": "Campeonato Pernambucano",
+    "slug": "campeonato-pernambucano",
+    "nome_popular": "Pernambucano",
+    "edicao_atual": {
+      "edicao_id": 231,
+      "temporada": "2026",
+      "nome": "Campeonato Pernambucano 2026",
+      "nome_popular": "Pernambucano 2026",
+      "slug": "campeonato-pernambucano-2026"
+    },
+    "fase_atual": {
+      "fase_id": 949,
+      "nome": "Final",
+      "slug": "final-pernambucano-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/25/fases/949"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-pernambucano.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/25"
+  },
+  {
+    "campeonato_id": 56,
+    "nome": "Campeonato Piauiense",
+    "slug": "campeonato-piauiense",
+    "nome_popular": "Piauiense",
+    "edicao_atual": {
+      "edicao_id": 260,
+      "temporada": "2026",
+      "nome": "Campeonato Piauiense 2026",
+      "nome_popular": "Piauiense 2026",
+      "slug": "campeonato-piauiense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1063,
+      "nome": "Final",
+      "slug": "final-piauiense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/56/fases/1063"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-piauiense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/56"
+  },
+  {
+    "campeonato_id": 57,
+    "nome": "Campeonato Potiguar",
+    "slug": "campeonato-potiguar",
+    "nome_popular": "Potiguar",
+    "edicao_atual": {
+      "edicao_id": 248,
+      "temporada": "2026",
+      "nome": "Campeonato Potiguar 2026",
+      "nome_popular": "Potiguar 2026",
+      "slug": "campeonato-potiguar-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1026,
+      "nome": "Final",
+      "slug": "final-potiguar-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/57/fases/1026"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-potiguar.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/57"
+  },
+  {
+    "campeonato_id": 60,
+    "nome": "Campeonato Rondoniense",
+    "slug": "campeonato-rondoniense",
+    "nome_popular": "Rondoniense",
+    "edicao_atual": {
+      "edicao_id": 261,
+      "temporada": "2026",
+      "nome": "Campeonato Rondoniense 2026",
+      "nome_popular": "Rondoniense 2026",
+      "slug": "campeonato-rondoniense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1066,
+      "nome": "Final",
+      "slug": "final-rondoniense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/60/fases/1066"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-rondoniense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/60"
+  },
+  {
+    "campeonato_id": 64,
+    "nome": "Campeonato Roraimense",
+    "slug": "campeonato-roraimense",
+    "nome_popular": "Roraimense",
+    "edicao_atual": {
+      "edicao_id": 263,
+      "temporada": "2026",
+      "nome": "Campeonato Roraimense 2026",
+      "nome_popular": "Roraimense 2026",
+      "slug": "campeonato-roraimense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1072,
+      "nome": "Final",
+      "slug": "final-roraimense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/64/fases/1072"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-roraimense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/64"
+  },
+  {
+    "campeonato_id": 47,
+    "nome": "Campeonato Sergipano",
+    "slug": "campeonato-sergipano",
+    "nome_popular": "Sergipano",
+    "edicao_atual": {
+      "edicao_id": 251,
+      "temporada": "2026",
+      "nome": "Campeonato Sergipano 2026",
+      "nome_popular": "Sergipano 2026",
+      "slug": "campeonato-sergipano-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1041,
+      "nome": "Final",
+      "slug": "final-sergipano-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/47/fases/1041"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-sergipano.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/47"
+  },
+  {
+    "campeonato_id": 54,
+    "nome": "Campeonato Sul-Mato-grossense",
+    "slug": "campeonato-sul-mato-grossense",
+    "nome_popular": "Sul-Mato-grossense",
+    "edicao_atual": {
+      "edicao_id": 249,
+      "temporada": "2026",
+      "nome": "Campeonato Sul-Mato-grossense 2026",
+      "nome_popular": "Sul-Mato-grossense 2026",
+      "slug": "campeonato-sul-mato-grossense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1030,
+      "nome": "Final",
+      "slug": "final-sul-mato-grossense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/54/fases/1030"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-sul-mato-grossense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/54"
+  },
+  {
+    "campeonato_id": 59,
+    "nome": "Campeonato Tocantinense",
+    "slug": "campeonato-tocantinense",
+    "nome_popular": "Tocantinense",
+    "edicao_atual": {
+      "edicao_id": 262,
+      "temporada": "2026",
+      "nome": "Campeonato Tocantinense 2026",
+      "nome_popular": "Tocantinense 2026",
+      "slug": "campeonato-tocantinense-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1069,
+      "nome": "Final",
+      "slug": "final-tocantinense-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/59/fases/1069"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-tocantinense.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/59"
+  },
+  {
+    "campeonato_id": 20,
+    "nome": "Champions League",
+    "slug": "champions-league",
+    "nome_popular": "Liga dos Campeões",
+    "edicao_atual": {
+      "edicao_id": 215,
+      "temporada": "2025-2026",
+      "nome": "Champions League 2025-2026",
+      "nome_popular": "Liga dos Campeões 2025-2026",
+      "slug": "champions-league-2025-2026"
+    },
+    "fase_atual": {
+      "fase_id": 876,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/20/fases/876"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/championsleague.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/20"
+  },
+  {
+    "campeonato_id": 18,
+    "nome": "Copa América",
+    "slug": "copa-america",
+    "nome_popular": "Copa América",
+    "edicao_atual": {
+      "edicao_id": 121,
+      "temporada": "2024",
+      "nome": "Copa América 2024",
+      "nome_popular": "Copa América 2024",
+      "slug": "copa-america-2024"
+    },
+    "fase_atual": {
+      "fase_id": 559,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/18/fases/559"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copa-america.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/18"
+  },
+  {
+    "campeonato_id": 66,
+    "nome": "Copa América Feminina",
+    "slug": "copa-america-feminina",
+    "nome_popular": "Copa América Feminina",
+    "edicao_atual": {
+      "edicao_id": 210,
+      "temporada": "2025",
+      "nome": "Copa América Feminina 2025",
+      "nome_popular": "Copa América Feminina 2025",
+      "slug": "copa-america-feminina-2025"
+    },
+    "fase_atual": {
+      "fase_id": 854,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/66/fases/854"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-america-feminina.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/66"
+  },
+  {
+    "campeonato_id": 2,
+    "nome": "Copa do Brasil",
+    "slug": "copa-do-brasil",
+    "nome_popular": "Copa do Brasil",
+    "edicao_atual": {
+      "edicao_id": 334,
+      "temporada": "2026",
+      "nome": "Copa do Brasil 2026",
+      "nome_popular": "Copa do Brasil 2026",
+      "slug": "copa-do-brasil-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1100,
+      "nome": "Oitavas de Final",
+      "slug": "oitavas-de-final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/2/fases/1100"
+    },
+    "rodada_atual": null,
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copa-do-brasil.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/2"
+  },
+  {
+    "campeonato_id": 67,
+    "nome": "Copa do Brasil Feminina",
+    "slug": "copa-do-brasil-feminina",
+    "nome_popular": "Copa do Brasil Feminina",
+    "edicao_atual": {
+      "edicao_id": 347,
+      "temporada": "2026",
+      "nome": "Copa do Brasil Feminina 2026",
+      "nome_popular": "Copa do Brasil Feminina 2026",
+      "slug": "copa-do-brasil-feminina-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1149,
+      "nome": "Oitavas de Final",
+      "slug": "oitavas-de-final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/67/fases/1149"
+    },
+    "rodada_atual": null,
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copa-do-brasil.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/67"
+  },
+  {
+    "campeonato_id": 24,
+    "nome": "Copa do Mundo 2022",
+    "slug": "copa-do-mundo",
+    "nome_popular": "Copa do Mundo 2022",
+    "edicao_atual": {
+      "edicao_id": 43,
+      "temporada": "Catar 2022",
+      "nome": "Copa do Mundo Catar 2022",
+      "nome_popular": "Copa do Mundo Catar 2022",
+      "slug": "copa-do-mundo-catar-2022"
+    },
+    "fase_atual": {
+      "fase_id": 205,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/24/fases/205"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copa-do-mundo-2022.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/24"
+  },
+  {
+    "campeonato_id": 72,
+    "nome": "Copa do Mundo 2026",
+    "slug": "copa-do-mundo-2026",
+    "nome_popular": "Copa do Mundo 2026",
+    "edicao_atual": {
+      "edicao_id": 218,
+      "temporada": "2026",
+      "nome": "Copa do Mundo 2026",
+      "nome_popular": "Copa do Mundo 2026",
+      "slug": "copa-do-mundo-2026-2026"
+    },
+    "fase_atual": {
+      "fase_id": 892,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/72/fases/892"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-do-mundo-2026.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/72"
+  },
+  {
+    "campeonato_id": 46,
+    "nome": "Copa do Mundo de Clubes",
+    "slug": "mundial-de-clubes",
+    "nome_popular": "Copa do Mundo de Clubes",
+    "edicao_atual": {
+      "edicao_id": 126,
+      "temporada": "2025",
+      "nome": "Mundial de Clubes 2025",
+      "nome_popular": "Mundial de Clubes 2025",
+      "slug": "mundial-de-clubes-2025"
+    },
+    "fase_atual": {
+      "fase_id": 585,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/46/fases/585"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/mundial-clubes-2025.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/46"
+  },
+  {
+    "campeonato_id": 43,
+    "nome": "Copa do Mundo Feminina",
+    "slug": "copa-do-mundo-feminina",
+    "nome_popular": "Copa do Mundo Feminina",
+    "edicao_atual": {
+      "edicao_id": 77,
+      "temporada": "2023",
+      "nome": "Copa do Mundo Feminina 2023",
+      "nome_popular": "Copa do Mundo Feminina 2023",
+      "slug": "copa-do-mundo-feminina-2023"
+    },
+    "fase_atual": {
+      "fase_id": 359,
+      "nome": "Disputa 3o lugar",
+      "slug": "disputa-3o-lugar",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/43/fases/359"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copa-do-mundo-2023-feminina.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/43"
+  },
+  {
+    "campeonato_id": 70,
+    "nome": "Copa do Mundo Sub-20",
+    "slug": "copa-do-mundo-sub20",
+    "nome_popular": "Copa do Mundo Sub-20",
+    "edicao_atual": {
+      "edicao_id": 214,
+      "temporada": "2025",
+      "nome": "Copa do Mundo Sub-20 2025",
+      "nome_popular": "Copa do Mundo Sub-20 2025",
+      "slug": "copa-do-mundo-sub-20-2025"
+    },
+    "fase_atual": {
+      "fase_id": 870,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/70/fases/870"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-do-mundo-sub20.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/70"
+  },
+  {
+    "campeonato_id": 15,
+    "nome": "Copa do Nordeste",
+    "slug": "copa-do-nordeste",
+    "nome_popular": "Copa do Nordeste",
+    "edicao_atual": {
+      "edicao_id": 341,
+      "temporada": "2026",
+      "nome": "Copa do Nordeste 2026",
+      "nome_popular": "Copa do Nordeste 2026",
+      "slug": "copa-do-nordeste-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1128,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/15/fases/1128"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copa-do-nordeste.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/15"
+  },
+  {
+    "campeonato_id": 74,
+    "nome": "Copa dos Campeões Feminina",
+    "slug": "copa-dos-campeoes-feminina",
+    "nome_popular": "Copa dos Campeões Feminina",
+    "edicao_atual": {
+      "edicao_id": 332,
+      "temporada": "2025-2026",
+      "nome": "Copa dos Campeões Feminina 2025/2026",
+      "nome_popular": "Copa dos Campeões Feminina 2025/2026",
+      "slug": "copa-das-campeas-feminina-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1093,
+      "nome": "Final",
+      "slug": "final-copa-dos-campeoes-feminina-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/74/fases/1093"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Mata-Mata",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-dos-campeoes-feminina.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/74"
+  },
+  {
+    "campeonato_id": 45,
+    "nome": "Copa Intercontinental",
+    "slug": "copa-intercontinental",
+    "nome_popular": "Copa Intercontinental",
+    "edicao_atual": {
+      "edicao_id": 217,
+      "temporada": "2025",
+      "nome": "Copa Intercontinental 2025",
+      "nome_popular": "Copa Intercontinental 2025",
+      "slug": "copa-intercontinental-2025"
+    },
+    "fase_atual": {
+      "fase_id": 885,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/45/fases/885"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-intercontinental.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/45"
+  },
+  {
+    "campeonato_id": 7,
+    "nome": "Copa Libertadores da América",
+    "slug": "copa-libertadores-da-america",
+    "nome_popular": "Libertadores",
+    "edicao_atual": {
+      "edicao_id": 266,
+      "temporada": "2026",
+      "nome": "Copa Libertadores da América 2026",
+      "nome_popular": "Libertadores 2026",
+      "slug": "taca-conmebol-libertadores-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1077,
+      "nome": "Fase de grupos",
+      "slug": "fase-de-grupos-libertadores-2026",
+      "tipo": "grupos",
+      "_link": "/v1/campeonatos/7/fases/1077"
+    },
+    "rodada_atual": null,
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/libertadores.png",
+    "regiao": "continental",
+    "_link": "/v1/campeonatos/7"
+  },
+  {
+    "campeonato_id": 71,
+    "nome": "Copa Libertadores da América Feminina",
+    "slug": "copa-libertadores-da-america-feminina",
+    "nome_popular": "Libertadores Feminina",
+    "edicao_atual": {
+      "edicao_id": 216,
+      "temporada": "2025",
+      "nome": "Copa Libertadores da América Feminina 2025",
+      "nome_popular": "Libertadores Feminina 2025",
+      "slug": "copa-libertadores-da-america-feminina-2025"
+    },
+    "fase_atual": {
+      "fase_id": 881,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/71/fases/881"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copa-libertadores-feminina.png",
+    "regiao": "continental",
+    "_link": "/v1/campeonatos/71"
+  },
+  {
+    "campeonato_id": 76,
+    "nome": "Copa Libertadores da América Sub-20",
+    "slug": "copa-libertadores-da-america-sub20",
+    "nome_popular": "Libertadores Sub-20",
+    "edicao_atual": {
+      "edicao_id": 339,
+      "temporada": "2026",
+      "nome": "Copa Libertadores da América Sub-20 2026",
+      "nome_popular": "Libertadores Sub-20 2026",
+      "slug": "copa-libertadores-da-america-sub-20-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1121,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/76/fases/1121"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/libertadores.png",
+    "regiao": "continental",
+    "_link": "/v1/campeonatos/76"
+  },
+  {
+    "campeonato_id": 42,
+    "nome": "Copa Paulista",
+    "slug": "copa-paulista",
+    "nome_popular": "Copa Paulista",
+    "edicao_atual": {
+      "edicao_id": 209,
+      "temporada": "2025",
+      "nome": "Copa Paulista 2025",
+      "nome_popular": "Copa Paulista 2025",
+      "slug": "copa-paulista-2025"
+    },
+    "fase_atual": {
+      "fase_id": 849,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/42/fases/849"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/campeonato-paulista.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/42"
+  },
+  {
+    "campeonato_id": 29,
+    "nome": "Copa São Paulo de Futebol Jr",
+    "slug": "copa-sao-paulo-de-futebol-jr",
+    "nome_popular": "Copinha",
+    "edicao_atual": {
+      "edicao_id": 233,
+      "temporada": "2026",
+      "nome": "Copa São Paulo de Futebol Jr 2026",
+      "nome_popular": "Copinha 2026",
+      "slug": "copa-sao-paulo-de-futebol-junior-2026"
+    },
+    "fase_atual": {
+      "fase_id": 961,
+      "nome": "Final",
+      "slug": "final-copa-sp-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/29/fases/961"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/copinha.jpeg",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/29"
+  },
+  {
+    "campeonato_id": 77,
+    "nome": "Copa Sul-Sudeste",
+    "slug": "copa-sul-sudeste",
+    "nome_popular": "Copa Sul-Sudeste",
+    "edicao_atual": {
+      "edicao_id": 344,
+      "temporada": "2026",
+      "nome": "Copa Sul-Sudeste 2026",
+      "nome_popular": "Copa Sul-Sudeste 2026",
+      "slug": "copa-sul-sudeste-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1135,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/77/fases/1135"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-sul-sudeste.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/77"
+  },
+  {
+    "campeonato_id": 8,
+    "nome": "Copa Sulamericana",
+    "slug": "copa-sulamericana",
+    "nome_popular": "Sulamericana",
+    "edicao_atual": {
+      "edicao_id": 267,
+      "temporada": "2026",
+      "nome": "Copa Sulamericana 2026",
+      "nome_popular": "Sulamericana 2026",
+      "slug": "copa-sul-americana-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1083,
+      "nome": "Fase de grupos",
+      "slug": "fase-de-grupos-sul-americana-2026",
+      "tipo": "grupos",
+      "_link": "/v1/campeonatos/8/fases/1083"
+    },
+    "rodada_atual": null,
+    "status": "andamento",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/sulamericana.png",
+    "regiao": "continental",
+    "_link": "/v1/campeonatos/8"
+  },
+  {
+    "campeonato_id": 65,
+    "nome": "Copa Verde",
+    "slug": "copa-verde",
+    "nome_popular": "Copa Verde",
+    "edicao_atual": {
+      "edicao_id": 342,
+      "temporada": "2026",
+      "nome": "Copa Verde 2026",
+      "nome_popular": "Copa Verde 2026",
+      "slug": "copa-verde-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1132,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/65/fases/1132"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-verde.png",
+    "regiao": "regional",
+    "_link": "/v1/campeonatos/65"
+  },
+  {
+    "campeonato_id": 44,
+    "nome": "Eliminatórias Copa do Mundo - América do Sul",
+    "slug": "eliminatorias-copa-do-mundo-america-do-sul",
+    "nome_popular": "Eliminatórias Copa do Mundo - América do Sul",
+    "edicao_atual": {
+      "edicao_id": 90,
+      "temporada": "2023-2025",
+      "nome": "Eliminatórias Copa do Mundo - América do Sul 2023-2025",
+      "nome_popular": "Eliminatórias Copa do Mundo - América do Sul 2023-2025",
+      "slug": "eliminatorias-copa-do-mundo-america-do-sul-2023-2025"
+    },
+    "fase_atual": {
+      "fase_id": 416,
+      "nome": "Fase Única",
+      "slug": "fase-unica",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/44/fases/416"
+    },
+    "rodada_atual": {
+      "nome": "18ª Rodada",
+      "slug": "18a-rodada",
+      "rodada": 18,
+      "status": "encerrada"
+    },
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/eliminatorias-copa-america-sul.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/44"
+  },
+  {
+    "campeonato_id": 19,
+    "nome": "Eurocopa",
+    "slug": "eurocopa",
+    "nome_popular": "Eurocopa",
+    "edicao_atual": {
+      "edicao_id": 122,
+      "temporada": "2024",
+      "nome": "Eurocopa 2024",
+      "nome_popular": "Eurocopa 2024",
+      "slug": "eurocopa-2024"
+    },
+    "fase_atual": {
+      "fase_id": 564,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/19/fases/564"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/eurocopa.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/19"
+  },
+  {
+    "campeonato_id": 68,
+    "nome": "La Liga",
+    "slug": "la-liga",
+    "nome_popular": "La Liga",
+    "edicao_atual": {
+      "edicao_id": 212,
+      "temporada": "2025-2026",
+      "nome": "La Liga 2025-2026",
+      "nome_popular": "La Liga 2025-2026",
+      "slug": "la-liga-2025-2026"
+    },
+    "fase_atual": {
+      "fase_id": 863,
+      "nome": "Fase Única",
+      "slug": "fase-unica",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/68/fases/863"
+    },
+    "rodada_atual": {
+      "nome": "38ª Rodada",
+      "slug": "38a-rodada",
+      "rodada": 38,
+      "status": "encerrada"
+    },
+    "status": "finalizado",
+    "tipo": "Pontos Corridos",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/la-liga.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/68"
+  },
+  {
+    "campeonato_id": 69,
+    "nome": "Premier League",
+    "slug": "premier-league",
+    "nome_popular": "Premier League",
+    "edicao_atual": {
+      "edicao_id": 213,
+      "temporada": "2025-2026",
+      "nome": "Premier League 2025-2026",
+      "nome_popular": "Premier League 2025-2026",
+      "slug": "premier-league-2025-2026"
+    },
+    "fase_atual": {
+      "fase_id": 864,
+      "nome": "Fase Única",
+      "slug": "fase-unica",
+      "tipo": "pontos-corridos",
+      "_link": "/v1/campeonatos/69/fases/864"
+    },
+    "rodada_atual": {
+      "nome": "38ª Rodada",
+      "slug": "38a-rodada",
+      "rodada": 38,
+      "status": "encerrada"
+    },
+    "status": "finalizado",
+    "tipo": "Pontos Corridos",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/premier-league.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/69"
+  },
+  {
+    "campeonato_id": 73,
+    "nome": "Recopa Sul-Americana",
+    "slug": "recopa-sul-americana",
+    "nome_popular": "Recopa Sul-Americana",
+    "edicao_atual": {
+      "edicao_id": 265,
+      "temporada": "2026",
+      "nome": "Recopa Sul-Americana 2026",
+      "nome_popular": "Recopa Sul-Americana 2026",
+      "slug": "recopa-sul-americana-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1073,
+      "nome": "Final",
+      "slug": "final-recopa-sul-americana-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/73/fases/1073"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Mata-Mata",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/escudos/recopa-sul-americana.png",
+    "regiao": "continental",
+    "_link": "/v1/campeonatos/73"
+  },
+  {
+    "campeonato_id": 75,
+    "nome": "Supercopa do Brasil Feminina",
+    "slug": "supercopa-do-brasil-feminina",
+    "nome_popular": "Supercopa do Brasil Feminina",
+    "edicao_atual": {
+      "edicao_id": 333,
+      "temporada": "2026",
+      "nome": "Supercopa do Brasil Feminina 2026",
+      "nome_popular": "Supercopa do Brasil Feminina 2026",
+      "slug": "supercopa-do-brasil-feminina-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1094,
+      "nome": "Final",
+      "slug": "final",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/75/fases/1094"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Misto",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/copa-dos-campeoes-feminina.png",
+    "regiao": "internacional",
+    "_link": "/v1/campeonatos/75"
+  },
+  {
+    "campeonato_id": 62,
+    "nome": "Supercopa Rei do Brasil",
+    "slug": "supercopa-rei-do-brasil",
+    "nome_popular": "Supercopa do Brasil",
+    "edicao_atual": {
+      "edicao_id": 259,
+      "temporada": "2026",
+      "nome": "Supercopa Rei do Brasil 2026",
+      "nome_popular": "Supercopa do Brasil 2026",
+      "slug": "supercopa-rei-do-brasil-2026"
+    },
+    "fase_atual": {
+      "fase_id": 1060,
+      "nome": "Final",
+      "slug": "final-supercopa-do-brasil-2026",
+      "tipo": "mata-mata",
+      "_link": "/v1/campeonatos/62/fases/1060"
+    },
+    "rodada_atual": null,
+    "status": "finalizado",
+    "tipo": "Mata-Mata",
+    "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/supercopa-rei.png",
+    "regiao": "nacional",
+    "_link": "/v1/campeonatos/62"
+  }
+]

@@ -8,6 +8,12 @@ tipo: log
 
 > Log datado, append-only. **Não é carregado nas sessões** (o presente mora no CONTEXT.md). Uma linha por evento relevante; detalhe fica no commit/D-NN.
 
+## 2026-07-22 — M7.2 empacotamento: entrega fechada + higiene de repo (D-41)
+- **Zip de entrega conferido** — `SCB_scb-v0.4-sot-goals-e0` (162 arquivos, 1,4 MB): só fonte + docs + dados curados; 0 `.venv`/`.git`/`__pycache__`/`*.sqlite`/`*.png`/segredo. Aberto e testado num diretório limpo: **90 testes verdes** + `ingest` offline reconstrói o banco só com os CSVs empacotados (BRA 5.499 / E0 12.704). Roda do zero, sem rede. **Portão final (rebuild no Windows do Gustavo) pendente do dono.**
+- **Higiene de EOL (D-41)** — 44 arquivos apareciam "modificados" no git só por CRLF (LF→CRLF do Windows); `--ignore-all-space` confirmou **0 dado real**. Normalizados de volta p/ LF + `.gitattributes` (`* text=auto eol=lf`) p/ não recorrer. `*.zip` adicionado ao `.gitignore`.
+- **README `scb_analytics` sincronizado** — estava travado em "Estado: M2 / 14 passed"; agora M7.1, `scb-v0.4-sot-goals-e0`, 90 testes, pipeline de rebuild completo e tabela de todos os módulos (incl. candidatos OFF).
+- **Nota operacional:** um `index.lock` órfão ficou no `.git` (criado por varredura em sandbox, sem permissão de unlink lá) — removido pelo Gustavo com `Remove-Item`; commit da entrega desbloqueado.
+
 ## 2026-07-21 (g) — BRA vira liga de 1ª classe: resultados via API-Futebol, escudos, classificação real, calibração (D-35..D-40)
 - **`scb-v0.4-sot-goals-e0` adotado e rebuild confirmado (D-35)** — SoT-total desacoplado no canal de gols da E0 saiu de candidato p/ oficial; run do Gustavo: 85 testes verdes, backtest E0 Brier 0,5894. 1X2/placar intocados; over/BTTS da E0 melhoram.
 - **API-Futebol agora também traz RESULTADOS do BRA (D-36)** — o "Liquidar resultados" não liquidava nada por FALTA DE DADO (o football-data só tinha o BRA até 1º/jun), não por bug. Agora o parser pega o placar e `load_bra_stats` insere em `matches` os jogos que a fonte primária ainda não publicou (à la `resultados_extra`/D-80, guarda ±2d/D-82) → o settle fecha as rodadas recém-jogadas. `match_stats` +8 colunas (posse/passes/desarmes/defesas) com migração aditiva idempotente. Fetcher endurecido: **self-healing** (completa linha sem placar), **trata o 429** (salva sempre; para com elegância) e busca **recentes primeiro** (o que o settle precisa). Recuperei 2 jogos perdidos por um 429 direto do output do terminal (valores reais da API, não inventados).

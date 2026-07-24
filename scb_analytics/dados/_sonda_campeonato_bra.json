@@ -1,0 +1,55 @@
+{
+  "campeonato_id": 10,
+  "nome": "Campeonato Brasileiro",
+  "slug": "campeonato-brasileiro",
+  "nome_popular": "Brasileirão",
+  "edicao_atual": {
+    "edicao_id": 225,
+    "temporada": "2026",
+    "nome": "Campeonato Brasileiro 2026",
+    "nome_popular": "Brasileirão 2026",
+    "slug": "campeonato-brasileiro-2026"
+  },
+  "fase_atual": {
+    "fase_id": 921,
+    "nome": "Fase única",
+    "slug": "fase-unica-campeonato-brasileiro-2026",
+    "tipo": "pontos-corridos",
+    "_link": "/v1/campeonatos/10/fases/921"
+  },
+  "rodada_atual": {
+    "nome": "19ª Rodada",
+    "slug": "19a-rodada",
+    "rodada": 19,
+    "status": "agendada"
+  },
+  "status": "andamento",
+  "tipo": "Pontos Corridos",
+  "logo": "https://cdn.api-futebol.com.br/campeonatos/logos/campeonato-brasileiro-serie-a-2024.png",
+  "regiao": "nacional",
+  "fases": [
+    {
+      "fase_id": 921,
+      "edicao": {
+        "edicao_id": 225,
+        "temporada": "2026",
+        "nome": "Campeonato Brasileiro 2026",
+        "nome_popular": "Brasileirão 2026",
+        "slug": "campeonato-brasileiro-2026"
+      },
+      "nome": "Fase única",
+      "slug": "fase-unica-campeonato-brasileiro-2026",
+      "status": "andamento",
+      "decisivo": false,
+      "eliminatorio": false,
+      "ida_e_volta": true,
+      "tipo": "pontos-corridos",
+      "grupos": [],
+      "chaves": [],
+      "rodadas": [],
+      "proxima_fase": null,
+      "fase_anterior": null,
+      "_link": "/v1/campeonatos/10/fases/921"
+    }
+  ]
+}

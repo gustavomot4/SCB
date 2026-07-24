@@ -17,7 +17,7 @@ data: 2026-07-16
 ## 🔜 Próximo
 
 - [x] **[v0.4+M7] GUSTAVO: rebuild FEITO** — `scb-v0.4-sot-goals-e0` confirmado (85 testes; predictor 18200; backtest **BRA 0,6131 / E0 0,5894**). ▶ Pendente agora: registrar cada rodada · terminar o backfill de placar/posse do BRA (`baixar_stats_bra.py`, resumível — cota baixa/429) · `baixar_escudos_bra.py` (escudos oficiais)
-- [ ] **[M7.2] Empacotamento final** — CHECKLIST de entrega (prompts/05): zip sem deps/segredos, README sincronizado, abrir e conferir
+- [x] **[M7.2] Empacotamento — ZIP CONFERIDO (D-41)** — `scb-v0.4-sot-goals-e0` (162 arq, 1,4 MB), sem deps/DB/segredos; extraído num diretório limpo roda do zero offline (90 testes, BRA 5.499/E0 12.704). README sincronizado M2→M7.1 + `.gitattributes` (LF) + `*.zip` no gitignore. ▶ **GUSTAVO: rebuild final no Windows** (`pytest -q` + `Abrir SCB.bat`) p/ selar o portão
 - [ ] **[evolução futura] Q-07 banda E0 (números na D-28) · Q-08: C4 viagem (curadoria de coordenadas) · C6 H por clube (pronto-para-rodar)**
 - [x] **[M7.1] WEB ENTREGUE (D-29)** — estilo EA FC (nav lateral condensada, dark+vinheta, cards, trilho de temporada, barras animadas, placares em tiles); escudos SVG por cores reais + override local `static/logos/`; 3 telas + launcher; badges com 5 testes (71); Flask lazy (roda sem Flask nos testes)
 - [x] **[M7.1b] Feedback do usuário aplicado** — QA-04 contraste dos chips (sólidos, texto escuro no volt); `scripts/baixar_escudos.py` (PNGs reais, uso pessoal — VOCÊ roda); Imprimir/PDF + Copiar resumo nas telas de confronto e tabela (D-30)
